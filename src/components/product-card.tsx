@@ -1,12 +1,10 @@
 'use client';
 
 import Image from 'next/image';
-import { motion } from 'framer-motion';
 import { ShoppingCart } from 'lucide-react';
 
 import type { Product } from '@/lib/types';
 import { useStore } from '@/store/useStore';
-import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { useToast } from '@/hooks/use-toast';
@@ -35,10 +33,8 @@ export function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <motion.div
-      className="bg-card/60 backdrop-blur-lg border border-border/20 rounded-xl overflow-hidden shadow-lg h-full flex flex-col"
-      whileHover={{ y: -5, scale: 1.02 }}
-      transition={{ type: 'spring', stiffness: 300 }}
+    <div
+      className="bg-card border rounded-lg overflow-hidden shadow-sm h-full flex flex-col"
     >
       <div className="relative aspect-square w-full">
         <Image
@@ -48,7 +44,7 @@ export function ProductCard({ product }: ProductCardProps) {
           className="object-cover"
         />
         {product.category === 'cond' && (
-          <Badge className="absolute top-3 right-3 bg-primary/80 text-primary-foreground">Эстетичный монтаж</Badge>
+          <Badge className="absolute top-3 right-3">Эстетичный монтаж</Badge>
         )}
       </div>
       <div className="p-4 flex flex-col flex-grow">
@@ -61,7 +57,7 @@ export function ProductCard({ product }: ProductCardProps) {
             </p>
         </div>
 
-        <div className="mt-4 pt-4 border-t border-border/20 space-y-2">
+        <div className="mt-4 pt-4 border-t space-y-2">
             <Button className="w-full" onClick={handleAddToCart}>
                 <ShoppingCart className="mr-2 h-4 w-4"/>
                 В корзину
@@ -71,6 +67,6 @@ export function ProductCard({ product }: ProductCardProps) {
             </Button>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

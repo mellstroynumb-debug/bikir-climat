@@ -1,0 +1,90 @@
+/**
+ * @file firestore.rules
+ * @description Security rules for the Bikir-Climat Firestore database.
+ *
+ * ## Core Philosophy
+ * This ruleset establishes a clear boundary between publicly accessible data and
+ * protected data. The primary goal is to allow public browsing of the product
+ * catalog while securing all management and order-related operations. It
+ * defaults to a "deny-all" posture, only granting permissions explicitly.
+ *
+ * ## Data Structure
+ * The data is organized into two main top-level collections:
+ * - `/products`: A public catalog of all items for sale.
+ * - `/orders`: A private collection of customer orders.
+ * This structural segregation ensures that security rules are simple, performant,
+ * and not reliant on filtering queries.
+ *
+ * ## Key Security Decisions
+ * - **Public Product Catalog:** The `/products` collection is publicly readable
+ *   to allow any visitor, signed-in or not, to browse items.
+ * - **Admin-Only Writes (Temporarily Disabled):** All write operations
+ *   (create, update, delete) on both `/products` and `/orders` are currently
+ *   disabled (`if false`). This is a critical security measure because a secure,
+ *   server-verifiable admin role or ownership model has not yet been implemented.
+ *   These rules must be updated once a proper authentication and role system exists.
+ * - **Open Order Creation:** Any authenticated user (including anonymous users)
+ *   can create a new document in the `/orders` collection. This allows visitors
+ *   to place orders without needing a permanent account. However, they cannot
+ *   view or modify their order after it has been placed.
+ */
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // -------------------------------------------------------------------------
+    // Helper Functions
+    // -------------------------------------------------------------------------
+
+    /**
+     * @description Checks if a user is authenticated.
+     */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // -------------------------------------------------------------------------
+    // Collection Rules
+    // -------------------------------------------------------------------------
+
+    /**
+     * @description Defines rules for the `products` collection. Products are
+     *              publicly readable, but can only be managed by admins.
+     * @path        /products/{productId}
+     * @allow       (get, list) An anonymous user can view a product or the full list.
+     * @deny        (create, update, delete) Any user attempting to modify a product.
+     * @principle   Public Read with Owner-Only Writes. Writes are currently
+     *              disabled pending a secure admin implementation.
+     */
+    match /products/{productId} {
+      allow get: if true;
+      allow list: if true;
+
+      // CRITICAL: Write operations are disabled. The user request relies on a
+      // client-side PIN, which is not secure. A server-side admin role check
+      // (e.g., using custom claims) must be implemented before enabling writes.
+      allow create: if false; // TODO: Implement admin-only creation.
+      allow update: if false; // TODO: Implement admin-only updates.
+      allow delete: if false; // TODO: Implement admin-only deletion.
+    }
+
+    /**
+     * @description Defines rules for the `orders` collection. Anyone can create
+     *              a new order, but only admins can view or manage them.
+     * @path        /orders/{orderId}
+     * @allow       (create) An anonymous but signed-in user creates a new order.
+     * @deny        (get, list, update, delete) Any user attempting to read or
+     *              modify existing orders.
+     * @principle   Enables public write access for order creation while securing
+     *              all existing order data until a proper admin role is defined.
+     */
+    match /orders/{orderId} {
+      allow get: if false; // TODO: Allow admin read access.
+      allow list: if false; // TODO: Allow admin list access.
+
+      allow create: if isSignedIn();
+      allow update: if false; // TODO: Allow admin update access.
+      allow delete: if false; // TODO: Allow admin delete access.
+    }
+  }
+}

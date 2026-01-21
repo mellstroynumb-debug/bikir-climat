@@ -1,0 +1,158 @@
+{
+  "entities": {
+    "Product": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Product",
+      "type": "object",
+      "description": "Represents a product in the Bikir-Climat store.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the product."
+        },
+        "title": {
+          "type": "string",
+          "description": "The title of the product."
+        },
+        "description": {
+          "type": "string",
+          "description": "A detailed description of the product."
+        },
+        "pricePmr": {
+          "type": "number",
+          "description": "The price of the product in PMR (Rubles)."
+        },
+        "priceMd": {
+          "type": "number",
+          "description": "The price of the product in MD (Lei)."
+        },
+        "images": {
+          "type": "array",
+          "description": "An array of image URLs for the product.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "specs": {
+          "type": "string",
+          "description": "Object that contains various product specifications such as area, type, and inverter. Stored as a string."
+        },
+        "category": {
+          "type": "string",
+          "description": "The category of the product (e.g., cond, service)."
+        },
+        "stockStatus": {
+          "type": "boolean",
+          "description": "Indicates whether the product is in stock."
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "description",
+        "pricePmr",
+        "priceMd",
+        "images",
+        "specs",
+        "category",
+        "stockStatus"
+      ]
+    },
+    "Order": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Order",
+      "type": "object",
+      "description": "Represents an order placed by a customer.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the order."
+        },
+        "customerName": {
+          "type": "string",
+          "description": "The name of the customer who placed the order."
+        },
+        "phone": {
+          "type": "string",
+          "description": "The customer's phone number."
+        },
+        "address": {
+          "type": "string",
+          "description": "The customer's shipping address."
+        },
+        "items": {
+          "type": "array",
+          "description": "An array of product IDs in the order.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "totalPrice": {
+          "type": "number",
+          "description": "The total price of the order."
+        },
+        "currency": {
+          "type": "string",
+          "description": "The currency used for the order (PMR or MD)."
+        },
+        "status": {
+          "type": "string",
+          "description": "The status of the order (e.g., new, done)."
+        }
+      },
+      "required": [
+        "id",
+        "customerName",
+        "phone",
+        "address",
+        "items",
+        "totalPrice",
+        "currency",
+        "status"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/products/{productId}",
+        "definition": {
+          "entityName": "Product",
+          "schema": {
+            "$ref": "#/backend/entities/Product"
+          },
+          "description": "Stores product information.  Admin users have read/write access.",
+          "params": [
+            {
+              "name": "productId",
+              "description": "Unique identifier for the product."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/orders/{orderId}",
+        "definition": {
+          "entityName": "Order",
+          "schema": {
+            "$ref": "#/backend/entities/Order"
+          },
+          "description": "Stores order information. Accessible to admins. Users can create orders.",
+          "params": [
+            {
+              "name": "orderId",
+              "description": "Unique identifier for the order."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore data structure is designed to manage products and orders for the Bikir-Climat webstore. It prioritizes structural segregation and clarity. Products are stored in a top-level `products` collection, and orders are stored in a top-level `orders` collection. This approach avoids mixing data with different access needs within the same collection.\n\nThis structure simplifies security rules by ensuring that all documents within a collection share the same security requirements. Products can be publicly accessible (for read operations), while write operations are restricted to authenticated admins (PIN code authentication is emulated on the client-side, so security rules still need to protect the data). Orders will be readable/writable by authenticated admins and writable by authenticated users (once user authentication is implemented).\n\nThis structure enables secure `list` operations by ensuring that the security rules don't act as filters. All documents in a collection have the same access requirements, so listing the entire collection is secure based on the role of the user making the request."
+  }
+}

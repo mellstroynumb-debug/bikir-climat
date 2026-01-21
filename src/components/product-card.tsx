@@ -34,7 +34,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
   return (
     <div
-      className="bg-card border rounded-lg overflow-hidden shadow-sm h-full flex flex-col"
+      className="bg-card border rounded-lg overflow-hidden shadow-sm h-full flex flex-col transition-all duration-300 ease-in-out hover:scale-[1.03] hover:shadow-xl"
     >
       <div className="relative aspect-square w-full">
         <Image

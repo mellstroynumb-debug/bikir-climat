@@ -11,6 +11,7 @@ export type Product = {
     area: string;
     type: string;
     inverter: string;
+    power?: number; // BTU
   };
   category: 'cond' | 'service';
 };

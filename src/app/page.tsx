@@ -168,7 +168,7 @@ function Quiz({ allProducts }: { allProducts: Product[] }) {
                 <motion.div key="step3" variants={stepVariants} initial="hidden" animate="visible" exit="exit" transition={{ duration: 0.3 }} className="absolute w-full">
                   <div className="space-y-4 pt-2">
                     <Label className="text-base sm:text-lg font-semibold text-center block">3. Какой у вас бюджет?</Label>
-                    <RadioGroup value={budget} onValueChange={setBudget} className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                    <RadioGroup value={budget} onValueChange={setBudget} className="grid grid-cols-3 gap-2 md:gap-4 pt-2">
                        <Label htmlFor="eco" className="flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer [&:has([data-state=checked])]:border-primary">
                         <RadioGroupItem value="eco" id="eco" className="sr-only" />
                         <span className="text-base sm:text-lg">Эконом</span>

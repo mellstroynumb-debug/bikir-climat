@@ -135,7 +135,7 @@ export function ProductForm({ product, onSave, onCancel }: ProductFormProps) {
                     />
                 ))}
             </div>
-            <Button type="button" variant="outline" size="sm" className="mt-2" onClick={() => appendImage({ url: '' })}>
+            <Button type="button" variant="outline" size="sm" className="mt-2" onClick={() => appendImage({ url: 'https://placehold.co/600x400' })}>
                 Добавить изображение
             </Button>
         </div>

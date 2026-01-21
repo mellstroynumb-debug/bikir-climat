@@ -20,3 +20,15 @@ export type Product = {
 export type CartItem = Product & {
   quantity: number;
 };
+
+export type Order = {
+  id: string;
+  customerName: string;
+  phone: string;
+  address: string;
+  items: string[]; // array of product IDs
+  totalPrice: number;
+  currency: 'PMR' | 'MD';
+  status: 'new' | 'done';
+  createdAt: any; // for serverTimestamp
+};

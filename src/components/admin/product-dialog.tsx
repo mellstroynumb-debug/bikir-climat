@@ -23,6 +23,11 @@ export function ProductDialog({ isOpen, onOpenChange, product }: ProductDialogPr
   const { toast } = useToast();
 
   const handleSave = (formData: Omit<Product, 'id'>) => {
+    if (!firestore) {
+        toast({ title: "Ошибка", description: "База данных не инициализирована.", variant: "destructive"});
+        return;
+    }
+
     if (product) {
       // Update existing product
       const productRef = doc(firestore, 'products', product.id);

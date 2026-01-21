@@ -28,11 +28,11 @@ export function OrderTable() {
   const firestore = useFirestore();
   const { toast } = useToast();
 
-  const productsQuery = useMemoFirebase(() => collection(firestore, 'products'), [firestore]);
+  const productsQuery = useMemoFirebase(() => firestore ? collection(firestore, 'products') : null, [firestore]);
   const { data: products } = useCollection<Product>(productsQuery);
 
   const ordersQuery = useMemoFirebase(
-    () => query(collection(firestore, 'orders'), orderBy('createdAt', 'desc')),
+    () => firestore ? query(collection(firestore, 'orders'), orderBy('createdAt', 'desc')) : null,
     [firestore]
   );
   const { data: orders, isLoading } = useCollection<Order>(ordersQuery);
@@ -46,6 +46,7 @@ export function OrderTable() {
   }, [products]);
 
   const handleStatusChange = (orderId: string, newStatus: Order['status']) => {
+    if (!firestore) return;
     const orderRef = doc(firestore, 'orders', orderId);
     setDocumentNonBlocking(orderRef, { status: newStatus }, { merge: true });
     toast({ title: `Статус заказа обновлен` });

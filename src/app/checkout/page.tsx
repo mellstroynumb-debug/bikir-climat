@@ -4,8 +4,8 @@ import { useStore } from '@/store/useStore';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useFirestore } from '@/firebase';
-import { addDoc, collection, serverTimestamp, Timestamp } from 'firebase/firestore';
+import { useFirestore, addDocumentNonBlocking } from '@/firebase';
+import { collection, serverTimestamp, Timestamp } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
 import { sendTelegramNotification } from '@/app/actions/telegram';
 import { useRouter } from 'next/navigation';
@@ -18,7 +18,6 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/componen
 import { Separator } from '@/components/ui/separator';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ShoppingBag } from 'lucide-react';
 
 const checkoutSchema = z.object({
   customerName: z.string().min(2, 'Имя должно содержать не менее 2 символов'),
@@ -68,6 +67,10 @@ export default function CheckoutPage() {
   }
 
   const onSubmit = async (formData: CheckoutFormData) => {
+    if (!firestore) {
+        toast({ title: "Ошибка", description: "База данных не инициализирована.", variant: "destructive" });
+        return;
+    }
     setIsSubmitting(true);
     try {
         const orderCurrency = region === 'PMR' ? 'PMR' : 'MD';
@@ -81,7 +84,7 @@ export default function CheckoutPage() {
         };
 
         const ordersCollection = collection(firestore, 'orders');
-        const newOrderRef = await addDoc(ordersCollection, newOrderData);
+        const newOrderRef = await addDocumentNonBlocking(ordersCollection, newOrderData);
 
         const serializableOrderData = {
           ...newOrderData,

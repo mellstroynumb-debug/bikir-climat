@@ -12,7 +12,7 @@ import { OrderTable } from './order-table';
 
 export function AdminDashboard() {
   const firestore = useFirestore();
-  const productsCollection = useMemoFirebase(() => collection(firestore, 'products'), [firestore]);
+  const productsCollection = useMemoFirebase(() => firestore ? collection(firestore, 'products') : null, [firestore]);
   const { data: products, isLoading, error } = useCollection<Product>(productsCollection);
   
   const [isDialogOpen, setIsDialogOpen] = useState(false);

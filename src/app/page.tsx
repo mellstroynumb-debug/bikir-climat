@@ -226,7 +226,7 @@ function Quiz({ allProducts }: { allProducts: Product[] }) {
 
 export default function Home() {
   const firestore = useFirestore();
-  const productsCollection = useMemoFirebase(() => query(collection(firestore, 'products')), [firestore]);
+  const productsCollection = useMemoFirebase(() => firestore ? query(collection(firestore, 'products')) : null, [firestore]);
   const { data: allProducts, isLoading } = useCollection<Product>(productsCollection);
 
   const featuredProducts = useMemo(() => {

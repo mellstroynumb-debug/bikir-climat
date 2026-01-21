@@ -6,7 +6,8 @@ import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 import MobileNav from '@/components/layout/mobile-nav';
 import PageTransitionWrapper from '@/components/layout/page-transition-wrapper';
-import { FirebaseClientProvider } from '@/firebase/client-provider';
+import { FirebaseClientProvider } from '@/firebase';
+import { FirebaseErrorListener } from '@/components/FirebaseErrorListener';
 
 export const metadata: Metadata = {
   title: 'Bikir-Climat',
@@ -27,6 +28,7 @@ export default function RootLayout({
       </head>
       <body className={cn('min-h-screen bg-background font-body antialiased')}>
         <FirebaseClientProvider>
+          <FirebaseErrorListener />
           <Header />
           <PageTransitionWrapper>
             <main className="pb-20 md:pb-0">{children}</main>

@@ -37,6 +37,7 @@ export function ProductTable({ products, onEdit }: ProductTableProps) {
     const { toast } = useToast();
 
     const handleDelete = (productId: string) => {
+        if (!firestore) return;
         const productRef = doc(firestore, 'products', productId);
         deleteDocumentNonBlocking(productRef);
         toast({ title: 'Товар успешно удален' });

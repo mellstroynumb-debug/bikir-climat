@@ -36,7 +36,7 @@ export default function ProductPage() {
   const params = useParams();
   const id = params.id as string;
   const firestore = useFirestore();
-  const productRef = useMemoFirebase(() => doc(firestore, 'products', id), [firestore, id]);
+  const productRef = useMemoFirebase(() => firestore && id ? doc(firestore, 'products', id) : null, [firestore, id]);
   const { data: product, isLoading } = useDoc<Product>(productRef);
 
   const { region, addToCart } = useStore();

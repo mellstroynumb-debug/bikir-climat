@@ -8,8 +8,8 @@ import {
 } from '@/components/ui/dialog';
 import { QuickOrderForm } from './quick-order-form';
 import type { Product, Order } from '@/lib/types';
-import { addDoc, collection, serverTimestamp, Timestamp } from 'firebase/firestore';
-import { useFirestore } from '@/firebase';
+import { collection, serverTimestamp, Timestamp } from 'firebase/firestore';
+import { useFirestore, addDocumentNonBlocking } from '@/firebase';
 import { useToast } from '@/hooks/use-toast';
 import { useStore } from '@/store/useStore';
 import { sendTelegramNotification } from '@/app/actions/telegram';
@@ -26,6 +26,10 @@ export function QuickOrderDialog({ isOpen, onOpenChange, product }: QuickOrderDi
   const { region } = useStore();
 
   const handleSave = async (formData: Pick<Order, 'customerName' | 'phone' | 'address'>) => {
+    if (!firestore) {
+        toast({ title: 'Ошибка', description: 'База данных не инициализирована.', variant: 'destructive' });
+        return;
+    }
     try {
       const price = region === 'PMR' ? product.price_pmr : product.price_md;
       const currency = region === 'PMR' ? 'PMR' : 'MD';
@@ -45,14 +49,11 @@ export function QuickOrderDialog({ isOpen, onOpenChange, product }: QuickOrderDi
       };
 
       const ordersCollection = collection(firestore, 'orders');
-      const newOrderRef = await addDoc(ordersCollection, newOrderData);
+      const newOrderRef = await addDocumentNonBlocking(ordersCollection, newOrderData);
 
-      // We need to pass a serializable version of the order to the server action.
-      // The `serverTimestamp` is not serializable until it's written and read back.
-      // So we'll pass the plain data and let the action know what happened.
       const serializableOrderData = {
         ...newOrderData,
-        createdAt: Timestamp.now().toJSON() // Send a serializable timestamp
+        createdAt: Timestamp.now().toJSON() 
       }
 
       await sendTelegramNotification(newOrderRef.id, serializableOrderData, [{ title: product.title, quantity: 1 }], 'quick');

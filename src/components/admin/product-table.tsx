@@ -12,8 +12,8 @@ import {
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Product } from '@/lib/types';
-import { useFirestore } from '@/firebase';
-import { doc, deleteDoc } from 'firebase/firestore';
+import { useFirestore, deleteDocumentNonBlocking } from '@/firebase';
+import { doc } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
 import {
   AlertDialog,
@@ -36,18 +36,10 @@ export function ProductTable({ products, onEdit }: ProductTableProps) {
     const firestore = useFirestore();
     const { toast } = useToast();
 
-    const handleDelete = async (productId: string) => {
-        try {
-            await deleteDoc(doc(firestore, 'products', productId));
-            toast({ title: 'Товар успешно удален' });
-        } catch (error) {
-            console.error("Ошибка удаления товара:", error);
-            toast({
-                title: 'Ошибка',
-                description: 'Не удалось удалить товар.',
-                variant: 'destructive',
-            });
-        }
+    const handleDelete = (productId: string) => {
+        const productRef = doc(firestore, 'products', productId);
+        deleteDocumentNonBlocking(productRef);
+        toast({ title: 'Товар успешно удален' });
     };
   
     return (

@@ -8,8 +8,8 @@ import {
 } from '@/components/ui/dialog';
 import { ProductForm } from './product-form';
 import type { Product } from '@/lib/types';
-import { doc, setDoc, addDoc, collection, serverTimestamp } from 'firebase/firestore';
-import { useFirestore } from '@/firebase';
+import { doc, collection, serverTimestamp } from 'firebase/firestore';
+import { useFirestore, addDocumentNonBlocking, setDocumentNonBlocking } from '@/firebase';
 import { useToast } from '@/hooks/use-toast';
 
 interface ProductDialogProps {
@@ -22,28 +22,19 @@ export function ProductDialog({ isOpen, onOpenChange, product }: ProductDialogPr
   const firestore = useFirestore();
   const { toast } = useToast();
 
-  const handleSave = async (formData: Omit<Product, 'id'>) => {
-    try {
-      if (product) {
-        // Update existing product
-        const productRef = doc(firestore, 'products', product.id);
-        await setDoc(productRef, formData, { merge: true });
-        toast({ title: 'Товар успешно обновлен' });
-      } else {
-        // Add new product
-        const productsCollection = collection(firestore, 'products');
-        await addDoc(productsCollection, { ...formData, createdAt: serverTimestamp() });
-        toast({ title: 'Товар успешно добавлен' });
-      }
-      onOpenChange(false);
-    } catch (error) {
-      console.error("Ошибка сохранения товара:", error);
-      toast({
-        title: 'Ошибка',
-        description: 'Не удалось сохранить товар.',
-        variant: 'destructive',
-      });
+  const handleSave = (formData: Omit<Product, 'id'>) => {
+    if (product) {
+      // Update existing product
+      const productRef = doc(firestore, 'products', product.id);
+      setDocumentNonBlocking(productRef, formData, { merge: true });
+      toast({ title: 'Товар успешно обновлен' });
+    } else {
+      // Add new product
+      const productsCollection = collection(firestore, 'products');
+      addDocumentNonBlocking(productsCollection, { ...formData, createdAt: serverTimestamp() });
+      toast({ title: 'Товар успешно добавлен' });
     }
+    onOpenChange(false);
   };
 
   return (

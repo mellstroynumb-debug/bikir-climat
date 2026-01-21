@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useMemo } from 'react';
-import { collection, doc, orderBy, query, setDoc } from 'firebase/firestore';
-import { useFirestore, useCollection, useMemoFirebase } from '@/firebase';
+import { collection, doc, orderBy, query } from 'firebase/firestore';
+import { useFirestore, useCollection, useMemoFirebase, setDocumentNonBlocking } from '@/firebase';
 import type { Order, Product } from '@/lib/types';
 import {
   Table,
@@ -45,19 +45,10 @@ export function OrderTable() {
     }, {} as Record<string, Product>);
   }, [products]);
 
-  const handleStatusChange = async (orderId: string, newStatus: Order['status']) => {
-    try {
-      const orderRef = doc(firestore, 'orders', orderId);
-      await setDoc(orderRef, { status: newStatus }, { merge: true });
-      toast({ title: `Статус заказа обновлен` });
-    } catch (error) {
-      console.error("Ошибка обновления статуса:", error);
-      toast({
-        title: 'Ошибка',
-        description: 'Не удалось обновить статус.',
-        variant: 'destructive',
-      });
-    }
+  const handleStatusChange = (orderId: string, newStatus: Order['status']) => {
+    const orderRef = doc(firestore, 'orders', orderId);
+    setDocumentNonBlocking(orderRef, { status: newStatus }, { merge: true });
+    toast({ title: `Статус заказа обновлен` });
   };
 
   const formatDate = (timestamp: any) => {

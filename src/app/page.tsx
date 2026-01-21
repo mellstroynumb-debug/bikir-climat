@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '@/store/useStore';
 
@@ -215,7 +216,7 @@ function Quiz({ allProducts }: { allProducts: Product[] }) {
               ))}
             </div>
           ) : (
-            <p className="text-center text-muted-foreground">К сожалению, по вашим критериям ничего не найдено. Попробуйте изменить параметры или <a href="#all-models" className="text-primary hover:underline">посмотрите все наши модели</a>.</p>
+            <p className="text-center text-muted-foreground">К сожалению, по вашим критериям ничего не найдено. Попробуйте изменить параметры или <a href="/catalog" className="text-primary hover:underline">посмотрите все наши модели</a>.</p>
           )}
         </motion.div>
       )}
@@ -228,31 +229,54 @@ export default function Home() {
   const productsCollection = useMemoFirebase(() => query(collection(firestore, 'products')), [firestore]);
   const { data: allProducts, isLoading } = useCollection<Product>(productsCollection);
 
+  const featuredProducts = useMemo(() => {
+    if (!allProducts) return [];
+    // Just an example: take first 4. In a real app, this could be based on a "featured" flag.
+    return allProducts.slice(0, 4);
+  }, [allProducts]);
+
   return (
     <>
       <Hero />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="py-24">
-          {isLoading && (
-            <div className="flex items-center justify-center h-[400px]">
-              <Loader2 className="h-8 w-8 animate-spin text-primary" />
-              <p className="ml-4 text-muted-foreground">Загружаем наш умный подборщик...</p>
-            </div>
-          )}
-          {allProducts && <Quiz allProducts={allProducts} />}
-        </div>
-        <div id="all-models" className="py-24 border-t scroll-mt-20">
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-center mb-12 font-headline">
-            Или посмотрите все наши модели
-          </h2>
+        
+        {/* Featured Products Section */}
+        <section id="featured-products" className="py-24 scroll-mt-20">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight font-headline">
+              Популярные модели
+            </h2>
+            <p className="mt-3 max-w-2xl mx-auto text-base text-muted-foreground">
+              Наш выбор лучших кондиционеров по соотношению цены и качества.
+            </p>
+          </div>
           {isLoading ? (
              <div className="flex justify-center items-center h-64">
                 <Loader2 className="h-8 w-8 animate-spin text-primary" />
             </div>
           ) : (
-            <ProductList products={allProducts || []} />
+            <ProductList products={featuredProducts} />
           )}
-        </div>
+          { allProducts && allProducts.length > 4 && (
+            <div className="text-center mt-12">
+              <Button asChild size="lg" variant="outline">
+                <Link href="/catalog">Смотреть все модели</Link>
+              </Button>
+            </div>
+          )}
+        </section>
+
+        {/* Quiz Section */}
+        <section className="py-24 border-t">
+          {isLoading && !allProducts ? (
+            <div className="flex items-center justify-center h-[400px]">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              <p className="ml-4 text-muted-foreground">Загружаем наш умный подборщик...</p>
+            </div>
+          ) : (
+             allProducts && <Quiz allProducts={allProducts} />
+          )}
+        </section>
       </div>
       <Advantages />
     </>

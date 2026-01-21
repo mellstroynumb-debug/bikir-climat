@@ -1,13 +1,12 @@
 'use client';
 
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Product } from '@/lib/types';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -177,7 +176,7 @@ export function ProductForm({ product, onSave, onCancel }: ProductFormProps) {
                         <FormControl>
                         <SelectTrigger>
                             <SelectValue />
-                        </SelectTrigger>
+                        </Trigger>
                         </FormControl>
                         <SelectContent>
                         <SelectItem value="Да">Да</SelectItem>

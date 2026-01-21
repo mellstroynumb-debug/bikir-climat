@@ -18,34 +18,32 @@ function Quiz() {
   const [step, setStep] = useState(1);
   const [roomType, setRoomType] = useState('');
   const [area, setArea] = useState([25]);
-  const [results, setResults] = useState<Product[]>([]);
   const [submitted, setSubmitted] = useState(false);
 
   const firestore = useFirestore();
   
   const productsQuery = useMemoFirebase(() => {
+    if (!firestore || !submitted) return null;
+    
     let q = query(collection(firestore, 'products'));
     
-    if (submitted) {
-        if (roomType === 'bedroom') {
-            q = query(q, where('specs.inverter', '==', 'Да'));
-        }
+    if (roomType === 'bedroom') {
+        q = query(q, where('specs.inverter', '==', 'Да'));
+    }
 
-        const selectedArea = area[0];
-        if (selectedArea <= 25) {
-            q = query(q, where('specs.power', '<=', 9000));
-        } else if (selectedArea > 25 && selectedArea <= 40) {
-            q = query(q, where('specs.power', '>', 7000), where('specs.power', '<=', 12000));
-        } else { // > 40
-            q = query(q, where('specs.power', '>', 12000));
-        }
+    const selectedArea = area[0];
+    if (selectedArea <= 25) {
+        q = query(q, where('specs.power', '<=', 9000));
+    } else if (selectedArea > 25 && selectedArea <= 40) {
+        q = query(q, where('specs.power', '>', 7000), where('specs.power', '<=', 12000));
+    } else { // > 40
+        q = query(q, where('specs.power', '>', 12000));
     }
     return q;
 
   }, [firestore, submitted, roomType, area]);
 
-  const { data: allProducts } = useCollection<Product>(useMemoFirebase(() => query(collection(firestore, 'products')), [firestore]));
-  const { data: quizResults } = useCollection<Product>(productsQuery, [submitted, productsQuery]);
+  const { data: quizResults } = useCollection<Product>(productsQuery);
 
 
   const handleNextStep = () => {
@@ -71,12 +69,12 @@ function Quiz() {
   return (
     <section id="quiz" className="w-full scroll-mt-20">
       <Card className="max-w-3xl mx-auto overflow-hidden">
-        <CardHeader className="text-center">
+        <CardHeader className="text-center px-4 pt-6 md:p-6">
           <CardTitle className="text-xl sm:text-2xl font-bold font-headline">Не знаете что выбрать?</CardTitle>
-          <CardDescription className="mt-2">Ответьте на 2 вопроса и мы подберем идеальный кондиционер для вас.</CardDescription>
+          <CardDescription className="mt-2 text-sm sm:text-base">Ответьте на 2 вопроса и мы подберем идеальный кондиционер для вас.</CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="relative flex items-start justify-center" style={{ minHeight: '350px' }}>
+        <CardContent className="px-4 pb-6 md:p-6 md:pt-0">
+          <div className="relative flex items-start justify-center min-h-[300px] md:min-h-[250px]">
             <AnimatePresence mode="wait">
               {step === 1 && (
                 <motion.div

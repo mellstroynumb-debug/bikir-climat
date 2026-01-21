@@ -1,6 +1,6 @@
 'use server';
 
-import type { Order, Product } from '@/lib/types';
+import type { Order } from '@/lib/types';
 
 // Helper function to escape characters for Telegram's MarkdownV2 parse mode
 function escapeMarkdownV2(text: string): string {
@@ -8,23 +8,35 @@ function escapeMarkdownV2(text: string): string {
     return String(text).replace(/([_*\[\]()~`>#\+\-=|{}.!])/g, '\\$1');
 }
 
-function formatOrderMessage(order: Order, product: Product): string {
+function formatOrderMessage(order: Order, items: { title: string; quantity: number }[], type: 'quick' | 'cart'): string {
+    const itemLines = items.map(item => 
+        `\\- ${escapeMarkdownV2(item.title)} (x${item.quantity})`
+    ).join('\n');
+    
+    const title = type === 'quick' ? '*Новый быстрый заказ!* 🎉' : '*Новый заказ из корзины!* 🛒';
+
     const details = [
-        `*Новый быстрый заказ!* 🎉`,
+        title,
         `--------------------------`,
         `*Клиент:* ${escapeMarkdownV2(order.customerName)}`,
         `*Телефон:* \`${escapeMarkdownV2(order.phone)}\``,
         `*Адрес:* ${escapeMarkdownV2(order.address)}`,
         `--------------------------`,
-        `*Товар:* ${escapeMarkdownV2(product.title)}`,
-        `*Цена:* ${new Intl.NumberFormat('ru-RU').format(order.totalPrice)} ${order.currency}`, // currency is safe
+        `*Товары:*\n${itemLines}`,
+        `--------------------------`,
+        `*Общая сумма:* ${new Intl.NumberFormat('ru-RU').format(order.totalPrice)} ${order.currency}`,
         `--------------------------`,
         `*ID Заказа:* \`${escapeMarkdownV2(order.id)}\``,
     ];
     return details.join('\n');
 }
 
-export async function sendTelegramNotification(orderId: string, orderData: Omit<Order, 'id'| 'createdAt'> & { createdAt: any }, product: Product) {
+export async function sendTelegramNotification(
+    orderId: string, 
+    orderData: Omit<Order, 'id'| 'createdAt'> & { createdAt: any }, 
+    items: { title: string, quantity: number }[],
+    type: 'quick' | 'cart'
+) {
     const botToken = process.env.TELEGRAM_BOT_TOKEN;
     const chatId = process.env.TELEGRAM_CHAT_ID;
 
@@ -34,7 +46,7 @@ export async function sendTelegramNotification(orderId: string, orderData: Omit<
     }
 
     const fullOrder: Order = { ...orderData, id: orderId };
-    const message = formatOrderMessage(fullOrder, product);
+    const message = formatOrderMessage(fullOrder, items, type);
     const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
     try {

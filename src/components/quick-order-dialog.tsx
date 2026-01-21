@@ -55,7 +55,7 @@ export function QuickOrderDialog({ isOpen, onOpenChange, product }: QuickOrderDi
         createdAt: Timestamp.now().toJSON() // Send a serializable timestamp
       }
 
-      await sendTelegramNotification(newOrderRef.id, serializableOrderData, product);
+      await sendTelegramNotification(newOrderRef.id, serializableOrderData, [{ title: product.title, quantity: 1 }], 'quick');
 
       toast({ title: 'Заказ успешно оформлен!', description: 'Мы скоро с вами свяжемся.' });
       onOpenChange(false);

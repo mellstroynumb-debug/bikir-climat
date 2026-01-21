@@ -62,7 +62,7 @@ function Quiz() {
     <section id="quiz" className="w-full scroll-mt-20">
       <Card className="max-w-3xl mx-auto overflow-hidden">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold font-headline">Не знаете что выбрать?</CardTitle>
+          <CardTitle className="text-xl md:text-2xl font-bold font-headline">Не знаете что выбрать?</CardTitle>
           <CardDescription>Ответьте на 2 вопроса и мы подберем идеальный кондиционер для вас.</CardDescription>
         </CardHeader>
         <CardContent>
@@ -87,13 +87,13 @@ function Quiz() {
                     >
                       <Label htmlFor="bedroom" className="flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer [&:has([data-state=checked])]:border-primary">
                         <RadioGroupItem value="bedroom" id="bedroom" className="sr-only" />
-                        <span className="text-xl">Спальня</span>
-                        <span className="text-sm text-muted-foreground">Тихий и комфортный сон</span>
+                        <span className="text-lg">Спальня</span>
+                        <span className="text-sm text-muted-foreground mt-1">Тихий и комфортный сон</span>
                       </Label>
                       <Label htmlFor="living_room" className="flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer [&:has([data-state=checked])]:border-primary">
                         <RadioGroupItem value="living_room" id="living_room" className="sr-only" />
-                        <span className="text-xl">Гостиная / Офис</span>
-                        <span className="text-sm text-muted-foreground">Мощное охлаждение</span>
+                        <span className="text-lg">Гостиная / Офис</span>
+                        <span className="text-sm text-muted-foreground mt-1">Мощное охлаждение</span>
                       </Label>
                     </RadioGroup>
                     <div className="flex justify-end pt-4">
@@ -124,7 +124,7 @@ function Quiz() {
                             value={area}
                             onValueChange={setArea}
                         />
-                        <p className="text-center text-2xl font-bold mt-4 text-primary">{area[0]} м²</p>
+                        <p className="text-center text-xl sm:text-2xl font-bold mt-4 text-primary">{area[0]} м²</p>
                      </div>
                      <div className="flex justify-center pt-2">
                         <Button size="lg" onClick={handleQuizSubmit}>Подобрать <Sparkles className="ml-2 h-4 w-4"/></Button>
@@ -145,7 +145,7 @@ function Quiz() {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="mt-16 scroll-mt-20"
         >
-          <h2 className="text-3xl font-bold tracking-tight text-center mb-4 font-headline">Рекомендуемые модели</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-center mb-4 font-headline">Рекомендуемые модели</h2>
           {results.length > 0 ? (
              <ProductList products={results} />
           ) : (
@@ -166,7 +166,7 @@ export default function Home() {
           <Quiz />
         </div>
         <div className="py-24 border-t">
-          <h2 className="text-3xl font-bold tracking-tight text-center mb-12 font-headline">Все популярные модели</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-center mb-12 font-headline">Все популярные модели</h2>
           <ProductList products={mockProducts} />
         </div>
       </div>

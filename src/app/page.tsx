@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Hero from "@/components/hero";
 import ProductList from "@/components/product-list";
-import { mockProducts } from "@/lib/mock-data";
 import type { Product } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -12,6 +11,8 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Slider } from '@/components/ui/slider';
 import { ArrowRight, Sparkles } from 'lucide-react';
+import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
+import { collection, query, where } from 'firebase/firestore';
 
 function Quiz() {
   const [step, setStep] = useState(1);
@@ -20,6 +21,33 @@ function Quiz() {
   const [results, setResults] = useState<Product[]>([]);
   const [submitted, setSubmitted] = useState(false);
 
+  const firestore = useFirestore();
+  
+  const productsQuery = useMemoFirebase(() => {
+    let q = query(collection(firestore, 'products'));
+    
+    if (submitted) {
+        if (roomType === 'bedroom') {
+            q = query(q, where('specs.inverter', '==', 'Да'));
+        }
+
+        const selectedArea = area[0];
+        if (selectedArea <= 25) {
+            q = query(q, where('specs.power', '<=', 9000));
+        } else if (selectedArea > 25 && selectedArea <= 40) {
+            q = query(q, where('specs.power', '>', 7000), where('specs.power', '<=', 12000));
+        } else { // > 40
+            q = query(q, where('specs.power', '>', 12000));
+        }
+    }
+    return q;
+
+  }, [firestore, submitted, roomType, area]);
+
+  const { data: allProducts } = useCollection<Product>(useMemoFirebase(() => query(collection(firestore, 'products')), [firestore]));
+  const { data: quizResults } = useCollection<Product>(productsQuery, [submitted, productsQuery]);
+
+
   const handleNextStep = () => {
     if (step === 1 && roomType) {
       setStep(2);
@@ -27,24 +55,6 @@ function Quiz() {
   };
 
   const handleQuizSubmit = () => {
-    if (!roomType) return;
-
-    let filtered = mockProducts.filter(p => p.price_pmr !== null || p.price_md !== null);
-
-    if (roomType === 'bedroom') {
-        filtered = filtered.filter(p => p.specs.inverter === 'Да');
-    }
-
-    const selectedArea = area[0];
-    if (selectedArea <= 25) {
-      filtered = filtered.filter(p => p.specs.power && p.specs.power <= 9000);
-    } else if (selectedArea > 25 && selectedArea <= 40) {
-      filtered = filtered.filter(p => p.specs.power && p.specs.power > 7000 && p.specs.power <= 12000);
-    } else { // > 40
-      filtered = filtered.filter(p => p.specs.power && p.specs.power > 12000);
-    }
-
-    setResults(filtered);
     setSubmitted(true);
     const resultsElement = document.getElementById('quiz-results');
     if (resultsElement) {
@@ -66,11 +76,7 @@ function Quiz() {
           <CardDescription className="mt-2">Ответьте на 2 вопроса и мы подберем идеальный кондиционер для вас.</CardDescription>
         </CardHeader>
         <CardContent>
-          {/*
-            The container needs a min-height to prevent content jumping during step transitions.
-            items-start is crucial to prevent content from overflowing to the top on smaller screens.
-          */}
-          <div className="relative flex items-start justify-center" style={{ minHeight: '320px' }}>
+          <div className="relative flex items-start justify-center" style={{ minHeight: '350px' }}>
             <AnimatePresence mode="wait">
               {step === 1 && (
                 <motion.div
@@ -150,8 +156,8 @@ function Quiz() {
           className="mt-16 scroll-mt-20"
         >
           <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-center mb-4 font-headline">Рекомендуемые модели</h2>
-          {results.length > 0 ? (
-             <ProductList products={results} />
+          {quizResults && quizResults.length > 0 ? (
+             <ProductList products={quizResults} />
           ) : (
             <p className="text-center text-muted-foreground">К сожалению, по вашим критериям ничего не найдено. Попробуйте изменить параметры.</p>
           )}
@@ -162,6 +168,10 @@ function Quiz() {
 }
 
 export default function Home() {
+  const firestore = useFirestore();
+  const productsCollection = useMemoFirebase(() => query(collection(firestore, 'products')), [firestore]);
+  const { data: products } = useCollection<Product>(productsCollection);
+
   return (
     <>
       <Hero />
@@ -171,7 +181,7 @@ export default function Home() {
         </div>
         <div className="py-24 border-t">
           <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-center mb-12 font-headline">Все популярные модели</h2>
-          <ProductList products={mockProducts} />
+          <ProductList products={products || []} />
         </div>
       </div>
     </>

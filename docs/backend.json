@@ -1,7 +1,6 @@
 {
   "entities": {
     "Product": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Product",
       "type": "object",
       "description": "Represents a product in the Bikir-Climat store.",
@@ -18,11 +17,11 @@
           "type": "string",
           "description": "A detailed description of the product."
         },
-        "pricePmr": {
+        "price_pmr": {
           "type": "number",
           "description": "The price of the product in PMR (Rubles)."
         },
-        "priceMd": {
+        "price_md": {
           "type": "number",
           "description": "The price of the product in MD (Lei)."
         },
@@ -34,24 +33,35 @@
           }
         },
         "specs": {
-          "type": "string",
-          "description": "Object that contains various product specifications such as area, type, and inverter. Stored as a string."
+          "type": "object",
+          "properties": {
+            "area": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            },
+            "inverter": {
+              "type": "string",
+              "enum": ["Да", "Нет"]
+            },
+             "power": {
+              "type": "number"
+            }
+          },
+           "required": ["area", "type", "inverter"]
         },
         "category": {
           "type": "string",
-          "description": "The category of the product (e.g., cond, service)."
+          "enum": ["cond", "service"]
         },
         "stockStatus": {
-          "type": "boolean",
-          "description": "Indicates whether the product is in stock."
+          "type": "boolean"
         }
       },
       "required": [
-        "id",
         "title",
         "description",
-        "pricePmr",
-        "priceMd",
         "images",
         "specs",
         "category",
@@ -59,7 +69,6 @@
       ]
     },
     "Order": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Order",
       "type": "object",
       "description": "Represents an order placed by a customer.",
@@ -101,7 +110,6 @@
         }
       },
       "required": [
-        "id",
         "customerName",
         "phone",
         "address",
@@ -114,45 +122,21 @@
   },
   "auth": {
     "providers": [
-      "password",
-      "anonymous"
+      "password"
     ]
   },
   "firestore": {
-    "structure": [
-      {
-        "path": "/products/{productId}",
-        "definition": {
-          "entityName": "Product",
-          "schema": {
-            "$ref": "#/backend/entities/Product"
-          },
-          "description": "Stores product information.  Admin users have read/write access.",
-          "params": [
-            {
-              "name": "productId",
-              "description": "Unique identifier for the product."
-            }
-          ]
-        }
+    "/products/{productId}": {
+      "schema": {
+        "$ref": "#/backend/entities/Product"
       },
-      {
-        "path": "/orders/{orderId}",
-        "definition": {
-          "entityName": "Order",
-          "schema": {
-            "$ref": "#/backend/entities/Order"
-          },
-          "description": "Stores order information. Accessible to admins. Users can create orders.",
-          "params": [
-            {
-              "name": "orderId",
-              "description": "Unique identifier for the order."
-            }
-          ]
-        }
-      }
-    ],
-    "reasoning": "The Firestore data structure is designed to manage products and orders for the Bikir-Climat webstore. It prioritizes structural segregation and clarity. Products are stored in a top-level `products` collection, and orders are stored in a top-level `orders` collection. This approach avoids mixing data with different access needs within the same collection.\n\nThis structure simplifies security rules by ensuring that all documents within a collection share the same security requirements. Products can be publicly accessible (for read operations), while write operations are restricted to authenticated admins (PIN code authentication is emulated on the client-side, so security rules still need to protect the data). Orders will be readable/writable by authenticated admins and writable by authenticated users (once user authentication is implemented).\n\nThis structure enables secure `list` operations by ensuring that the security rules don't act as filters. All documents in a collection have the same access requirements, so listing the entire collection is secure based on the role of the user making the request."
+      "description": "Stores all product information for the Bikir-Climat store."
+    },
+    "/orders/{orderId}": {
+      "schema": {
+        "$ref": "#/backend/entities/Order"
+      },
+      "description": "Stores all order information placed by customers."
+    }
   }
 }

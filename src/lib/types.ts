@@ -10,10 +10,11 @@ export type Product = {
   specs: {
     area: string;
     type: string;
-    inverter: string;
+    inverter: 'Да' | 'Нет';
     power?: number; // BTU
   };
   category: 'cond' | 'service';
+  stockStatus: boolean;
 };
 
 export type CartItem = Product & {

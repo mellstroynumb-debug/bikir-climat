@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
 import Header from '@/components/layout/header';
 import PageTransitionWrapper from '@/components/layout/page-transition-wrapper';
+import { FirebaseClientProvider } from '@/firebase/client-provider';
 
 export const metadata: Metadata = {
   title: 'Bikir-Climat',
@@ -23,11 +24,13 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap" rel="stylesheet" />
       </head>
       <body className={cn('min-h-screen bg-background font-body antialiased')}>
-        <Header />
-        <PageTransitionWrapper>
-          <main>{children}</main>
-        </PageTransitionWrapper>
-        <Toaster />
+        <FirebaseClientProvider>
+          <Header />
+          <PageTransitionWrapper>
+            <main>{children}</main>
+          </PageTransitionWrapper>
+          <Toaster />
+        </FirebaseClientProvider>
       </body>
     </html>
   );

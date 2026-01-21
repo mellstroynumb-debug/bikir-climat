@@ -1,16 +1,8 @@
 'use client';
 
-import { useStore } from "@/store/useStore";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ContactsClient } from "@/components/contacts-client";
-import { YandexMap } from "@/components/yandex-map";
-
-const tiraspolCoords: [number, number] = [46.8403, 29.6331];
-const chisinauCoords: [number, number] = [47.0269, 28.8415];
 
 export default function ContactsPage() {
-  const { region } = useStore();
-  const mapCenter = region === 'PMR' ? tiraspolCoords : chisinauCoords;
 
   return (
     <div className="container mx-auto px-4 py-12 md:py-16">
@@ -21,19 +13,10 @@ export default function ContactsPage() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <ContactsClient />
-
-        <Card>
-           <CardHeader>
-                <CardTitle>Мы на карте</CardTitle>
-            </CardHeader>
-            <CardContent>
-                 <div className="aspect-video bg-muted rounded-lg overflow-hidden">
-                    <YandexMap center={mapCenter} zoom={15} />
-                </div>
-            </CardContent>
-        </Card>
+      <div className="flex justify-center">
+        <div className="w-full max-w-2xl">
+            <ContactsClient />
+        </div>
       </div>
     </div>
   );

@@ -1,3 +1,34 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hero-background",
+      "description": "Abstract clean air flows",
+      "imageUrl": "https://images.unsplash.com/photo-1684856111070-0433891d6af5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxjbGVhbiUyMGFpcnxlbnwwfHx8fDE3NjkwMDM3NjR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "clean air"
+    },
+    {
+      "id": "product-1",
+      "description": "Modern air conditioner unit",
+      "imageUrl": "https://images.unsplash.com/photo-1436473849883-bb3464c23e93?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxhaXIlMjBjb25kaXRpb25lcnxlbnwwfHx8fDE3Njg5MTYzNDR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "air conditioner"
+    },
+    {
+      "id": "product-2",
+      "description": "Sleek air conditioner",
+      "imageUrl": "https://images.unsplash.com/photo-1718203862467-c33159fdc504?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxhaXIlMjBjb25kaXRpb25lcnxlbnwwfHx8fDE3Njg5MTYzNDR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "air conditioner"
+    },
+    {
+      "id": "product-3",
+      "description": "Powerful air conditioner",
+      "imageUrl": "https://images.unsplash.com/photo-1718203862467-c33159fdc504?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxhaXIlMjBjb25kaXRpb25lcnxlbnwwfHx8fDE3Njg5MTYzNDR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "air conditioner"
+    },
+    {
+      "id": "product-4",
+      "description": "Compact air conditioner",
+      "imageUrl": "https://images.unsplash.com/photo-1642018929698-8d86f43ffcd5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxhaXIlMjBjb25kaXRpb25lcnxlbnwwfHx8fDE3Njg5MTYzNDR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "air conditioner"
+    }
+  ]
 }

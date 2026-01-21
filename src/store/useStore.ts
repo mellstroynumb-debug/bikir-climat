@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import type { Product, CartItem, Region } from '@/lib/types';
-import { useToast } from '@/hooks/use-toast';
 
 interface StoreState {
   region: Region;
@@ -8,6 +7,9 @@ interface StoreState {
   setRegion: (region: Region) => void;
   addToCart: (product: Product) => void;
   removeFromCart: (productId: string) => void;
+  increaseQuantity: (productId: string) => void;
+  decreaseQuantity: (productId: string) => void;
+  clearCart: () => void;
   getCartCount: () => number;
   getCartTotal: () => number;
 }
@@ -34,6 +36,21 @@ export const useStore = create<StoreState>((set, get) => ({
       cart: state.cart.filter(item => item.id !== productId),
     }));
   },
+  increaseQuantity: (productId) => {
+    set(state => ({
+      cart: state.cart.map(item =>
+        item.id === productId ? { ...item, quantity: item.quantity + 1 } : item
+      ),
+    }));
+  },
+  decreaseQuantity: (productId) => {
+    set(state => ({
+      cart: state.cart.map(item =>
+        item.id === productId ? { ...item, quantity: Math.max(1, item.quantity - 1) } : item
+      ),
+    }));
+  },
+  clearCart: () => set({ cart: [] }),
   getCartCount: () => {
     const { cart } = get();
     return cart.reduce((count, item) => count + item.quantity, 0);

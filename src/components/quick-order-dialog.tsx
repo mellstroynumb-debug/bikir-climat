@@ -8,10 +8,11 @@ import {
 } from '@/components/ui/dialog';
 import { QuickOrderForm } from './quick-order-form';
 import type { Product, Order } from '@/lib/types';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { addDoc, collection, serverTimestamp, Timestamp } from 'firebase/firestore';
 import { useFirestore } from '@/firebase';
 import { useToast } from '@/hooks/use-toast';
 import { useStore } from '@/store/useStore';
+import { sendTelegramNotification } from '@/app/actions/telegram';
 
 interface QuickOrderDialogProps {
   isOpen: boolean;
@@ -29,20 +30,33 @@ export function QuickOrderDialog({ isOpen, onOpenChange, product }: QuickOrderDi
       const price = region === 'PMR' ? product.price_pmr : product.price_md;
       const currency = region === 'PMR' ? 'PMR' : 'MD';
 
-      if (price === null) {
+      if (price === null || price === undefined) {
           toast({ title: 'Ошибка', description: 'Цена для этого региона не указана.', variant: 'destructive' });
           return;
       }
       
-      const ordersCollection = collection(firestore, 'orders');
-      await addDoc(ordersCollection, {
+      const newOrderData = {
           ...formData,
           items: [product.id],
           totalPrice: price,
           currency: currency,
-          status: 'new',
+          status: 'new' as const,
           createdAt: serverTimestamp(),
-      });
+      };
+
+      const ordersCollection = collection(firestore, 'orders');
+      const newOrderRef = await addDoc(ordersCollection, newOrderData);
+
+      // We need to pass a serializable version of the order to the server action.
+      // The `serverTimestamp` is not serializable until it's written and read back.
+      // So we'll pass the plain data and let the action know what happened.
+      const serializableOrderData = {
+        ...newOrderData,
+        createdAt: Timestamp.now().toJSON() // Send a serializable timestamp
+      }
+
+      await sendTelegramNotification(newOrderRef.id, serializableOrderData, product);
+
       toast({ title: 'Заказ успешно оформлен!', description: 'Мы скоро с вами свяжемся.' });
       onOpenChange(false);
     } catch (error) {

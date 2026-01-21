@@ -106,7 +106,13 @@
         },
         "status": {
           "type": "string",
-          "description": "The status of the order (e.g., new, done)."
+          "description": "The status of the order (e.g., new, done).",
+          "enum": ["new", "done"]
+        },
+        "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The timestamp when the order was created."
         }
       },
       "required": [
@@ -116,7 +122,8 @@
         "items",
         "totalPrice",
         "currency",
-        "status"
+        "status",
+        "createdAt"
       ]
     }
   },

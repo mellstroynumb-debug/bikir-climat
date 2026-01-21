@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -13,6 +14,7 @@ import { Slider } from '@/components/ui/slider';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
 import { collection, query, where } from 'firebase/firestore';
+import { Advantages } from '@/components/advantages';
 
 function Quiz() {
   const [step, setStep] = useState(1);
@@ -176,6 +178,7 @@ export default function Home() {
   return (
     <>
       <Hero />
+      <Advantages />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="py-24">
           <Quiz />

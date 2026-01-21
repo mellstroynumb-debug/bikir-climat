@@ -27,17 +27,20 @@ function Quiz() {
     
     let q = query(collection(firestore, 'products'));
     
+    // For quiet operation in bedrooms, recommend inverter models
     if (roomType === 'bedroom') {
         q = query(q, where('specs.inverter', '==', 'Да'));
     }
 
+    // Match area to cooling power (BTU)
+    // This is a common conversion for air conditioners
     const selectedArea = area[0];
-    if (selectedArea <= 25) {
-        q = query(q, where('specs.power', '<=', 9000));
-    } else if (selectedArea > 25 && selectedArea <= 40) {
-        q = query(q, where('specs.power', '>', 7000), where('specs.power', '<=', 12000));
-    } else { // > 40
-        q = query(q, where('specs.power', '>', 12000));
+    if (selectedArea <= 25) { // ~7000-9000 BTU
+        q = query(q, where('specs.power_btu', '<=', 9000));
+    } else if (selectedArea > 25 && selectedArea <= 40) { // ~12000 BTU
+        q = query(q, where('specs.power_btu', '>', 7000), where('specs.power_btu', '<=', 12000));
+    } else { // > 40, ~18000+ BTU
+        q = query(q, where('specs.power_btu', '>', 12000));
     }
     return q;
 

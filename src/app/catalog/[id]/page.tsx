@@ -22,6 +22,16 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card } from '@/components/ui/card';
 
+const specLabels: Record<string, string> = {
+  inverter: 'Инвертор',
+  power_btu: 'Мощность (BTU)',
+  area_sq_m: 'Площадь (м²)',
+  brand: 'Бренд',
+  compressor_type: 'Тип компрессора',
+  // Add other known keys here for user-friendly display
+};
+
+
 export default function ProductPage() {
   const params = useParams();
   const id = params.id as string;
@@ -139,7 +149,7 @@ export default function ProductPage() {
                 <div className="divide-y">
                   {Object.entries(product.specs).map(([key, value]) => (
                     <div key={key} className="grid grid-cols-2 gap-4 px-6 py-3">
-                      <dt className="text-sm font-medium text-muted-foreground">{key}</dt>
+                      <dt className="text-sm font-medium text-muted-foreground">{specLabels[key] || key}</dt>
                       <dd className="text-sm font-semibold">{String(value)}</dd>
                     </div>
                   ))}

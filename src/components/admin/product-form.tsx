@@ -48,7 +48,11 @@ export function ProductForm({ product, onSave, onCancel }: ProductFormProps) {
       price_md: product?.price_md ?? 0,
       old_price_md: product?.old_price_md ?? null,
       images: product?.images?.map(url => ({ url })) ?? [{ url: 'https://placehold.co/600x400' }],
-      specs: product ? Object.entries(product.specs).map(([key, value]) => ({ key, value: String(value) })) : [{ key: "Площадь", value: "25" }],
+      specs: product ? Object.entries(product.specs).map(([key, value]) => ({ key, value: String(value) })) : [
+          { key: "inverter", value: "Да" },
+          { key: "power_btu", value: "9000" },
+          { key: "area_sq_m", value: "25" },
+      ],
       category: product?.category ?? 'cond',
       stockStatus: product?.stockStatus ?? true,
     },
@@ -240,7 +244,7 @@ export function ProductForm({ product, onSave, onCancel }: ProductFormProps) {
                             name={`specs.${index}.key`}
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormControl><Input placeholder="Название" {...field} /></FormControl>
+                                    <FormControl><Input placeholder="Название (напр. power_btu)" {...field} /></FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
@@ -250,7 +254,7 @@ export function ProductForm({ product, onSave, onCancel }: ProductFormProps) {
                             name={`specs.${index}.value`}
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormControl><Input placeholder="Значение" {...field} /></FormControl>
+                                    <FormControl><Input placeholder="Значение (напр. 9000)" {...field} /></FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}

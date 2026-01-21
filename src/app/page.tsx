@@ -1,8 +1,9 @@
-
 'use client';
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useStore } from '@/store/useStore';
+
 import Hero from "@/components/hero";
 import ProductList from "@/components/product-list";
 import type { Product } from '@/lib/types';
@@ -11,58 +12,101 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Slider } from '@/components/ui/slider';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles, Loader2, Lightbulb } from 'lucide-react';
 import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
-import { collection, query, where } from 'firebase/firestore';
+import { collection, query } from 'firebase/firestore';
 import { Advantages } from '@/components/advantages';
 
-function Quiz() {
+// Helper function to get price based on region
+const getPrice = (product: Product, region: 'PMR' | 'MD') => {
+  return region === 'PMR' ? product.price_pmr : product.price_md;
+};
+
+
+function Quiz({ allProducts }: { allProducts: Product[] }) {
   const [step, setStep] = useState(1);
   const [roomType, setRoomType] = useState('');
   const [area, setArea] = useState([25]);
+  const [budget, setBudget] = useState('');
   const [submitted, setSubmitted] = useState(false);
-
-  const firestore = useFirestore();
-  
-  const productsQuery = useMemoFirebase(() => {
-    if (!firestore || !submitted) return null;
-    
-    let q = query(collection(firestore, 'products'));
-    
-    // For quiet operation in bedrooms, recommend inverter models
-    if (roomType === 'bedroom') {
-        q = query(q, where('specs.inverter', '==', 'Да'));
-    }
-
-    // Match area to cooling power (BTU)
-    // This is a common conversion for air conditioners
-    const selectedArea = area[0];
-    if (selectedArea <= 25) { // ~7000-9000 BTU
-        q = query(q, where('specs.power_btu', '<=', 9000));
-    } else if (selectedArea > 25 && selectedArea <= 40) { // ~12000 BTU
-        q = query(q, where('specs.power_btu', '>', 7000), where('specs.power_btu', '<=', 12000));
-    } else { // > 40, ~18000+ BTU
-        q = query(q, where('specs.power_btu', '>', 12000));
-    }
-    return q;
-
-  }, [firestore, submitted, roomType, area]);
-
-  const { data: quizResults } = useCollection<Product>(productsQuery);
-
+  const [results, setResults] = useState<Record<string, { title: string; description: string; products: Product[] }>>({});
 
   const handleNextStep = () => {
-    if (step === 1 && roomType) {
-      setStep(2);
-    }
+    if (step === 1 && roomType) setStep(2);
+    if (step === 2 && area) setStep(3);
   };
 
   const handleQuizSubmit = () => {
-    setSubmitted(true);
-    const resultsElement = document.getElementById('quiz-results');
-    if (resultsElement) {
-      resultsElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    const { region } = useStore.getState();
+
+    // 1. Filter by Area
+    const filteredByArea = allProducts.filter(p => {
+      const productArea = Number(p.specs.area_sq_m) || 0;
+      if (productArea === 0) return false; // Don't recommend products without area spec
+
+      // Looser filter logic
+      if (area[0] <= 20) return productArea <= 25;
+      if (area[0] >= 50) return productArea >= 45;
+      
+      return productArea >= area[0] - 7 && productArea <= area[0] + 7;
+    });
+
+    // 2. Group by type and quality
+    const groups = {
+      optimal: { title: 'Оптимальный выбор', products: [] as Product[], description: 'Надежные и тихие инверторные модели. Экономят электроэнергию и создают комфортный климат. Лучшее соотношение цены и качества.' },
+      budget: { title: 'Бюджетные модели', products: [] as Product[], description: 'Отличный выбор, если вам нужно простое и эффективное решение для охлаждения без лишних затрат. Идеально для дачи или небольшой комнаты.' },
+      premium: { title: 'Премиум-класс', products: [] as Product[], description: 'Флагманские модели от ведущих брендов с максимальным набором функций, стильным дизайном и высочайшей энергоэффективностью.' },
+    };
+
+    const priceRangesPMR = { budget: 4500, premium: 8500 };
+    const priceRangesMD = { budget: 4500, premium: 8500 };
+    const priceRanges = region === 'PMR' ? priceRangesPMR : priceRangesMD;
+    const premiumBrands = ['Mitsubishi', 'Daikin', 'Cooper&Hunter', 'Gree'];
+
+    filteredByArea.forEach(p => {
+      const price = getPrice(p, region);
+      if (!price) return;
+
+      const isPremiumBrand = premiumBrands.some(brand => String(p.specs.brand).toLowerCase().includes(brand.toLowerCase()));
+
+      if (isPremiumBrand && price > priceRanges.budget) {
+        groups.premium.products.push(p);
+      } else if (p.specs.inverter === 'Да' && price > priceRanges.budget) {
+        groups.optimal.products.push(p);
+      } else {
+        groups.budget.products.push(p);
+      }
+    });
+    
+    // If user wants quietness (bedroom), boost inverter models
+    if (roomType === 'bedroom') {
+        groups.optimal.products = [...groups.optimal.products, ...groups.budget.products.filter(p => p.specs.inverter === 'Да')];
+        groups.budget.products = groups.budget.products.filter(p => p.specs.inverter !== 'Да');
     }
+
+    // 3. Reorder and filter groups based on user's budget preference
+    let finalGroups: Record<string, any> = {};
+    if (budget === 'premium') {
+        finalGroups = { premium: groups.premium, optimal: groups.optimal, budget: groups.budget };
+    } else if (budget === 'base') {
+        finalGroups = { optimal: groups.optimal, premium: groups.premium, budget: groups.budget };
+    } else { // 'eco'
+        finalGroups = { budget: groups.budget, optimal: groups.optimal, premium: groups.premium };
+    }
+    
+    const nonEmptyGroups = Object.fromEntries(
+      Object.entries(finalGroups).filter(([, group]) => group.products.length > 0)
+    );
+
+    setResults(nonEmptyGroups);
+    setSubmitted(true);
+    
+    setTimeout(() => {
+      const resultsElement = document.getElementById('quiz-results');
+      if (resultsElement) {
+        resultsElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 100);
   };
   
   const stepVariants = {
@@ -76,28 +120,16 @@ function Quiz() {
       <Card className="max-w-3xl mx-auto overflow-hidden">
         <CardHeader className="text-center px-4 pt-6 md:p-6">
           <CardTitle className="text-xl sm:text-2xl font-bold font-headline">Не знаете что выбрать?</CardTitle>
-          <CardDescription className="mt-2 text-sm sm:text-base">Ответьте на 2 вопроса и мы подберем идеальный кондиционер для вас.</CardDescription>
+          <CardDescription className="mt-2 text-sm sm:text-base">Пройдите наш мини-тест и получите персональную подборку за 1 минуту.</CardDescription>
         </CardHeader>
         <CardContent className="px-4 pb-6 md:p-6 md:pt-0">
           <div className="relative flex items-start justify-center min-h-[300px] md:min-h-[250px]">
             <AnimatePresence mode="wait">
               {step === 1 && (
-                <motion.div
-                  key="step1"
-                  variants={stepVariants}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                  transition={{ duration: 0.3 }}
-                  className="absolute w-full"
-                >
+                <motion.div key="step1" variants={stepVariants} initial="hidden" animate="visible" exit="exit" transition={{ duration: 0.3 }} className="absolute w-full">
                   <div className="space-y-4 pt-2">
                     <Label className="text-base sm:text-lg font-semibold text-center block">1. Куда вы хотите установить кондиционер?</Label>
-                    <RadioGroup
-                      value={roomType}
-                      onValueChange={setRoomType}
-                      className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2"
-                    >
+                    <RadioGroup value={roomType} onValueChange={setRoomType} className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
                       <Label htmlFor="bedroom" className="flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer [&:has([data-state=checked])]:border-primary">
                         <RadioGroupItem value="bedroom" id="bedroom" className="sr-only" />
                         <span className="text-base sm:text-lg">Спальня</span>
@@ -117,31 +149,41 @@ function Quiz() {
               )}
 
               {step === 2 && (
-                <motion.div
-                  key="step2"
-                  variants={stepVariants}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                  transition={{ duration: 0.3 }}
-                  className="absolute w-full"
-                >
+                <motion.div key="step2" variants={stepVariants} initial="hidden" animate="visible" exit="exit" transition={{ duration: 0.3 }} className="absolute w-full">
                   <div className="space-y-6 pt-2">
                      <Label htmlFor="area-slider" className="text-base sm:text-lg font-semibold text-center block">2. Какая площадь помещения?</Label>
                      <div className="p-4">
-                        <Slider
-                            id="area-slider"
-                            min={10}
-                            max={60}
-                            step={5}
-                            value={area}
-                            onValueChange={setArea}
-                        />
+                        <Slider id="area-slider" min={10} max={60} step={5} value={area} onValueChange={setArea} />
                         <p className="text-center text-xl sm:text-2xl font-bold mt-4 text-primary">{area[0]} м²</p>
                      </div>
-                     <div className="flex justify-center pt-2">
-                        <Button size="lg" onClick={handleQuizSubmit}>Подобрать <Sparkles className="ml-2 h-4 w-4"/></Button>
+                     <div className="flex justify-end pt-2">
+                        <Button onClick={handleNextStep}>Далее <ArrowRight className="ml-2 h-4 w-4"/></Button>
                      </div>
+                  </div>
+                </motion.div>
+              )}
+
+              {step === 3 && (
+                <motion.div key="step3" variants={stepVariants} initial="hidden" animate="visible" exit="exit" transition={{ duration: 0.3 }} className="absolute w-full">
+                  <div className="space-y-4 pt-2">
+                    <Label className="text-base sm:text-lg font-semibold text-center block">3. Какой у вас бюджет?</Label>
+                    <RadioGroup value={budget} onValueChange={setBudget} className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                       <Label htmlFor="eco" className="flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer [&:has([data-state=checked])]:border-primary">
+                        <RadioGroupItem value="eco" id="eco" className="sr-only" />
+                        <span className="text-base sm:text-lg">Эконом</span>
+                      </Label>
+                       <Label htmlFor="base" className="flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer [&:has([data-state=checked])]:border-primary">
+                        <RadioGroupItem value="base" id="base" className="sr-only" />
+                        <span className="text-base sm:text-lg">Базовый</span>
+                      </Label>
+                       <Label htmlFor="premium" className="flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer [&:has([data-state=checked])]:border-primary">
+                        <RadioGroupItem value="premium" id="premium" className="sr-only" />
+                        <span className="text-base sm:text-lg">Премиум</span>
+                      </Label>
+                    </RadioGroup>
+                    <div className="flex justify-center pt-4">
+                      <Button size="lg" onClick={handleQuizSubmit} disabled={!budget}>Подобрать <Sparkles className="ml-2 h-4 w-4"/></Button>
+                    </div>
                   </div>
                 </motion.div>
               )}
@@ -158,11 +200,22 @@ function Quiz() {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="mt-16 scroll-mt-20"
         >
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-center mb-4 font-headline">Рекомендуемые модели</h2>
-          {quizResults && quizResults.length > 0 ? (
-             <ProductList products={quizResults} />
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-center mb-10 font-headline">Вот что мы подобрали для вас:</h2>
+          {Object.keys(results).length > 0 ? (
+            <div className="space-y-12">
+              {Object.entries(results).map(([key, groupData]) => (
+                <div key={key}>
+                  <h3 className="text-xl sm:text-2xl font-bold font-headline mb-3">{groupData.title}</h3>
+                  <div className="flex items-start bg-blue-50 border-l-4 border-blue-400 p-4 rounded-md mb-6">
+                      <Lightbulb className="h-6 w-6 text-blue-500 mr-4 mt-1 flex-shrink-0" />
+                      <p className="text-sm text-blue-800">{groupData.description}</p>
+                  </div>
+                  <ProductList products={groupData.products} />
+                </div>
+              ))}
+            </div>
           ) : (
-            <p className="text-center text-muted-foreground">К сожалению, по вашим критериям ничего не найдено. Попробуйте изменить параметры.</p>
+            <p className="text-center text-muted-foreground">К сожалению, по вашим критериям ничего не найдено. Попробуйте изменить параметры или <a href="#all-models" className="text-primary hover:underline">посмотрите все наши модели</a>.</p>
           )}
         </motion.div>
       )}
@@ -173,21 +226,35 @@ function Quiz() {
 export default function Home() {
   const firestore = useFirestore();
   const productsCollection = useMemoFirebase(() => query(collection(firestore, 'products')), [firestore]);
-  const { data: products } = useCollection<Product>(productsCollection);
+  const { data: allProducts, isLoading } = useCollection<Product>(productsCollection);
 
   return (
     <>
       <Hero />
-      <Advantages />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="py-24">
-          <Quiz />
+          {isLoading && (
+            <div className="flex items-center justify-center h-[400px]">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              <p className="ml-4 text-muted-foreground">Загружаем наш умный подборщик...</p>
+            </div>
+          )}
+          {allProducts && <Quiz allProducts={allProducts} />}
         </div>
-        <div className="py-24 border-t">
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-center mb-12 font-headline">Все популярные модели</h2>
-          <ProductList products={products || []} />
+        <div id="all-models" className="py-24 border-t scroll-mt-20">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-center mb-12 font-headline">
+            Или посмотрите все наши модели
+          </h2>
+          {isLoading ? (
+             <div className="flex justify-center items-center h-64">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+          ) : (
+            <ProductList products={allProducts || []} />
+          )}
         </div>
       </div>
+      <Advantages />
     </>
   );
 }

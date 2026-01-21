@@ -6,7 +6,7 @@ import { PinForm } from '@/components/admin/pin-form';
 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const correctPin = "1234"; // Hardcoded PIN
+  const correctPin = "28405"; // Hardcoded PIN
 
   const handlePinSubmit = (pin: string) => {
     if (pin === correctPin) {

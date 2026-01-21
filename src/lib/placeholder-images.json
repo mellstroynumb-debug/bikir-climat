@@ -35,6 +35,42 @@
       "description": "Compact air conditioner",
       "imageUrl": "https://images.unsplash.com/photo-1642018929698-8d86f43ffcd5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxhaXIlMjBjb25kaXRpb25lcnxlbnwwfHx8fDE3Njg5MTYzNDR8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "air conditioner"
+    },
+    {
+      "id": "portfolio-1",
+      "description": "Clean installation of an air conditioner in a bedroom",
+      "imageUrl": "https://images.unsplash.com/photo-1558286084-5176c113f338?auto=format&fit=crop&q=80",
+      "imageHint": "clean installation"
+    },
+    {
+      "id": "portfolio-2",
+      "description": "Air conditioner unit mounted on an exterior wall",
+      "imageUrl": "https://images.unsplash.com/photo-1620703551528-a6e541457b89?auto=format&fit=crop&q=80",
+      "imageHint": "exterior unit"
+    },
+    {
+      "id": "portfolio-3",
+      "description": "Minimalist living room with a new air conditioner",
+      "imageUrl": "https://images.unsplash.com/photo-1603072462949-c19c5a4d4b1a?auto=format&fit=crop&q=80",
+      "imageHint": "minimalist interior"
+    },
+    {
+      "id": "portfolio-4",
+      "description": "Close up of an aesthetic installation with hidden wires",
+      "imageUrl": "https://images.unsplash.com/photo-1631510287002-3657a8a18357?auto=format&fit=crop&q=80",
+      "imageHint": "clean wiring"
+    },
+    {
+      "id": "portfolio-5",
+      "description": "Outdoor compressor unit installed neatly",
+      "imageUrl": "https://images.unsplash.com/photo-1658515335965-3855a8894170?auto=format&fit=crop&q=80",
+      "imageHint": "compressor unit"
+    },
+    {
+      "id": "portfolio-6",
+      "description": "Servicing an air conditioner unit",
+      "imageUrl": "https://images.unsplash.com/photo-1617042388659-0045e7f1b326?auto=format&fit=crop&q=80",
+      "imageHint": "ac service"
     }
   ]
 }

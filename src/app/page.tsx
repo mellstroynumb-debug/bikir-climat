@@ -62,11 +62,15 @@ function Quiz() {
     <section id="quiz" className="w-full scroll-mt-20">
       <Card className="max-w-3xl mx-auto overflow-hidden">
         <CardHeader className="text-center">
-          <CardTitle className="text-xl md:text-2xl font-bold font-headline">Не знаете что выбрать?</CardTitle>
-          <CardDescription>Ответьте на 2 вопроса и мы подберем идеальный кондиционер для вас.</CardDescription>
+          <CardTitle className="text-xl sm:text-2xl font-bold font-headline">Не знаете что выбрать?</CardTitle>
+          <CardDescription className="mt-2">Ответьте на 2 вопроса и мы подберем идеальный кондиционер для вас.</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="relative h-48 flex items-center">
+          {/*
+            The container needs a min-height to prevent content jumping during step transitions.
+            items-start is crucial to prevent content from overflowing to the top on smaller screens.
+          */}
+          <div className="relative flex items-start justify-center" style={{ minHeight: '320px' }}>
             <AnimatePresence mode="wait">
               {step === 1 && (
                 <motion.div
@@ -78,8 +82,8 @@ function Quiz() {
                   transition={{ duration: 0.3 }}
                   className="absolute w-full"
                 >
-                  <div className="space-y-4">
-                    <Label className="text-lg font-semibold text-center block">1. Куда вы хотите установить кондиционер?</Label>
+                  <div className="space-y-4 pt-2">
+                    <Label className="text-base sm:text-lg font-semibold text-center block">1. Куда вы хотите установить кондиционер?</Label>
                     <RadioGroup
                       value={roomType}
                       onValueChange={setRoomType}
@@ -87,13 +91,13 @@ function Quiz() {
                     >
                       <Label htmlFor="bedroom" className="flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer [&:has([data-state=checked])]:border-primary">
                         <RadioGroupItem value="bedroom" id="bedroom" className="sr-only" />
-                        <span className="text-lg">Спальня</span>
-                        <span className="text-sm text-muted-foreground mt-1">Тихий и комфортный сон</span>
+                        <span className="text-base sm:text-lg">Спальня</span>
+                        <span className="text-xs sm:text-sm text-muted-foreground mt-1">Тихий и комфортный сон</span>
                       </Label>
                       <Label htmlFor="living_room" className="flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer [&:has([data-state=checked])]:border-primary">
                         <RadioGroupItem value="living_room" id="living_room" className="sr-only" />
-                        <span className="text-lg">Гостиная / Офис</span>
-                        <span className="text-sm text-muted-foreground mt-1">Мощное охлаждение</span>
+                        <span className="text-base sm:text-lg">Гостиная / Офис</span>
+                        <span className="text-xs sm:text-sm text-muted-foreground mt-1">Мощное охлаждение</span>
                       </Label>
                     </RadioGroup>
                     <div className="flex justify-end pt-4">
@@ -113,8 +117,8 @@ function Quiz() {
                   transition={{ duration: 0.3 }}
                   className="absolute w-full"
                 >
-                  <div className="space-y-6">
-                     <Label htmlFor="area-slider" className="text-lg font-semibold text-center block">2. Какая площадь помещения?</Label>
+                  <div className="space-y-6 pt-2">
+                     <Label htmlFor="area-slider" className="text-base sm:text-lg font-semibold text-center block">2. Какая площадь помещения?</Label>
                      <div className="p-4">
                         <Slider
                             id="area-slider"

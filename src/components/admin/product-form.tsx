@@ -176,7 +176,7 @@ export function ProductForm({ product, onSave, onCancel }: ProductFormProps) {
                         <FormControl>
                         <SelectTrigger>
                             <SelectValue />
-                        </Trigger>
+                        </SelectTrigger>
                         </FormControl>
                         <SelectContent>
                         <SelectItem value="Да">Да</SelectItem>

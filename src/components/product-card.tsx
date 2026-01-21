@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { ShoppingCart } from 'lucide-react';
 import { useState } from 'react';
+import Link from 'next/link';
 
 import type { Product } from '@/lib/types';
 import { useStore } from '@/store/useStore';
@@ -38,37 +39,39 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <>
       <div
-        className="bg-card border rounded-lg overflow-hidden shadow-sm h-full flex flex-col transition-all duration-300 ease-in-out hover:scale-[1.03] hover:shadow-xl"
+        className="bg-card border rounded-lg overflow-hidden shadow-sm h-full flex flex-col transition-all duration-300 ease-in-out hover:scale-[1.03] hover:shadow-xl group"
       >
-        <div className="relative aspect-square w-full">
-          <Image
-            src={product.images[0]}
-            alt={product.title}
-            fill
-            className="object-cover"
-          />
-          {product.category === 'cond' && (
-            <Badge className="absolute top-3 right-3">Эстетичный монтаж</Badge>
-          )}
-        </div>
-        <div className="p-4 flex flex-col flex-grow">
-          <h3 className="font-bold text-lg font-headline truncate">{product.title}</h3>
-          <p className="text-muted-foreground text-sm mt-1 flex-grow">{product.description}</p>
-          
-          <div className="mt-4">
-              <p className="text-2xl font-extrabold text-primary">
-                  {new Intl.NumberFormat('ru-RU').format(price)} {currency}
-              </p>
+        <Link href={`/catalog/${product.id}`} className="flex flex-col flex-grow">
+          <div className="relative aspect-square w-full">
+            <Image
+              src={product.images[0]}
+              alt={product.title}
+              fill
+              className="object-cover"
+            />
+            {product.category === 'cond' && (
+              <Badge className="absolute top-3 right-3">Эстетичный монтаж</Badge>
+            )}
           </div>
-
-          <div className="mt-4 pt-4 border-t space-y-2">
-              <Button className="w-full" onClick={handleAddToCart}>
-                  <ShoppingCart className="mr-2 h-4 w-4"/>
-                  В корзину
-              </Button>
-              <Button variant="secondary" className="w-full" onClick={() => setIsQuickOrderOpen(true)}>
-                  Быстрый заказ
-              </Button>
+          <div className="p-4 flex flex-col flex-grow">
+            <h3 className="font-bold text-lg font-headline truncate group-hover:text-primary transition-colors">{product.title}</h3>
+            <p className="text-muted-foreground text-sm mt-1 flex-grow">{product.description}</p>
+            <div className="mt-4">
+                <p className="text-2xl font-extrabold text-primary">
+                    {new Intl.NumberFormat('ru-RU').format(price)} {currency}
+                </p>
+            </div>
+          </div>
+        </Link>
+        <div className="p-4 pt-0">
+          <div className="border-t pt-4 space-y-2">
+            <Button className="w-full" onClick={handleAddToCart} disabled={!product.stockStatus}>
+                <ShoppingCart className="mr-2 h-4 w-4"/>
+                В корзину
+            </Button>
+            <Button variant="secondary" className="w-full" onClick={() => setIsQuickOrderOpen(true)} disabled={!product.stockStatus}>
+                Быстрый заказ
+            </Button>
           </div>
         </div>
       </div>

@@ -1,0 +1,167 @@
+'use client';
+
+import { useParams } from 'next/navigation';
+import { doc } from 'firebase/firestore';
+import { useFirestore, useDoc, useMemoFirebase } from '@/firebase';
+import type { Product } from '@/lib/types';
+import Image from 'next/image';
+import { useStore } from '@/store/useStore';
+import { useToast } from '@/hooks/use-toast';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { ShoppingCart, Loader2 } from 'lucide-react';
+import { QuickOrderDialog } from '@/components/quick-order-dialog';
+import { useState } from 'react';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card } from '@/components/ui/card';
+
+export default function ProductPage() {
+  const params = useParams();
+  const id = params.id as string;
+  const firestore = useFirestore();
+  const productRef = useMemoFirebase(() => doc(firestore, 'products', id), [firestore, id]);
+  const { data: product, isLoading } = useDoc<Product>(productRef);
+
+  const { region, addToCart } = useStore();
+  const { toast } = useToast();
+  const [isQuickOrderOpen, setIsQuickOrderOpen] = useState(false);
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-[60vh]">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    );
+  }
+
+  if (!product) {
+    return (
+      <div className="text-center py-20">
+        <h1 className="text-2xl font-bold">Товар не найден</h1>
+        <p className="text-muted-foreground">Возможно, он был удален или ссылка неверна.</p>
+      </div>
+    );
+  }
+
+  const price = region === 'PMR' ? product.price_pmr : product.price_md;
+  const oldPrice = region === 'PMR' ? product.old_price_pmr : product.old_price_md;
+  const currency = region === 'PMR' ? 'руб.' : 'лей';
+
+  const handleAddToCart = () => {
+    addToCart(product);
+    toast({
+      title: "Товар добавлен в корзину",
+      description: product.title,
+    });
+  };
+
+  return (
+    <>
+      <div className="container mx-auto px-4 py-8 md:py-12">
+        <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
+          {/* Image Gallery */}
+          <div className="w-full">
+             <Carousel className="w-full">
+              <CarouselContent>
+                {product.images.map((img, index) => (
+                  <CarouselItem key={index}>
+                    <Card className="overflow-hidden">
+                      <div className="aspect-square relative">
+                        <Image
+                          src={img}
+                          alt={`${product.title} - изображение ${index + 1}`}
+                          fill
+                          className="object-contain"
+                        />
+                      </div>
+                    </Card>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="hidden sm:flex" />
+              <CarouselNext className="hidden sm:flex" />
+            </Carousel>
+          </div>
+
+          {/* Product Info */}
+          <div className="flex flex-col">
+            <h1 className="text-2xl md:text-3xl font-bold font-headline">{product.title}</h1>
+            
+            <div className="mt-2">
+              {product.stockStatus ? (
+                <Badge variant="default">В наличии</Badge>
+              ) : (
+                <Badge variant="destructive">Нет в наличии</Badge>
+              )}
+            </div>
+
+            <div className="mt-4">
+              {oldPrice && (
+                <span className="text-xl text-muted-foreground line-through mr-2">
+                  {new Intl.NumberFormat('ru-RU').format(oldPrice)} {currency}
+                </span>
+              )}
+              {price && (
+                 <span className="text-3xl font-extrabold text-primary">
+                    {new Intl.NumberFormat('ru-RU').format(price)} {currency}
+                 </span>
+              )}
+            </div>
+            
+            <div className="mt-6 pt-6 border-t space-y-3">
+              <Button size="lg" className="w-full" onClick={handleAddToCart} disabled={!product.stockStatus}>
+                <ShoppingCart className="mr-2 h-5 w-5" />
+                Добавить в корзину
+              </Button>
+              <Button size="lg" variant="secondary" className="w-full" onClick={() => setIsQuickOrderOpen(true)} disabled={!product.stockStatus}>
+                Быстрый заказ
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        {/* Description and Specs */}
+        <div className="mt-12 md:mt-16">
+          <Tabs defaultValue="specs">
+            <TabsList>
+              <TabsTrigger value="specs">Характеристики</TabsTrigger>
+              {product.description && <TabsTrigger value="description">Описание</TabsTrigger>}
+            </TabsList>
+            <TabsContent value="specs" className="pt-6">
+              <Card>
+                <div className="divide-y">
+                  {Object.entries(product.specs).map(([key, value]) => (
+                    <div key={key} className="grid grid-cols-2 gap-4 px-6 py-3">
+                      <dt className="text-sm font-medium text-muted-foreground">{key}</dt>
+                      <dd className="text-sm font-semibold">{String(value)}</dd>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            </TabsContent>
+            {product.description && (
+              <TabsContent value="description" className="pt-6">
+                 <Card className="p-6">
+                    <div className="prose max-w-none text-sm" dangerouslySetInnerHTML={{ __html: product.description.replace(/\n/g, '<br />') }} />
+                 </Card>
+              </TabsContent>
+            )}
+          </Tabs>
+        </div>
+
+      </div>
+      <QuickOrderDialog
+        isOpen={isQuickOrderOpen}
+        onOpenChange={setIsQuickOrderOpen}
+        product={product}
+      />
+    </>
+  );
+}

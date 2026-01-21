@@ -1,6 +1,6 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
+import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Product } from '@/lib/types';
@@ -10,19 +10,21 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Trash2 } from 'lucide-react';
+import { Separator } from '../ui/separator';
 
 const productSchema = z.object({
   title: z.string().min(1, 'Название обязательно'),
-  description: z.string().min(1, 'Описание обязательно'),
+  description: z.string().optional(),
   price_pmr: z.coerce.number().min(0, 'Цена должна быть положительной').nullable(),
+  old_price_pmr: z.coerce.number().min(0, 'Цена должна быть положительной').nullable().optional(),
   price_md: z.coerce.number().min(0, 'Цена должна быть положительной').nullable(),
-  images: z.array(z.string()).min(1, 'Нужно хотя бы одно изображение'),
-  specs: z.object({
-    area: z.string().min(1, "Площадь обязательна"),
-    power: z.coerce.number().min(0).optional(),
-    type: z.string().min(1, "Тип обязателен"),
-    inverter: z.enum(['Да', 'Нет']),
-  }),
+  old_price_md: z.coerce.number().min(0, 'Цена должна быть положительной').nullable().optional(),
+  images: z.array(z.object({ url: z.string().url('Введите корректный URL') })).min(1, 'Нужно хотя бы одно изображение'),
+  specs: z.array(z.object({
+    key: z.string().min(1, 'Ключ обязателен'),
+    value: z.string().min(1, 'Значение обязательно'),
+  })),
   category: z.enum(['cond', 'service']),
   stockStatus: z.boolean(),
 });
@@ -42,26 +44,48 @@ export function ProductForm({ product, onSave, onCancel }: ProductFormProps) {
       title: product?.title ?? '',
       description: product?.description ?? '',
       price_pmr: product?.price_pmr ?? 0,
+      old_price_pmr: product?.old_price_pmr ?? null,
       price_md: product?.price_md ?? 0,
-      images: product?.images ?? ['https://placehold.co/600x400'],
-      specs: {
-        area: product?.specs.area ?? '',
-        power: product?.specs.power ?? 7000,
-        type: product?.specs.type ?? 'Настенный',
-        inverter: product?.specs.inverter ?? 'Нет',
-      },
+      old_price_md: product?.old_price_md ?? null,
+      images: product?.images?.map(url => ({ url })) ?? [{ url: 'https://placehold.co/600x400' }],
+      specs: product ? Object.entries(product.specs).map(([key, value]) => ({ key, value: String(value) })) : [{ key: "Площадь", value: "25" }],
       category: product?.category ?? 'cond',
       stockStatus: product?.stockStatus ?? true,
     },
   });
 
+  const { fields: imageFields, append: appendImage, remove: removeImage } = useFieldArray({
+    control: form.control,
+    name: "images",
+  });
+
+  const { fields: specFields, append: appendSpec, remove: removeSpec } = useFieldArray({
+    control: form.control,
+    name: "specs",
+  });
+
+
   const onSubmit = (data: ProductFormData) => {
-    onSave(data);
+    const specsObject = data.specs.reduce((acc, { key, value }) => {
+      if (key) {
+        // Attempt to convert to number if it's a numeric string
+        const numericValue = Number(value);
+        acc[key] = isNaN(numericValue) || value.trim() === '' ? value : numericValue;
+      }
+      return acc;
+    }, {} as Record<string, string | number>);
+
+    const finalData = {
+      ...data,
+      images: data.images.map(img => img.url),
+      specs: specsObject,
+    };
+    onSave(finalData);
   };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 max-h-[70vh] overflow-y-auto p-1 pr-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 max-h-[70vh] overflow-y-auto p-1 pr-4">
         <FormField
           control={form.control}
           name="title"
@@ -80,7 +104,7 @@ export function ProductForm({ product, onSave, onCancel }: ProductFormProps) {
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Описание</FormLabel>
+              <FormLabel>Описание (необязательно)</FormLabel>
               <FormControl>
                 <Textarea {...field} />
               </FormControl>
@@ -88,34 +112,101 @@ export function ProductForm({ product, onSave, onCancel }: ProductFormProps) {
             </FormItem>
           )}
         />
-        <div className="grid grid-cols-2 gap-4">
-            <FormField
-              control={form.control}
-              name="price_pmr"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Цена PMR (руб)</FormLabel>
-                  <FormControl>
-                    <Input type="number" {...field} value={field.value ?? ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="price_md"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Цена MD (лей)</FormLabel>
-                  <FormControl>
-                    <Input type="number" {...field} value={field.value ?? ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+
+        <div>
+            <FormLabel>Изображения (URL)</FormLabel>
+            <div className="space-y-2 pt-2">
+                {imageFields.map((field, index) => (
+                    <FormField
+                        key={field.id}
+                        control={form.control}
+                        name={`images.${index}.url`}
+                        render={({ field }) => (
+                            <FormItem className="flex items-center gap-2">
+                                <FormControl>
+                                    <Input placeholder="https://..." {...field} />
+                                </FormControl>
+                                <Button type="button" variant="ghost" size="icon" onClick={() => removeImage(index)} disabled={imageFields.length <= 1}>
+                                    <Trash2 className="h-4 w-4"/>
+                                </Button>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                ))}
+            </div>
+            <Button type="button" variant="outline" size="sm" className="mt-2" onClick={() => appendImage({ url: '' })}>
+                Добавить изображение
+            </Button>
         </div>
+
+        <Separator />
+
+        <div className="space-y-4">
+            <h4 className="font-medium text-sm">Цены в Приднестровье (PMR)</h4>
+            <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="price_pmr"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Текущая цена (руб)</FormLabel>
+                      <FormControl>
+                        <Input type="number" {...field} value={field.value ?? ''} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="old_price_pmr"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Старая цена (руб)</FormLabel>
+                      <FormControl>
+                        <Input type="number" placeholder="Необязательно" {...field} value={field.value ?? ''} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+            </div>
+        </div>
+
+        <div className="space-y-4">
+            <h4 className="font-medium text-sm">Цены в Молдове (MD)</h4>
+            <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="price_md"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Текущая цена (лей)</FormLabel>
+                      <FormControl>
+                        <Input type="number" {...field} value={field.value ?? ''} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="old_price_md"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Старая цена (лей)</FormLabel>
+                      <FormControl>
+                        <Input type="number" placeholder="Необязательно" {...field} value={field.value ?? ''} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+            </div>
+        </div>
+        
+        <Separator />
 
         <FormField
             control={form.control}
@@ -138,57 +229,45 @@ export function ProductForm({ product, onSave, onCancel }: ProductFormProps) {
                 </FormItem>
             )}
         />
-
-        <div className="grid grid-cols-2 gap-4">
-            <FormField
-                control={form.control}
-                name="specs.area"
-                render={({ field }) => (
-                    <FormItem>
-                    <FormLabel>Площадь (кв.м)</FormLabel>
-                    <FormControl>
-                        <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                    </FormItem>
-                )}
-            />
-            <FormField
-                control={form.control}
-                name="specs.power"
-                render={({ field }) => (
-                    <FormItem>
-                    <FormLabel>Мощность (BTU)</FormLabel>
-                    <FormControl>
-                        <Input type="number" {...field} value={field.value ?? ''}/>
-                    </FormControl>
-                    <FormMessage />
-                    </FormItem>
-                )}
-            />
-             <FormField
-                control={form.control}
-                name="specs.inverter"
-                render={({ field }) => (
-                    <FormItem>
-                    <FormLabel>Инвертор</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                        <SelectTrigger>
-                            <SelectValue />
-                        </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                        <SelectItem value="Да">Да</SelectItem>
-                        <SelectItem value="Нет">Нет</SelectItem>
-                        </SelectContent>
-                    </Select>
-                    <FormMessage />
-                    </FormItem>
-                )}
-            />
+        
+        <div>
+            <FormLabel>Характеристики</FormLabel>
+            <div className="space-y-3 pt-2">
+                {specFields.map((field, index) => (
+                    <div key={field.id} className="grid grid-cols-[1fr_2fr_auto] items-start gap-2">
+                        <FormField
+                            control={form.control}
+                            name={`specs.${index}.key`}
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormControl><Input placeholder="Название" {...field} /></FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name={`specs.${index}.value`}
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormControl><Input placeholder="Значение" {...field} /></FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <Button type="button" variant="ghost" size="icon" onClick={() => removeSpec(index)}>
+                            <Trash2 className="h-4 w-4 text-destructive"/>
+                        </Button>
+                    </div>
+                ))}
+            </div>
+            <Button type="button" variant="outline" size="sm" className="mt-2" onClick={() => appendSpec({ key: '', value: '' })}>
+                Добавить характеристику
+            </Button>
         </div>
         
+        <Separator />
+
         <FormField
             control={form.control}
             name="stockStatus"

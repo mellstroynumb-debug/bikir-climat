@@ -3,16 +3,13 @@ export type Region = 'PMR' | 'MD';
 export type Product = {
   id: string;
   title: string;
-  description: string;
+  description?: string; // Made optional
   price_pmr: number | null;
+  old_price_pmr?: number | null; // For discounts
   price_md: number | null;
+  old_price_md?: number | null; // For discounts
   images: string[];
-  specs: {
-    area: string;
-    type: string;
-    inverter: 'Да' | 'Нет';
-    power?: number; // BTU
-  };
+  specs: Record<string, string | number>; // Changed to dynamic key-value
   category: 'cond' | 'service';
   stockStatus: boolean;
 };

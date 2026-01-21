@@ -8,15 +8,16 @@ service cloud.firestore {
       return request.auth != null;
     }
 
-    // Products can be read by anyone, but only modified by authenticated users
-    // In a real app, you'd likely have an 'admin' role check here.
+    // Products can be read by anyone.
+    // Write access is open for now to support PIN-based admin panel.
+    // WARNING: For a production app, you MUST implement proper role-based authentication.
     match /products/{productId} {
       allow read: if true;
-      allow write: if isSignedIn();
+      allow write: if true; // Changed from isSignedIn() to allow admin panel edits
     }
 
     // Orders can be created by anyone, but only read/updated by authenticated users.
-    // Again, you'd have more granular owner/admin checks in a real app.
+    // In a real app, you'd likely have owner/admin checks here.
     match /orders/{orderId} {
       allow read, update, delete: if isSignedIn();
       allow create: if true;

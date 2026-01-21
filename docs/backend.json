@@ -21,9 +21,17 @@
           "type": "number",
           "description": "The price of the product in PMR (Rubles)."
         },
+        "old_price_pmr": {
+            "type": "number",
+            "description": "The old price of the product in PMR (Rubles) for showing discounts."
+        },
         "price_md": {
           "type": "number",
           "description": "The price of the product in MD (Lei)."
+        },
+        "old_price_md": {
+            "type": "number",
+            "description": "The old price of the product in MD (Lei) for showing discounts."
         },
         "images": {
           "type": "array",
@@ -34,22 +42,13 @@
         },
         "specs": {
           "type": "object",
-          "properties": {
-            "area": {
-              "type": "string"
-            },
-            "type": {
-              "type": "string"
-            },
-            "inverter": {
-              "type": "string",
-              "enum": ["Да", "Нет"]
-            },
-             "power": {
-              "type": "number"
-            }
-          },
-           "required": ["area", "type", "inverter"]
+          "description": "A key-value map of product specifications.",
+          "additionalProperties": {
+            "anyOf": [
+              { "type": "string" },
+              { "type": "number" }
+            ]
+          }
         },
         "category": {
           "type": "string",
@@ -61,7 +60,6 @@
       },
       "required": [
         "title",
-        "description",
         "images",
         "specs",
         "category",

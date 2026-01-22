@@ -74,7 +74,7 @@ export const productsToSeed: Product[] = [
   },
   {
     id: 'midea-ag11a-09hrdn8i-bk',
-    title: 'кондиционер MIDEA AG11A-09HRDN8I-BK',
+    title: 'кондиционер MIDEA AG11A-09HRDN8I-BK / MOX11A-09HFN8I-BK',
     brand: 'MIDEA',
     description: 'Стильный и мощный инверторный кондиционер в черном цвете. Высочайший класс энергоэффективности A+++.',
     price_pmr: 5199,
@@ -120,11 +120,11 @@ export const productsToSeed: Product[] = [
     stockStatus: true,
   },
   {
-    id: 'gree-gwh09aac-k6dna2a',
-    title: 'кондиционер GREE Pular GWH09AAC-K6DNA2A',
+    id: 'gree-pular-inverter-r32',
+    title: 'кондиционер GREE Pular Inverter',
     brand: 'GREE',
     description: 'Надежный инверторный кондиционер от лидера рынка GREE. Готов к работе в суровые зимы (до -25°С) благодаря подогреву поддона.',
-    price_pmr: null, // No price in source file
+    price_pmr: null,
     old_price_pmr: null,
     price_md: null,
     old_price_md: null,

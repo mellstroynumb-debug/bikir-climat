@@ -68,7 +68,7 @@ export function SearchDialog({ isOpen, onOpenChange }: SearchDialogProps) {
           <Input
             type="text"
             placeholder="Поиск по названию товара..."
-            className="w-full h-12 border-0 shadow-none focus-visible:ring-0"
+            className="w-full h-12 border-0 shadow-none focus-visible:ring-0 focus-visible:outline-none"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />

@@ -8,12 +8,14 @@ import { RegionSwitcher } from "./region-switcher";
 
 const contactDetails = {
     PMR: {
-        phone: '+373 777 12345',
+        phone: '0775 28 405',
+        phoneLink: '+37377528405',
         email: 'info.pmr@bikir-climat.com',
         address: 'г. Тирасполь, ул. 25 Октября, 100',
     },
     MD: {
         phone: '+373 68 123456',
+        phoneLink: '+37368123456',
         email: 'info.md@bikir-climat.com',
         address: 'mun. Chișinău, str. Arborilor, 21',
     }
@@ -44,7 +46,7 @@ export function ContactsClient() {
                         <div className="flex items-center">
                             <Phone className="h-6 w-6 mr-4 text-primary" />
                             <div>
-                                <p className="font-semibold text-lg">{details.phone}</p>
+                                <a href={`tel:${details.phoneLink}`} className="font-semibold text-lg hover:underline">{details.phone}</a>
                                 <p className="text-sm text-muted-foreground">Телефон</p>
                             </div>
                         </div>

@@ -12,7 +12,10 @@ import { SearchDialog } from '@/components/search-dialog';
 
 export default function Header() {
   const region = useStore(state => state.region);
-  const phone = region === 'PMR' ? '+373 777 12345' : '+373 68 123456';
+  
+  const phoneDisplay = region === 'PMR' ? '0775 28 405' : '+373 68 123456';
+  const phoneCall = region === 'PMR' ? '+37377528405' : '+37368123456';
+
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   useEffect(() => {
@@ -44,7 +47,7 @@ export default function Header() {
             </Button>
             <div className="hidden items-center space-x-2 md:flex">
                <Phone className="h-4 w-4 text-primary" />
-               <a href={`tel:${phone.replace(/\s/g, '')}`} className="font-medium text-sm hover:text-primary transition-colors">{phone}</a>
+               <a href={`tel:${phoneCall}`} className="font-medium text-sm hover:text-primary transition-colors">{phoneDisplay}</a>
             </div>
             <RegionSwitcher />
             <CartIcon />

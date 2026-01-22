@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, LayoutGrid, Wrench, Phone } from 'lucide-react';
+import { Home, LayoutGrid, Wrench, Phone, ShoppingCart } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 import { useStore } from '@/store/useStore';
@@ -10,13 +10,13 @@ import { useStore } from '@/store/useStore';
 export default function MobileNav() {
   const pathname = usePathname();
   const { region } = useStore();
-  const phone = region === 'PMR' ? '+373 777 12345' : '+373 68 123456';
+  const phoneCall = region === 'PMR' ? '+37377528405' : '+37368123456';
 
   const navItems = [
     { href: '/', label: 'Главная', icon: Home },
     { href: '/catalog', label: 'Каталог', icon: LayoutGrid },
     { href: '/services', label: 'Услуги', icon: Wrench },
-    { href: `tel:${phone.replace(/\s/g, '')}`, label: 'Позвонить', icon: Phone },
+    { href: `tel:${phoneCall}`, label: 'Позвонить', icon: Phone },
   ];
   
   // Hydration safety
@@ -26,7 +26,7 @@ export default function MobileNav() {
   }, []);
 
   return (
-    <div className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-background/95 backdrop-blur-sm border-t z-40">
+    <div className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-background backdrop-blur-sm border-t z-40">
       <nav className="h-full">
         <ul className="h-full grid grid-cols-4">
           {navItems.map((item) => {

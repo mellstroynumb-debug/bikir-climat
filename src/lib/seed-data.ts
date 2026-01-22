@@ -142,5 +142,56 @@ export const productsToSeed: Product[] = [
     },
     category: 'cond',
     stockStatus: true,
+  },
+  {
+    id: 'service-aesthetic-montaj',
+    title: 'Эстетичный монтаж',
+    brand: 'Bikir Climat',
+    description: 'Аккуратная прокладка коммуникаций в декоративном коробе, без штробления стен. Включает все расходные материалы.',
+    price_pmr: 600,
+    old_price_pmr: null,
+    price_md: 600,
+    old_price_md: null,
+    images: ['https://placehold.co/600x400/eeeeee/333333?text=Услуга'],
+    specs: {
+      'type': 'Установка',
+      'included': 'Короб, крепежи, до 3м трассы'
+    },
+    category: 'service',
+    stockStatus: true,
+  },
+  {
+    id: 'service-standard-montaj',
+    title: 'Стандартный монтаж',
+    brand: 'Bikir Climat',
+    description: 'Базовая установка кондиционера с выводом трассы на улицу. Быстро и надежно.',
+    price_pmr: 450,
+    old_price_pmr: null,
+    price_md: 450,
+    old_price_md: null,
+    images: ['https://placehold.co/600x400/eeeeee/333333?text=Услуга'],
+    specs: {
+      'type': 'Установка',
+      'included': 'Крепежи, до 3м трассы'
+    },
+    category: 'service',
+    stockStatus: true,
+  },
+    {
+    id: 'service-diagnostics',
+    title: 'Диагностика и чистка',
+    brand: 'Bikir Climat',
+    description: 'Полная проверка системы, чистка фильтров и внутреннего блока, дозаправка фреоном при необходимости.',
+    price_pmr: 300,
+    old_price_pmr: null,
+    price_md: 300,
+    old_price_md: null,
+    images: ['https://placehold.co/600x400/eeeeee/333333?text=Услуга'],
+    specs: {
+      'type': 'Обслуживание',
+      'included': 'Чистка, диагностика'
+    },
+    category: 'service',
+    stockStatus: true,
   }
 ];

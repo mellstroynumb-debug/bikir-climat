@@ -156,10 +156,10 @@ export default function CinematicHero() {
                     initial={{ x: "-150%" }}
                     animate={{ x: "150%" }}
                     transition={{
-                        delay: 2.5,
+                        delay: 4,
                         duration: 1.5,
                         repeat: Infinity,
-                        repeatDelay: 3,
+                        repeatDelay: 5,
                         ease: "linear",
                     }}
                 />

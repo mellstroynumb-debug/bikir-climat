@@ -7,13 +7,17 @@ import { Button } from './ui/button';
 // The generative background is included here for a self-contained component.
 function AnimatedBackground() {
   return (
-    <div aria-hidden="true" className="absolute inset-0 -z-10 overflow-hidden bg-white">
+    <motion.div 
+      aria-hidden="true" 
+      className="absolute inset-0 -z-10 overflow-hidden bg-white"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1, ease: "easeOut" }}
+    >
       {/* Blob 1 - Brand Blue */}
       <motion.div
         className="absolute top-0 left-0 h-96 w-96 rounded-full bg-[rgba(56,189,248,0.6)] blur-[100px]"
-        initial={{ opacity: 0 }}
         animate={{
-          opacity: 1,
           x: [0, 200, 0, -100, 0],
           y: [0, 100, 250, 100, 0],
           scale: [1, 1.2, 1, 0.8, 1],
@@ -28,9 +32,7 @@ function AnimatedBackground() {
       {/* Blob 2 - Soft Indigo */}
       <motion.div
         className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-[rgba(129,140,248,0.4)] blur-[100px]"
-        initial={{ opacity: 0 }}
         animate={{
-          opacity: 1,
           x: [0, -200, 0, 100, 0],
           y: [0, -100, -250, -100, 0],
           scale: [1, 0.8, 1, 1.2, 1],
@@ -45,9 +47,7 @@ function AnimatedBackground() {
        {/* Blob 3 - Pale Grey */}
        <motion.div
         className="absolute top-1/2 left-1/2 h-80 w-80 rounded-full bg-[rgba(203,213,225,0.7)] blur-[100px]"
-        initial={{ opacity: 0 }}
         animate={{
-          opacity: 1,
           x: ['-50%', '0%', '-50%', '-100%', '-50%'],
           y: ['-50%', '-100%', '-50%', '0%', '-50%'],
           rotate: [0, 45, 90, 180, 360],
@@ -58,7 +58,7 @@ function AnimatedBackground() {
           repeat: Infinity,
         }}
       />
-    </div>
+    </motion.div>
   );
 }
 
@@ -146,6 +146,7 @@ export default function CinematicHero() {
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 1.2, type: 'spring', stiffness: 200, damping: 15 }}
+          whileHover={{ scale: 1.05 }}
           className="mt-8"
         >
           <Button asChild size="lg" className="font-bold shadow-lg">

@@ -13,7 +13,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Slider } from '@/components/ui/slider';
-import { ArrowRight, Sparkles, Loader2, Lightbulb } from 'lucide-react';
+import { ArrowRight, Sparkles, Loader2, Lightbulb, Moon, Wind } from 'lucide-react';
 import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
 import { collection, query } from 'firebase/firestore';
 import { Advantages } from '@/components/advantages';
@@ -27,14 +27,14 @@ const getPrice = (product: Product, region: 'PMR' | 'MD') => {
 
 function Quiz({ allProducts }: { allProducts: Product[] }) {
   const [step, setStep] = useState(1);
-  const [roomType, setRoomType] = useState('');
+  const [priority, setPriority] = useState('');
   const [area, setArea] = useState([25]);
   const [budget, setBudget] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [results, setResults] = useState<Record<string, { title: string; description: string; products: Product[] }>>({});
 
   const handleNextStep = () => {
-    if (step === 1 && roomType) setStep(2);
+    if (step === 1 && priority) setStep(2);
     if (step === 2 && area) setStep(3);
   };
 
@@ -80,10 +80,13 @@ function Quiz({ allProducts }: { allProducts: Product[] }) {
       }
     });
     
-    // If user wants quietness (bedroom), boost inverter models
-    if (roomType === 'bedroom') {
-        groups.optimal.products = [...groups.optimal.products, ...groups.budget.products.filter(p => p.specs.inverter === 'Да')];
-        groups.budget.products = groups.budget.products.filter(p => p.specs.inverter !== 'Да');
+    // If user wants quietness, boost inverter models
+    if (priority === 'quiet') {
+        groups.optimal.products.sort((a, b) => {
+            if (a.specs.inverter === 'Да' && b.specs.inverter !== 'Да') return -1;
+            if (a.specs.inverter !== 'Да' && b.specs.inverter === 'Да') return 1;
+            return 0;
+        });
     }
 
     // 3. Reorder and filter groups based on user's budget preference
@@ -130,21 +133,23 @@ function Quiz({ allProducts }: { allProducts: Product[] }) {
               {step === 1 && (
                 <motion.div key="step1" variants={stepVariants} initial="hidden" animate="visible" exit="exit" transition={{ duration: 0.3 }} className="absolute w-full">
                   <div className="space-y-4 pt-2">
-                    <Label className="text-base sm:text-lg font-semibold text-center block">1. Куда вы хотите установить кондиционер?</Label>
-                    <RadioGroup value={roomType} onValueChange={setRoomType} className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-                      <Label htmlFor="bedroom" className="flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer [&:has([data-state=checked])]:border-primary">
-                        <RadioGroupItem value="bedroom" id="bedroom" className="sr-only" />
-                        <span className="text-base sm:text-lg">Спальня</span>
-                        <span className="text-xs sm:text-sm text-muted-foreground mt-1">Тихий и комфортный сон</span>
+                    <Label className="text-base sm:text-lg font-semibold text-center block">1. Что для вас важнее всего в работе кондиционера?</Label>
+                    <RadioGroup value={priority} onValueChange={setPriority} className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                      <Label htmlFor="quiet" className="flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer [&:has([data-state=checked])]:border-primary">
+                        <RadioGroupItem value="quiet" id="quiet" className="sr-only" />
+                        <Moon className="h-6 w-6 mb-2"/>
+                        <span className="text-base sm:text-lg font-semibold">Тишина и комфорт</span>
+                        <span className="text-xs sm:text-sm text-muted-foreground mt-1 text-center">Для спальни, детской или кабинета</span>
                       </Label>
-                      <Label htmlFor="living_room" className="flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer [&:has([data-state=checked])]:border-primary">
-                        <RadioGroupItem value="living_room" id="living_room" className="sr-only" />
-                        <span className="text-base sm:text-lg">Гостиная / Офис</span>
-                        <span className="text-xs sm:text-sm text-muted-foreground mt-1">Мощное охлаждение</span>
+                      <Label htmlFor="power" className="flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer [&:has([data-state=checked])]:border-primary">
+                        <RadioGroupItem value="power" id="power" className="sr-only" />
+                         <Wind className="h-6 w-6 mb-2"/>
+                        <span className="text-base sm:text-lg font-semibold">Мощность</span>
+                        <span className="text-xs sm:text-sm text-muted-foreground mt-1 text-center">Для гостиной, офиса или магазина</span>
                       </Label>
                     </RadioGroup>
                     <div className="flex justify-end pt-4">
-                      <Button onClick={handleNextStep} disabled={!roomType}>Далее <ArrowRight className="ml-2 h-4 w-4"/></Button>
+                      <Button onClick={handleNextStep} disabled={!priority}>Далее <ArrowRight className="ml-2 h-4 w-4"/></Button>
                     </div>
                   </div>
                 </motion.div>
@@ -158,7 +163,8 @@ function Quiz({ allProducts }: { allProducts: Product[] }) {
                         <Slider id="area-slider" min={10} max={60} step={5} value={area} onValueChange={setArea} />
                         <p className="text-center text-xl sm:text-2xl font-bold mt-4 text-primary">{area[0]} м²</p>
                      </div>
-                     <div className="flex justify-end pt-2">
+                     <div className="flex justify-between items-center pt-2">
+                        <Button variant="ghost" onClick={() => setStep(1)}>Назад</Button>
                         <Button onClick={handleNextStep}>Далее <ArrowRight className="ml-2 h-4 w-4"/></Button>
                      </div>
                   </div>
@@ -169,22 +175,23 @@ function Quiz({ allProducts }: { allProducts: Product[] }) {
                 <motion.div key="step3" variants={stepVariants} initial="hidden" animate="visible" exit="exit" transition={{ duration: 0.3 }} className="absolute w-full">
                   <div className="space-y-4 pt-2">
                     <Label className="text-base sm:text-lg font-semibold text-center block">3. Какой у вас бюджет?</Label>
-                    <RadioGroup value={budget} onValueChange={setBudget} className="grid grid-cols-3 gap-2 md:gap-4 pt-2">
-                       <Label htmlFor="eco" className="flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer [&:has([data-state=checked])]:border-primary">
+                    <RadioGroup value={budget} onValueChange={setBudget} className="grid grid-cols-1 sm:grid-cols-3 gap-2 md:gap-4 pt-2">
+                       <Label htmlFor="eco" className="flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer [&:has([data-state=checked])]:border-primary h-24">
                         <RadioGroupItem value="eco" id="eco" className="sr-only" />
                         <span className="text-base sm:text-lg">Эконом</span>
                       </Label>
-                       <Label htmlFor="base" className="flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer [&:has([data-state=checked])]:border-primary">
+                       <Label htmlFor="base" className="flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer [&:has([data-state=checked])]:border-primary h-24">
                         <RadioGroupItem value="base" id="base" className="sr-only" />
                         <span className="text-base sm:text-lg">Базовый</span>
                       </Label>
-                       <Label htmlFor="premium" className="flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer [&:has([data-state=checked])]:border-primary">
+                       <Label htmlFor="premium" className="flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer [&:has([data-state=checked])]:border-primary h-24">
                         <RadioGroupItem value="premium" id="premium" className="sr-only" />
                         <span className="text-base sm:text-lg">Премиум</span>
                       </Label>
                     </RadioGroup>
-                    <div className="flex justify-center pt-4">
-                      <Button size="lg" onClick={handleQuizSubmit} disabled={!budget}>Подобрать <Sparkles className="ml-2 h-4 w-4"/></Button>
+                    <div className="flex justify-between items-center pt-4">
+                        <Button variant="ghost" onClick={() => setStep(2)}>Назад</Button>
+                        <Button size="lg" onClick={handleQuizSubmit} disabled={!budget}>Подобрать <Sparkles className="ml-2 h-4 w-4"/></Button>
                     </div>
                   </div>
                 </motion.div>
@@ -232,8 +239,9 @@ export default function Home() {
 
   const featuredProducts = useMemo(() => {
     if (!allProducts) return [];
-    // Just an example: take first 4. In a real app, this could be based on a "featured" flag.
-    return allProducts.slice(0, 4);
+    // Just an example: take first 4 available in region. In a real app, this could be based on a "featured" flag.
+     const { region } = useStore.getState();
+     return allProducts.filter(p => getPrice(p, region)).slice(0, 4);
   }, [allProducts]);
 
   return (

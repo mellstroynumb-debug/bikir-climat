@@ -111,7 +111,7 @@ function Quiz({ allProducts }: { allProducts: Product[] }) {
   const handleViewResults = () => {
     const resultsElement = document.getElementById('quiz-results');
     if (resultsElement) {
-      resultsElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      resultsElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
   

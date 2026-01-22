@@ -35,10 +35,24 @@ export default function Header() {
       if (!products || !searchTerm) {
           return [];
       }
-      return products.filter(product =>
-          product.title.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+      const searchWords = searchTerm.toLowerCase().split(' ').filter(Boolean);
+      if (searchWords.length === 0) {
+          return [];
+      }
+      return products.filter(product => {
+          const productTitleLower = product.title.toLowerCase();
+          // A smarter check: ensures all search words appear in the title, regardless of order
+          return searchWords.every(word => productTitleLower.includes(word));
+      });
   }, [products, searchTerm]);
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      router.push(`/catalog?q=${encodeURIComponent(searchTerm.trim())}`);
+      setIsPopoverOpen(false);
+    }
+  };
 
   const handleSelect = (path: string) => {
       router.push(path);
@@ -57,7 +71,11 @@ export default function Header() {
     const down = (e: KeyboardEvent) => {
       if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
-        setIsPopoverOpen((open) => !open);
+        // This is a workaround to make sure the input gets focus inside the popover.
+        const trigger = document.querySelector('[data-radix-collection-item] button[aria-label="Поиск"]');
+        if(trigger instanceof HTMLElement) {
+            trigger.click();
+        }
       }
     };
 
@@ -67,7 +85,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 w-full border-b bg-background">
+      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur-sm">
         <div className="mx-auto flex h-16 max-w-7xl items-center px-4 sm:px-6 lg:px-8">
           <Link href="/" className="mr-6 flex items-center space-x-2">
             <span className="font-bold sm:inline-block font-headline text-lg">
@@ -84,45 +102,47 @@ export default function Header() {
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-[300px] sm:w-[400px] lg:w-[500px] p-0">
-                    <div className="flex items-center px-4 border-b">
-                        <Search className="h-5 w-5 text-muted-foreground" />
-                        <Input
-                            type="text"
-                            placeholder="Поиск по названию товара..."
-                            className="w-full h-12 border-0 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:outline-none"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            autoFocus
-                        />
-                    </div>
-                    <div className="py-4 overflow-y-auto max-h-[70vh]">
+                    <form onSubmit={handleSearchSubmit}>
+                        <div className="flex items-center px-4 border-b">
+                            <Search className="h-5 w-5 text-muted-foreground" />
+                            <Input
+                                type="text"
+                                placeholder="Найти кондиционер..."
+                                className="w-full h-12 border-0 shadow-none focus-visible:ring-0"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                autoFocus
+                            />
+                        </div>
+                    </form>
+                    <div className="py-2 overflow-y-auto max-h-[70vh]">
                         {isLoading && (
                             <div className="flex items-center justify-center p-8">
                                 <Loader2 className="h-6 w-6 animate-spin" />
                             </div>
                         )}
                         {!isLoading && searchTerm && filteredProducts.length === 0 && (
-                            <p className="text-center text-muted-foreground p-8">Ничего не найдено.</p>
+                            <p className="text-center text-muted-foreground p-4 text-sm">Ничего не найдено.</p>
                         )}
                         {!isLoading && !searchTerm && (
-                            <p className="text-center text-muted-foreground p-8">Начните вводить название товара.</p>
+                            <p className="text-center text-muted-foreground p-4 text-sm">Начните вводить название товара.</p>
                         )}
                         <ul className="divide-y">
-                            {filteredProducts.map((product) => {
+                            {filteredProducts.slice(0, 7).map((product) => {
                                 const price = region === 'PMR' ? product.price_pmr : product.price_md;
                                 return (
                                     <li key={product.id}>
-                                        <button onClick={() => handleSelect(`/catalog/${product.id}`)} className="w-full text-left p-4 hover:bg-accent transition-colors flex items-center gap-4">
+                                        <button onClick={() => handleSelect(`/catalog/${product.id}`)} className="w-full text-left p-2 hover:bg-accent transition-colors flex items-center gap-3">
                                             <Image
                                                 src={product.images[0]}
                                                 alt={product.title}
-                                                width={50}
-                                                height={50}
+                                                width={40}
+                                                height={40}
                                                 className="rounded-md object-cover border"
                                             />
                                             <div className="flex-1">
-                                                <p className="font-semibold">{product.title}</p>
-                                                {price && <p className="text-sm text-primary">{new Intl.NumberFormat('ru-RU').format(price)} {currency}</p>}
+                                                <p className="font-medium text-sm leading-tight">{product.title}</p>
+                                                {price && <p className="text-xs text-primary">{new Intl.NumberFormat('ru-RU').format(price)} {currency}</p>}
                                             </div>
                                         </button>
                                     </li>

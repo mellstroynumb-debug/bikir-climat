@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import { useSearchParams } from 'next/navigation';
 import ProductList from "@/components/product-list";
 import type { Product } from '@/lib/types';
 import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
@@ -20,6 +21,9 @@ export default function CatalogPage() {
   const productsCollection = useMemoFirebase(() => firestore ? query(collection(firestore, 'products')) : null, [firestore]);
   const { data: products, isLoading } = useCollection<Product>(productsCollection);
 
+  const searchParams = useSearchParams();
+  const searchQuery = searchParams.get('q');
+
   const [sortOrder, setSortOrder] = useState('default');
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [inStockOnly, setInStockOnly] = useState(false);
@@ -38,9 +42,21 @@ export default function CatalogPage() {
 
     let filtered = [...products];
     
-    // Filter to only show conditioners ('cond') and hide services
+    // Filter to only show conditioners ('cond')
     filtered = filtered.filter(p => p.category === 'cond');
 
+    // Search query filter
+    if (searchQuery) {
+      const searchWords = searchQuery.toLowerCase().split(' ').filter(Boolean);
+      if (searchWords.length > 0) {
+        filtered = filtered.filter(p => {
+          const productTitleLower = p.title.toLowerCase();
+          // Check that every search word is present in the title
+          return searchWords.every(word => productTitleLower.includes(word));
+        });
+      }
+    }
+    
     // Price filter for current region
     filtered = filtered.filter(p => {
         const price = region === 'PMR' ? p.price_pmr : p.price_md;
@@ -73,7 +89,7 @@ export default function CatalogPage() {
     }
 
     return filtered;
-  }, [products, sortOrder, selectedBrands, inStockOnly, region]);
+  }, [products, sortOrder, selectedBrands, inStockOnly, region, searchQuery]);
 
   const handleBrandChange = (brand: string) => {
     setSelectedBrands(prev => 
@@ -85,10 +101,21 @@ export default function CatalogPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="py-12 md:py-16">
         <div className="text-center mb-12">
-            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight font-headline">Каталог товаров</h1>
-            <p className="mt-3 max-w-2xl mx-auto text-base text-muted-foreground">
-                Все наши кондиционеры и услуги в одном месте.
-            </p>
+            {searchQuery ? (
+              <>
+                <h1 className="text-3xl sm:text-4xl font-bold tracking-tight font-headline">Результаты поиска</h1>
+                <p className="mt-3 max-w-2xl mx-auto text-base text-muted-foreground">
+                  По запросу: <span className="font-bold text-foreground">{searchQuery}</span>
+                </p>
+              </>
+            ) : (
+              <>
+                <h1 className="text-3xl sm:text-4xl font-bold tracking-tight font-headline">Каталог товаров</h1>
+                <p className="mt-3 max-w-2xl mx-auto text-base text-muted-foreground">
+                    Все наши кондиционеры в одном месте.
+                </p>
+              </>
+            )}
         </div>
 
         {isLoading ? (
@@ -161,7 +188,7 @@ export default function CatalogPage() {
                     ) : (
                         <div className="flex flex-col items-center justify-center h-full bg-secondary/30 rounded-lg py-20">
                             <p className="font-semibold text-lg">Товары не найдены</p>
-                            <p className="text-muted-foreground text-sm mt-1">Попробуйте изменить или сбросить фильтры.</p>
+                            <p className="text-muted-foreground text-sm mt-1">Попробуйте изменить поисковой запрос или сбросить фильтры.</p>
                         </div>
                     )}
                 </main>

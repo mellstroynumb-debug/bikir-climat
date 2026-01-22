@@ -13,6 +13,10 @@
           "type": "string",
           "description": "The title of the product."
         },
+        "brand": {
+          "type": "string",
+          "description": "The brand/manufacturer of the product."
+        },
         "description": {
           "type": "string",
           "description": "A detailed description of the product."
@@ -60,6 +64,7 @@
       },
       "required": [
         "title",
+        "brand",
         "images",
         "specs",
         "category",

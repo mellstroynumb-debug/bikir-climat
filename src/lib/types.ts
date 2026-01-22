@@ -8,6 +8,7 @@ export type OrderItem = {
 export type Product = {
   id: string;
   title: string;
+  brand: string;
   description?: string; // Made optional
   price_pmr: number | null;
   old_price_pmr?: number | null; // For discounts

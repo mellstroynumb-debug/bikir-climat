@@ -203,7 +203,8 @@ export default function ProductPage() {
 
           {/* Product Info */}
           <div className="flex flex-col">
-            <h1 className="text-2xl md:text-3xl font-bold font-headline">{product.title}</h1>
+            <p className="text-sm font-medium text-muted-foreground">{product.brand}</p>
+            <h1 className="text-2xl md:text-3xl font-bold font-headline mt-1">{product.title}</h1>
             
             <div className="mt-2">
               {product.stockStatus ? (
@@ -268,6 +269,10 @@ export default function ProductPage() {
             <TabsContent value="specs" className="pt-6">
               <Card>
                 <div className="divide-y">
+                   <div className="grid grid-cols-2 gap-4 px-6 py-3">
+                      <dt className="text-sm font-medium text-muted-foreground">Бренд</dt>
+                      <dd className="text-sm font-semibold">{String(product.brand)}</dd>
+                    </div>
                   {Object.entries(product.specs).map(([key, value]) => (
                     <div key={key} className="grid grid-cols-2 gap-4 px-6 py-3">
                       <dt className="text-sm font-medium text-muted-foreground">{specLabels[key] || key}</dt>

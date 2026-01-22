@@ -26,7 +26,7 @@ export default function CatalogPage() {
 
   const availableBrands = useMemo(() => {
     if (!products) return [];
-    const brands = products.map(p => String(p.specs.brand)).filter(Boolean);
+    const brands = products.map(p => p.brand).filter(Boolean);
     return [...new Set(brands)];
   }, [products]);
 
@@ -48,7 +48,7 @@ export default function CatalogPage() {
 
     // Brand filter
     if (selectedBrands.length > 0) {
-      filtered = filtered.filter(p => selectedBrands.includes(String(p.specs.brand)));
+      filtered = filtered.filter(p => selectedBrands.includes(p.brand));
     }
 
     // Sorting

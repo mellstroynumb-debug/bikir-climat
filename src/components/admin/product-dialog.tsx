@@ -22,22 +22,30 @@ export function ProductDialog({ isOpen, onOpenChange, product }: ProductDialogPr
   const firestore = useFirestore();
   const { toast } = useToast();
 
-  const handleSave = (formData: Omit<Product, 'id'>) => {
+  const handleSave = (formData: any) => {
     if (!firestore) {
         toast({ title: "Ошибка", description: "База данных не инициализирована.", variant: "destructive"});
         return;
     }
 
+    const { id: customId, ...productData } = formData;
+
     if (product) {
       // Update existing product
       const productRef = doc(firestore, 'products', product.id);
-      setDocumentNonBlocking(productRef, formData, { merge: true });
+      setDocumentNonBlocking(productRef, productData, { merge: true });
       toast({ title: 'Товар успешно обновлен' });
     } else {
       // Add new product
-      const productsCollection = collection(firestore, 'products');
-      addDocumentNonBlocking(productsCollection, { ...formData, createdAt: serverTimestamp() });
-      toast({ title: 'Товар успешно добавлен' });
+      if (customId && customId.trim() !== '') {
+         const productRef = doc(firestore, 'products', customId);
+         setDocumentNonBlocking(productRef, { ...productData, createdAt: serverTimestamp() });
+         toast({ title: 'Товар успешно добавлен' });
+      } else {
+         const productsCollection = collection(firestore, 'products');
+         addDocumentNonBlocking(productsCollection, { ...productData, createdAt: serverTimestamp() });
+         toast({ title: 'Товар успешно добавлен' });
+      }
     }
     onOpenChange(false);
   };

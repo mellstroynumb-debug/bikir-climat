@@ -69,7 +69,7 @@ function Quiz({ allProducts }: { allProducts: Product[] }) {
       const price = getPrice(p, region);
       if (!price) return;
 
-      const isPremiumBrand = premiumBrands.some(brand => String(p.specs.brand).toLowerCase().includes(brand.toLowerCase()));
+      const isPremiumBrand = premiumBrands.some(brand => p.brand.toLowerCase().includes(brand.toLowerCase()));
 
       if (isPremiumBrand && price > priceRanges.budget) {
         groups.premium.products.push(p);

@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useStore } from '@/store/useStore';
 import { Button } from '@/components/ui/button';
-import { Trash2, Plus, Minus, ShoppingBag } from 'lucide-react';
+import { Trash2, Plus, Minus, ShoppingBag, Wrench } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { useEffect, useState } from 'react';
@@ -54,31 +54,40 @@ export default function CartPage() {
               <ul className="divide-y">
                 {cart.map((item) => {
                   const itemPrice = region === 'PMR' ? item.price_pmr : item.price_md;
+                  const isService = item.category === 'service';
                   return (
                     <li key={item.id} className="flex items-center p-4 sm:p-6">
-                      <Image
-                        src={item.images[0]}
-                        alt={item.title}
-                        width={100}
-                        height={100}
-                        className="rounded-md object-cover border"
-                      />
-                      <div className="ml-4 flex-1">
+                       {isService ? (
+                        <div className="flex h-[100px] w-[100px] items-center justify-center rounded-md border bg-secondary">
+                            <Wrench className="h-10 w-10 text-muted-foreground" />
+                        </div>
+                      ) : (
+                        <Image
+                          src={item.images[0]}
+                          alt={item.title}
+                          width={100}
+                          height={100}
+                          className="rounded-md object-cover border"
+                        />
+                      )}
+                      <div className="ml-4 mr-auto">
                         <Link href={`/catalog/${item.id}`} className="font-semibold hover:text-primary">{item.title}</Link>
                         <p className="text-muted-foreground text-sm mt-1">
                           {itemPrice ? `${new Intl.NumberFormat('ru-RU').format(itemPrice)} ${currency}` : 'Цена не указана'}
                         </p>
                       </div>
                       <div className="flex items-center gap-2 sm:gap-4 ml-4">
-                        <div className="flex items-center border rounded-md">
-                          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => decreaseQuantity(item.id)}>
-                            <Minus className="h-4 w-4" />
-                          </Button>
-                          <span className="px-3 text-sm font-medium">{item.quantity}</span>
-                           <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => increaseQuantity(item.id)}>
-                            <Plus className="h-4 w-4" />
-                          </Button>
-                        </div>
+                        {!isService && (
+                            <div className="flex items-center border rounded-md">
+                            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => decreaseQuantity(item.id)}>
+                                <Minus className="h-4 w-4" />
+                            </Button>
+                            <span className="px-3 text-sm font-medium">{item.quantity}</span>
+                            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => increaseQuantity(item.id)}>
+                                <Plus className="h-4 w-4" />
+                            </Button>
+                            </div>
+                        )}
                         <Button variant="ghost" size="icon" onClick={() => removeFromCart(item.id)}>
                           <Trash2 className="h-5 w-5 text-muted-foreground hover:text-destructive" />
                         </Button>

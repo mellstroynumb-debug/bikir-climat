@@ -9,12 +9,14 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from '@/components/ui/form';
 import { Trash2 } from 'lucide-react';
 import { Separator } from '../ui/separator';
 
 const productSchema = z.object({
+  id: z.string().optional(),
   title: z.string().min(1, 'Название обязательно'),
+  brand: z.string().min(1, 'Бренд обязателен'),
   description: z.string().optional(),
   price_pmr: z.coerce.number().min(0, 'Цена должна быть положительной').nullable(),
   old_price_pmr: z.coerce.number().min(0, 'Цена должна быть положительной').nullable().optional(),
@@ -41,7 +43,9 @@ export function ProductForm({ product, onSave, onCancel }: ProductFormProps) {
   const form = useForm<ProductFormData>({
     resolver: zodResolver(productSchema),
     defaultValues: {
+      id: product?.id ?? '',
       title: product?.title ?? '',
+      brand: product?.brand ?? '',
       description: product?.description ?? '',
       price_pmr: product?.price_pmr ?? 0,
       old_price_pmr: product?.old_price_pmr ?? null,
@@ -103,6 +107,36 @@ export function ProductForm({ product, onSave, onCancel }: ProductFormProps) {
             </FormItem>
           )}
         />
+
+        <FormField
+          control={form.control}
+          name="id"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>ID Товара (необязательно)</FormLabel>
+              <FormControl>
+                <Input {...field} placeholder="auto-generated" disabled={!!product} />
+              </FormControl>
+              <FormDescription>Можно задать свой ID. Если оставить пустым, сгенерируется автоматически. Нельзя менять после создания.</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="brand"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Бренд</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <FormField
           control={form.control}
           name="description"

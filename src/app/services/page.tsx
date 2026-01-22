@@ -6,11 +6,13 @@ import { useState } from 'react';
 import { QuickOrderDialog } from '@/components/quick-order-dialog';
 import type { Product } from '@/lib/types';
 import { Button } from '@/components/ui/button';
+import { ServiceAdvantages } from '@/components/service-advantages';
 
-const services: Product[] = [
+const services: (Product & { features: string[] })[] = [
   {
     id: 'service-standart-montaj',
     title: 'Стандартный монтаж',
+    brand: 'Bikir Climat',
     description: 'Быстрая и качественная установка кондиционера с соблюдением всех технических норм.',
     price_pmr: 800,
     price_md: 800,
@@ -28,6 +30,7 @@ const services: Product[] = [
   {
     id: 'service-aesthetic-montaj',
     title: 'Эстетичный монтаж',
+    brand: 'Bikir Climat',
     description: 'Скрытая прокладка коммуникаций для сохранения идеального вида вашего интерьера.',
     price_pmr: 1200,
     price_md: 1200,
@@ -45,6 +48,7 @@ const services: Product[] = [
   {
     id: 'service-to',
     title: 'Техническое обслуживание',
+    brand: 'Bikir Climat',
     description: 'Комплексная проверка и чистка вашего оборудования для долгой и надежной работы.',
     price_pmr: 500,
     price_md: 500,
@@ -82,7 +86,7 @@ export default function ServicesPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {services.map((service: any) => (
+            {services.map((service) => (
               <Card key={service.title} className="flex flex-col">
                 <CardHeader>
                   <CardTitle>{service.title}</CardTitle>
@@ -109,6 +113,9 @@ export default function ServicesPage() {
             ))}
           </div>
         </div>
+        
+        <ServiceAdvantages />
+        
         {selectedService && (
             <QuickOrderDialog
                 isOpen={isDialogOpen}

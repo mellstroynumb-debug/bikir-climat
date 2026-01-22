@@ -17,7 +17,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import Image from 'next/image';
-import Link from 'next/link';
+import { Wrench } from 'lucide-react';
 
 const checkoutSchema = z.object({
   customerName: z.string().min(2, 'Имя должно содержать не менее 2 символов'),
@@ -131,19 +131,26 @@ export default function CheckoutPage() {
               <ul className="divide-y -mx-6 px-6">
                 {cart.map((item) => {
                   const itemPrice = region === 'PMR' ? item.price_pmr : item.price_md;
+                  const isService = item.category === 'service';
                   return (
                     <li key={item.id} className="flex py-4">
-                      <Image
-                        src={item.images[0]}
-                        alt={item.title}
-                        width={64}
-                        height={64}
-                        className="rounded-md object-cover border"
-                      />
+                      {isService ? (
+                          <div className="flex h-[64px] w-[64px] items-center justify-center rounded-md border bg-secondary">
+                              <Wrench className="h-8 w-8 text-muted-foreground" />
+                          </div>
+                      ) : (
+                          <Image
+                              src={item.images[0]}
+                              alt={item.title}
+                              width={64}
+                              height={64}
+                              className="rounded-md object-cover border"
+                          />
+                      )}
                       <div className="ml-4 flex-1 flex justify-between">
                         <div>
                           <p className="font-semibold text-sm">{item.title}</p>
-                          <p className="text-muted-foreground text-sm">Кол-во: {item.quantity}</p>
+                          {!isService && <p className="text-muted-foreground text-sm">Кол-во: {item.quantity}</p>}
                         </div>
                         <p className="font-medium text-sm whitespace-nowrap">
                             {itemPrice ? `${new Intl.NumberFormat('ru-RU').format(itemPrice * item.quantity)} ${currency}` : ''}

@@ -89,7 +89,7 @@ export default function Header() {
                         <Input
                             type="text"
                             placeholder="Поиск по названию товара..."
-                            className="w-full h-12 border-0 shadow-none focus-visible:ring-0 focus-visible:outline-none"
+                            className="w-full h-12 border-0 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:outline-none"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             autoFocus

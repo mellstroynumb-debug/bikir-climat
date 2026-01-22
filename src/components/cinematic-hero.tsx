@@ -149,8 +149,22 @@ export default function CinematicHero() {
           whileHover={{ scale: 1.05 }}
           className="mt-8"
         >
-          <Button asChild size="lg" className="font-bold shadow-lg">
-            <a href="#quiz">Подобрать кондиционер</a>
+          <Button asChild size="lg" className="font-bold shadow-lg relative overflow-hidden">
+            <a href="#quiz">
+                <motion.span
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-[-20deg]"
+                    initial={{ x: "-150%" }}
+                    animate={{ x: "150%" }}
+                    transition={{
+                        delay: 2.5,
+                        duration: 1.5,
+                        repeat: Infinity,
+                        repeatDelay: 3,
+                        ease: "linear",
+                    }}
+                />
+                <span className="relative">Подобрать кондиционер</span>
+            </a>
           </Button>
         </motion.div>
       </div>

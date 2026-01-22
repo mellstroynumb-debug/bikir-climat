@@ -1,10 +1,8 @@
 'use client';
 
-import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useStore } from '@/store/useStore';
 import { Button } from './ui/button';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 function HeroSubtitle() {
   const region = useStore(state => state.region);
@@ -22,23 +20,27 @@ function HeroSubtitle() {
   );
 }
 
-const heroImage = PlaceHolderImages.find(img => img.id === 'hero-living-room');
-
 export default function Hero() {
   return (
-    <section className="relative w-full h-[60vh] min-h-[450px] flex items-center justify-center text-center overflow-hidden">
-      {heroImage && (
-        <Image
-          src={heroImage.imageUrl}
-          alt={heroImage.description}
-          fill
-          className="object-cover"
-          data-ai-hint={heroImage.imageHint}
-          priority
-        />
-      )}
-      <div className="absolute inset-0 bg-gradient-to-r from-white/30 via-white/80 to-sky-100/20" />
-      <div className="relative px-4 z-10">
+    <section className="relative w-full h-[60vh] min-h-[450px] flex items-center justify-center text-center overflow-hidden bg-background">
+      {/* Background Video */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute top-1/2 left-1/2 w-full h-full min-w-full min-h-full object-cover -translate-x-1/2 -translate-y-1/2 z-0"
+      >
+        {/* This video shows abstract white lines flowing on a white background, creating a sense of clean air and technology */}
+        <source src="https://videos.pexels.com/video-files/8571708/8571708-hd_1920_1080_30fps.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+      
+      {/* Overlay to ensure text readability */}
+      <div className="absolute inset-0 bg-background/60 backdrop-blur-sm z-10" />
+
+      {/* Content */}
+      <div className="relative z-20 px-4">
         <motion.h1 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

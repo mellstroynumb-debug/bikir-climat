@@ -41,7 +41,7 @@ export function QuickOrderDialog({ isOpen, onOpenChange, product }: QuickOrderDi
       
       const newOrderData = {
           ...formData,
-          items: [product.id],
+          items: [{ productId: product.id, quantity: 1 }],
           totalPrice: price,
           currency: currency,
           status: 'new' as const,

@@ -9,7 +9,7 @@ import { useStore } from '@/store/useStore';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ShoppingCart, Loader2 } from 'lucide-react';
+import { ShoppingCart, Loader2, Wrench } from 'lucide-react';
 import { QuickOrderDialog } from '@/components/quick-order-dialog';
 import { useState, useMemo, useEffect } from 'react';
 import {
@@ -24,6 +24,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card } from '@/components/ui/card';
 import ProductList from '@/components/product-list';
 import { cn } from '@/lib/utils';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
 
 const specLabels: Record<string, string> = {
   inverter: 'Инвертор',
@@ -44,10 +46,16 @@ export default function ProductPage() {
 
   const productsCollection = useMemoFirebase(() => firestore ? query(collection(firestore, 'products')) : null, [firestore]);
   const { data: allProducts } = useCollection<Product>(productsCollection);
+  
+  // Fetch the installation service
+  const installationServiceRef = useMemoFirebase(() => firestore ? doc(firestore, 'products', 'service-aesthetic-montaj') : null, [firestore]);
+  const { data: installationService, isLoading: isServiceLoading } = useDoc<Product>(installationServiceRef);
+
 
   const { region, addToCart } = useStore();
   const { toast } = useToast();
   const [isQuickOrderOpen, setIsQuickOrderOpen] = useState(false);
+  const [addInstallation, setAddInstallation] = useState(false);
 
   // State for Carousel API
   const [api, setApi] = useState<CarouselApi>()
@@ -78,6 +86,7 @@ export default function ProductPage() {
     return allProducts
       .filter(p => 
         p.id !== product.id && 
+        p.category === 'cond' && // Only show other conditioners
         (region === 'PMR' ? p.price_pmr : p.price_md)
       ) // Exclude self & products not priced for the region
       .sort((a, b) => {
@@ -102,7 +111,7 @@ export default function ProductPage() {
 
   }, [product, allProducts, region]);
 
-  if (isLoading) {
+  if (isLoading || isServiceLoading) {
     return (
       <div className="flex justify-center items-center h-[60vh]">
         <Loader2 className="h-8 w-8 animate-spin" />
@@ -123,11 +132,19 @@ export default function ProductPage() {
   const oldPrice = region === 'PMR' ? product.old_price_pmr : product.old_price_md;
   const currency = region === 'PMR' ? 'руб.' : 'лей';
 
+  const installationPrice = installationService ? (region === 'PMR' ? installationService.price_pmr : installationService.price_md) : null;
+
+
   const handleAddToCart = () => {
     addToCart(product);
+    let toastMessage = product.title;
+    if (addInstallation && installationService) {
+        addToCart(installationService);
+        toastMessage += ` + ${installationService.title}`;
+    }
     toast({
-      title: "Товар добавлен в корзину",
-      description: product.title,
+      title: "Добавлено в корзину",
+      description: toastMessage,
     });
   };
 
@@ -202,12 +219,32 @@ export default function ProductPage() {
                     {new Intl.NumberFormat('ru-RU').format(price)} {currency}
                  </span>
               )}
-              {oldPrice && oldPrice > price && (
+              {oldPrice && price && oldPrice > price && (
                 <span className="text-xl text-muted-foreground line-through">
                   {new Intl.NumberFormat('ru-RU').format(oldPrice)} {currency}
                 </span>
               )}
             </div>
+
+            {product.category === 'cond' && installationService && installationPrice && (
+                 <div className="mt-6 border-t pt-6">
+                    <div className="flex items-center space-x-3 rounded-lg border p-4">
+                        <Checkbox id="installation" checked={addInstallation} onCheckedChange={(checked) => setAddInstallation(checked as boolean)} />
+                        <div className="grid gap-1.5 leading-none">
+                            <Label htmlFor="installation" className="font-semibold cursor-pointer flex items-center">
+                                <Wrench className="h-4 w-4 mr-2" />
+                                {installationService.title}
+                            </Label>
+                            <p className="text-sm text-muted-foreground">
+                               {installationService.description}
+                            </p>
+                        </div>
+                        <p className="font-semibold text-primary whitespace-nowrap ml-auto">
+                            + {new Intl.NumberFormat('ru-RU').format(installationPrice)} {currency}
+                        </p>
+                    </div>
+                </div>
+            )}
             
             <div className="mt-6 pt-6 border-t space-y-3">
               <Button size="lg" className="w-full" onClick={handleAddToCart} disabled={!product.stockStatus}>

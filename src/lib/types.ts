@@ -1,5 +1,10 @@
 export type Region = 'PMR' | 'MD';
 
+export type OrderItem = {
+  productId: string;
+  quantity: number;
+};
+
 export type Product = {
   id: string;
   title: string;
@@ -23,7 +28,7 @@ export type Order = {
   customerName: string;
   phone: string;
   address: string;
-  items: string[]; // array of product IDs
+  items: OrderItem[]; // array of product IDs and quantities
   totalPrice: number;
   currency: 'PMR' | 'MD';
   status: 'new' | 'done';

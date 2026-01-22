@@ -76,7 +76,7 @@ export default function CheckoutPage() {
         const orderCurrency = region === 'PMR' ? 'PMR' : 'MD';
         const newOrderData = {
             ...formData,
-            items: cart.map(item => item.id),
+            items: cart.map(item => ({ productId: item.id, quantity: item.quantity })),
             totalPrice: total,
             currency: orderCurrency,
             status: 'new' as const,

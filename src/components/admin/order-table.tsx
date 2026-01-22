@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { collection, doc, orderBy, query } from 'firebase/firestore';
 import { useFirestore, useCollection, useMemoFirebase, setDocumentNonBlocking } from '@/firebase';
 import type { Order, Product } from '@/lib/types';
@@ -22,11 +22,15 @@ import {
 import { OrderStatusBadge } from './order-status-badge';
 import { useToast } from '@/hooks/use-toast';
 import { Timestamp } from 'firebase/firestore';
+import { OrderDetailDialog } from './order-detail-dialog';
 
 
 export function OrderTable() {
   const firestore = useFirestore();
   const { toast } = useToast();
+  
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
 
   const productsQuery = useMemoFirebase(() => firestore ? collection(firestore, 'products') : null, [firestore]);
   const { data: products } = useCollection<Product>(productsQuery);
@@ -51,6 +55,11 @@ export function OrderTable() {
     setDocumentNonBlocking(orderRef, { status: newStatus }, { merge: true });
     toast({ title: `Статус заказа обновлен` });
   };
+  
+  const handleRowClick = (order: Order) => {
+    setSelectedOrder(order);
+    setIsDetailOpen(true);
+  }
 
   const formatDate = (timestamp: any) => {
     if (timestamp instanceof Timestamp) {
@@ -72,54 +81,62 @@ export function OrderTable() {
   }
 
   return (
-    <div className="border rounded-lg overflow-hidden">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Дата</TableHead>
-            <TableHead>Клиент</TableHead>
-            <TableHead>Телефон</TableHead>
-            <TableHead>Адрес</TableHead>
-            <TableHead>Товары</TableHead>
-            <TableHead>Сумма</TableHead>
-            <TableHead>Статус</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {orders.map((order) => (
-            <TableRow key={order.id}>
-              <TableCell className="text-xs text-muted-foreground whitespace-nowrap">
-                {formatDate(order.createdAt)}
-              </TableCell>
-              <TableCell className="font-medium">{order.customerName}</TableCell>
-              <TableCell>{order.phone}</TableCell>
-              <TableCell>{order.address}</TableCell>
-              <TableCell className="text-xs">
-                {order.items.map(itemId => productsById[itemId]?.title || 'Неизвестный товар').join(', ')}
-              </TableCell>
-              <TableCell className="whitespace-nowrap">
-                {new Intl.NumberFormat('ru-RU').format(order.totalPrice)} {order.currency}
-              </TableCell>
-              <TableCell>
-                <Select
-                  defaultValue={order.status}
-                  onValueChange={(value: Order['status']) => handleStatusChange(order.id, value)}
-                >
-                  <SelectTrigger className="w-[120px]">
-                    <SelectValue asChild>
-                       <OrderStatusBadge status={order.status} />
-                    </SelectValue>
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="new">Новый</SelectItem>
-                    <SelectItem value="done">Выполнен</SelectItem>
-                  </SelectContent>
-                </Select>
-              </TableCell>
+    <>
+        <div className="border rounded-lg overflow-hidden">
+        <Table>
+            <TableHeader>
+            <TableRow>
+                <TableHead>Дата</TableHead>
+                <TableHead>Клиент</TableHead>
+                <TableHead>Телефон</TableHead>
+                <TableHead className="hidden md:table-cell">Адрес</TableHead>
+                <TableHead>Товары</TableHead>
+                <TableHead>Сумма</TableHead>
+                <TableHead>Статус</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+            </TableHeader>
+            <TableBody>
+            {orders.map((order) => (
+                <TableRow key={order.id} onClick={() => handleRowClick(order)} className="cursor-pointer">
+                <TableCell className="text-xs text-muted-foreground whitespace-nowrap">
+                    {formatDate(order.createdAt)}
+                </TableCell>
+                <TableCell className="font-medium">{order.customerName}</TableCell>
+                <TableCell>{order.phone}</TableCell>
+                <TableCell className="hidden md:table-cell">{order.address}</TableCell>
+                <TableCell className="text-xs">
+                    {order.items.map(item => `${productsById[item.productId]?.title || 'Неизвестный товар'} (x${item.quantity})`).join(', ')}
+                </TableCell>
+                <TableCell className="whitespace-nowrap">
+                    {new Intl.NumberFormat('ru-RU').format(order.totalPrice)} {order.currency}
+                </TableCell>
+                <TableCell onClick={(e) => e.stopPropagation()}>
+                    <Select
+                    defaultValue={order.status}
+                    onValueChange={(value: Order['status']) => handleStatusChange(order.id, value)}
+                    >
+                    <SelectTrigger className="w-[120px]">
+                        <SelectValue asChild>
+                        <OrderStatusBadge status={order.status} />
+                        </SelectValue>
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="new">Новый</SelectItem>
+                        <SelectItem value="done">Выполнен</SelectItem>
+                    </SelectContent>
+                    </Select>
+                </TableCell>
+                </TableRow>
+            ))}
+            </TableBody>
+        </Table>
+        </div>
+        <OrderDetailDialog
+            isOpen={isDetailOpen}
+            onOpenChange={setIsDetailOpen}
+            order={selectedOrder}
+            productsById={productsById}
+        />
+    </>
   );
 }

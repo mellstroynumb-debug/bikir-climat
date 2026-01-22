@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '@/store/useStore';
 
-import Hero from "@/components/hero";
+import CinematicHero from "@/components/cinematic-hero";
 import ProductList from "@/components/product-list";
 import type { Product } from '@/lib/types';
 import { Button } from '@/components/ui/button';
@@ -238,7 +238,7 @@ export default function Home() {
 
   return (
     <>
-      <Hero />
+      <CinematicHero />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Featured Products Section */}

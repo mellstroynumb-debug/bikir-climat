@@ -8,7 +8,6 @@ const navItems = [
   { href: '/catalog', label: 'Каталог' },
   { href: '/services', label: 'Услуги' },
   { href: '/portfolio', label: 'Наши работы' },
-  { href: '/faq', label: 'Вопрос-ответ' },
   { href: '/contacts', label: 'Контакты' },
 ];
 

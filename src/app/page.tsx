@@ -17,6 +17,7 @@ import { ArrowRight, Sparkles, Loader2, Lightbulb } from 'lucide-react';
 import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
 import { collection, query } from 'firebase/firestore';
 import { Advantages } from '@/components/advantages';
+import { FaqSection } from '@/components/faq-section';
 
 // Helper function to get price based on region
 const getPrice = (product: Product, region: 'PMR' | 'MD') => {
@@ -276,6 +277,10 @@ export default function Home() {
           ) : (
              allProducts && <Quiz allProducts={allProducts} />
           )}
+        </section>
+
+        <section className="py-24 border-t">
+            <FaqSection />
         </section>
       </div>
       <Advantages />

@@ -38,7 +38,6 @@ function AnimatedBackground() {
           ease: 'easeInOut',
           repeat: Infinity,
           repeatType: 'reverse',
-          delay: 0.5,
         }}
       />
        <motion.div
@@ -54,7 +53,6 @@ function AnimatedBackground() {
           duration: 35,
           ease: 'linear',
           repeat: Infinity,
-          delay: 1,
         }}
       />
     </div>

@@ -6,6 +6,11 @@ import React from 'react';
 
 export default function PageTransitionWrapper({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
+
+    React.useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [pathname]);
+
     return (
         <AnimatePresence mode="wait">
             <motion.div

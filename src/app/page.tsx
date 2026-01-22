@@ -129,7 +129,7 @@ function Quiz({ allProducts }: { allProducts: Product[] }) {
           <CardDescription className="mt-2 text-sm sm:text-base">Пройдите наш мини-тест и получите персональную подборку за 1 минуту.</CardDescription>
         </CardHeader>
         <CardContent className="px-4 pb-6 md:p-6 md:pt-0">
-          <div className="relative flex items-start justify-center min-h-[300px] md:min-h-[250px]">
+          <div className="relative flex items-start justify-center min-h-[420px] md:min-h-[250px]">
             <AnimatePresence mode="wait">
               {step === 1 && (
                 <motion.div key="step1" variants={stepVariants} initial="hidden" animate="visible" exit="exit" transition={{ duration: 0.3 }} className="absolute w-full">

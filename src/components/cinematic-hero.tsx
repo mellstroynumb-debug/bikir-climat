@@ -9,7 +9,7 @@ function AnimatedBackground() {
   return (
     <div aria-hidden="true" className="absolute inset-0 -z-10 overflow-hidden bg-white">
       <motion.div
-        className="absolute top-0 left-0 h-96 w-96 rounded-full bg-[rgba(56,189,248,0.3)] blur-[100px]"
+        className="absolute top-0 left-0 h-96 w-96 rounded-full bg-[rgba(56,189,248,0.4)] blur-[100px]"
         initial={{ opacity: 0 }}
         animate={{
           opacity: 1,
@@ -25,7 +25,7 @@ function AnimatedBackground() {
         }}
       />
       <motion.div
-        className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-[rgba(129,140,248,0.15)] blur-[100px]"
+        className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-[rgba(129,140,248,0.25)] blur-[100px]"
         initial={{ opacity: 0 }}
         animate={{
           opacity: 1,
@@ -42,7 +42,7 @@ function AnimatedBackground() {
         }}
       />
        <motion.div
-        className="absolute top-1/2 left-1/2 h-80 w-80 rounded-full bg-[rgba(203,213,225,0.4)] blur-[100px]"
+        className="absolute top-1/2 left-1/2 h-80 w-80 rounded-full bg-[rgba(203,213,225,0.5)] blur-[100px]"
         initial={{ opacity: 0 }}
         animate={{
           opacity: 1,

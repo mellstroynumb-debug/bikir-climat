@@ -11,17 +11,19 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ShoppingCart, Loader2 } from 'lucide-react';
 import { QuickOrderDialog } from '@/components/quick-order-dialog';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
+  type CarouselApi,
 } from "@/components/ui/carousel";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card } from '@/components/ui/card';
 import ProductList from '@/components/product-list';
+import { cn } from '@/lib/utils';
 
 const specLabels: Record<string, string> = {
   inverter: 'Инвертор',
@@ -46,6 +48,24 @@ export default function ProductPage() {
   const { region, addToCart } = useStore();
   const { toast } = useToast();
   const [isQuickOrderOpen, setIsQuickOrderOpen] = useState(false);
+
+  // State for Carousel API
+  const [api, setApi] = useState<CarouselApi>()
+  const [current, setCurrent] = useState(0)
+
+  useEffect(() => {
+    if (!api) {
+      return
+    }
+    setCurrent(api.selectedScrollSnap())
+    api.on("select", () => {
+      setCurrent(api.selectedScrollSnap())
+    })
+  }, [api])
+
+  const handleThumbnailClick = (index: number) => {
+    api?.scrollTo(index, false); // false for instant scroll
+  }
 
   const similarProducts = useMemo(() => {
     if (!product || !allProducts) return [];
@@ -116,8 +136,8 @@ export default function ProductPage() {
       <div className="container mx-auto px-4 py-8 md:py-12">
         <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
           {/* Image Gallery */}
-          <div className="w-full">
-             <Carousel className="w-full">
+          <div className="w-full flex flex-col gap-4">
+             <Carousel className="w-full" setApi={setApi}>
               <CarouselContent>
                 {product.images.map((img, index) => (
                   <CarouselItem key={index}>
@@ -137,6 +157,31 @@ export default function ProductPage() {
               <CarouselPrevious className="hidden sm:flex" />
               <CarouselNext className="hidden sm:flex" />
             </Carousel>
+            
+             {/* Thumbnails */}
+            {product.images.length > 1 && (
+              <div className="grid grid-cols-5 gap-2">
+                  {product.images.map((img, index) => (
+                      <button
+                          key={index}
+                          onClick={() => handleThumbnailClick(index)}
+                          className={cn(
+                              "aspect-square relative rounded-md overflow-hidden border-2 transition focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+                              index === current ? "border-primary" : "border-transparent"
+                          )}
+                          aria-label={`Переключить на изображение ${index + 1}`}
+                      >
+                          <Image
+                              src={img}
+                              alt={`Thumbnail ${index + 1}`}
+                              fill
+                              className="object-cover"
+                              sizes="(max-width: 768px) 20vw, 10vw"
+                          />
+                      </button>
+                  ))}
+              </div>
+            )}
           </div>
 
           {/* Product Info */}
@@ -151,16 +196,16 @@ export default function ProductPage() {
               )}
             </div>
 
-            <div className="mt-4">
-              {oldPrice && (
-                <span className="text-xl text-muted-foreground line-through mr-2">
-                  {new Intl.NumberFormat('ru-RU').format(oldPrice)} {currency}
-                </span>
-              )}
+            <div className="mt-4 flex flex-wrap items-baseline gap-x-3 gap-y-1">
               {price && (
                  <span className="text-3xl font-extrabold text-primary">
                     {new Intl.NumberFormat('ru-RU').format(price)} {currency}
                  </span>
+              )}
+              {oldPrice && oldPrice > price && (
+                <span className="text-xl text-muted-foreground line-through">
+                  {new Intl.NumberFormat('ru-RU').format(oldPrice)} {currency}
+                </span>
               )}
             </div>
             

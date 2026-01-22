@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { ShoppingCart } from 'lucide-react';
+import { ShoppingCart, Ruler, RefreshCw } from 'lucide-react';
 import { useState } from 'react';
 import Link from 'next/link';
 
@@ -22,6 +22,7 @@ export function ProductCard({ product }: ProductCardProps) {
   const [isQuickOrderOpen, setIsQuickOrderOpen] = useState(false);
 
   const price = region === 'PMR' ? product.price_pmr : product.price_md;
+  const oldPrice = region === 'PMR' ? product.old_price_pmr : product.old_price_md;
   const currency = region === 'PMR' ? 'руб.' : 'лей';
 
   if (price === null || price === 0) {
@@ -49,17 +50,41 @@ export function ProductCard({ product }: ProductCardProps) {
               fill
               className="object-cover"
             />
-            {product.category === 'cond' && (
-              <Badge className="absolute top-3 right-3">Эстетичный монтаж</Badge>
+             {product.stockStatus ? (
+                 <Badge className="absolute top-3 right-3" variant="default">В наличии</Badge>
+            ) : (
+                 <Badge className="absolute top-3 right-3" variant="destructive">Нет в наличии</Badge>
             )}
           </div>
           <div className="p-4 flex flex-col flex-grow">
             <h3 className="font-bold text-lg font-headline truncate group-hover:text-primary transition-colors">{product.title}</h3>
-            <p className="text-muted-foreground text-sm mt-1 flex-grow">{product.description}</p>
-            <div className="mt-4">
+            
+            <div className="mt-2 flex items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
+              {product.specs.area_sq_m && (
+                <div className="flex items-center gap-1.5" title={`Рекомендуемая площадь: до ${product.specs.area_sq_m} м²`}>
+                  <Ruler className="h-3.5 w-3.5" />
+                  <span>до {product.specs.area_sq_m} м²</span>
+                </div>
+              )}
+              {product.specs.inverter && (
+                <div className="flex items-center gap-1.5" title={`Инвертор: ${product.specs.inverter}`}>
+                  <RefreshCw className="h-3 w-3" />
+                  <span>{product.specs.inverter === "Да" ? "Инвертор" : "On/Off"}</span>
+                </div>
+              )}
+            </div>
+
+            <div className="flex-grow" />
+
+            <div className="mt-4 flex items-baseline gap-2">
                 <p className="text-2xl font-extrabold text-primary">
                     {new Intl.NumberFormat('ru-RU').format(price)} {currency}
                 </p>
+                {oldPrice && oldPrice > price && (
+                  <p className="text-base font-medium text-muted-foreground line-through">
+                      {new Intl.NumberFormat('ru-RU').format(oldPrice)} {currency}
+                  </p>
+                )}
             </div>
           </div>
         </Link>

@@ -10,6 +10,9 @@ import type { Product } from '@/lib/types';
 import {
   Dialog,
   DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Loader2, Search } from 'lucide-react';
@@ -54,6 +57,12 @@ export function SearchDialog({ isOpen, onOpenChange }: SearchDialogProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-xl gap-0 p-0">
+        <DialogHeader className="sr-only">
+          <DialogTitle>Поиск по сайту</DialogTitle>
+          <DialogDescription>
+              Начните вводить название товара, чтобы увидеть результаты.
+          </DialogDescription>
+        </DialogHeader>
         <div className="flex items-center px-4 border-b">
           <Search className="h-5 w-5 text-muted-foreground"/>
           <Input

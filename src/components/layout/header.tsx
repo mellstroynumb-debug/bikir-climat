@@ -9,7 +9,6 @@ import { Phone, Search, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState, useMemo, useEffect } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Input } from '@/components/ui/input';
 import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
 import { collection, query } from 'firebase/firestore';
 import type { Product } from '@/lib/types';
@@ -85,7 +84,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur-sm">
+      <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-sm">
         <div className="mx-auto flex h-16 max-w-7xl items-center px-4 sm:px-6 lg:px-8">
           <Link href="/" className="mr-6 flex items-center space-x-2">
             <span className="font-bold sm:inline-block font-headline text-lg">
@@ -105,10 +104,10 @@ export default function Header() {
                     <form onSubmit={handleSearchSubmit}>
                         <div className="flex items-center px-4 border-b">
                             <Search className="h-5 w-5 text-muted-foreground" />
-                            <Input
+                            <input
                                 type="text"
                                 placeholder="Найти кондиционер..."
-                                className="w-full h-12 border-0 shadow-none focus-visible:ring-0"
+                                className="w-full h-12 border-0 bg-transparent px-3 text-base placeholder:text-muted-foreground focus:outline-none md:text-sm"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                                 autoFocus

@@ -13,7 +13,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Slider } from '@/components/ui/slider';
-import { ArrowRight, Sparkles, Loader2, Lightbulb, Moon, Wind } from 'lucide-react';
+import { ArrowRight, Sparkles, Loader2, Lightbulb, Moon, Wind, CheckCircle2 } from 'lucide-react';
 import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
 import { collection, query } from 'firebase/firestore';
 import { Advantages } from '@/components/advantages';
@@ -105,13 +105,14 @@ function Quiz({ allProducts }: { allProducts: Product[] }) {
 
     setResults(nonEmptyGroups);
     setSubmitted(true);
-    
-    setTimeout(() => {
-      const resultsElement = document.getElementById('quiz-results');
-      if (resultsElement) {
-        resultsElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }, 100);
+    setStep(4); // Move to the "results ready" view
+  };
+
+  const handleViewResults = () => {
+    const resultsElement = document.getElementById('quiz-results');
+    if (resultsElement) {
+      resultsElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
   };
   
   const stepVariants = {
@@ -194,6 +195,21 @@ function Quiz({ allProducts }: { allProducts: Product[] }) {
                         <Button size="lg" onClick={handleQuizSubmit} disabled={!budget}>Подобрать <Sparkles className="ml-2 h-4 w-4"/></Button>
                     </div>
                   </div>
+                </motion.div>
+              )}
+
+              {step === 4 && (
+                <motion.div key="step4" variants={stepVariants} initial="hidden" animate="visible" exit="exit" transition={{ duration: 0.3 }} className="absolute w-full flex flex-col items-center justify-center text-center h-full">
+                    <div className="space-y-4">
+                        <CheckCircle2 className="mx-auto h-12 w-12 text-green-500" />
+                        <h3 className="text-xl font-bold">Отлично! Ваша подборка готова.</h3>
+                        <p className="text-muted-foreground max-w-sm mx-auto">Мы проанализировали ваши ответы и подобрали лучшие варианты кондиционеров.</p>
+                        <div className="pt-4">
+                            <Button size="lg" onClick={handleViewResults}>
+                                Посмотреть результаты
+                            </Button>
+                        </div>
+                    </div>
                 </motion.div>
               )}
             </AnimatePresence>

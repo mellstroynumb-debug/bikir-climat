@@ -26,7 +26,10 @@ export default function CatalogPage() {
 
   const availableBrands = useMemo(() => {
     if (!products) return [];
-    const brands = products.map(p => p.brand).filter(Boolean);
+    const brands = products
+      .filter(p => p.category === 'cond') // Only show brands of conditioners
+      .map(p => p.brand)
+      .filter(Boolean);
     return [...new Set(brands)];
   }, [products]);
 
@@ -35,6 +38,9 @@ export default function CatalogPage() {
 
     let filtered = [...products];
     
+    // Filter to only show conditioners ('cond') and hide services
+    filtered = filtered.filter(p => p.category === 'cond');
+
     // Price filter for current region
     filtered = filtered.filter(p => {
         const price = region === 'PMR' ? p.price_pmr : p.price_md;

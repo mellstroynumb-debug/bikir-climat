@@ -237,12 +237,16 @@ export default function Home() {
   const productsCollection = useMemoFirebase(() => firestore ? query(collection(firestore, 'products')) : null, [firestore]);
   const { data: allProducts, isLoading } = useCollection<Product>(productsCollection);
 
-  const featuredProducts = useMemo(() => {
+  const conditionerProducts = useMemo(() => {
     if (!allProducts) return [];
-    // Just an example: take first 4 available in region. In a real app, this could be based on a "featured" flag.
-     const { region } = useStore.getState();
-     return allProducts.filter(p => getPrice(p, region)).slice(0, 4);
+    return allProducts.filter(p => p.category === 'cond');
   }, [allProducts]);
+
+  const featuredProducts = useMemo(() => {
+    if (!conditionerProducts) return [];
+    const { region } = useStore.getState();
+    return conditionerProducts.filter(p => getPrice(p, region)).slice(0, 4);
+  }, [conditionerProducts]);
 
   return (
     <>
@@ -283,7 +287,7 @@ export default function Home() {
               <p className="ml-4 text-muted-foreground">Загружаем наш умный подборщик...</p>
             </div>
           ) : (
-             allProducts && <Quiz allProducts={allProducts} />
+             allProducts && <Quiz allProducts={conditionerProducts} />
           )}
         </section>
 

@@ -48,7 +48,7 @@ export function ProductCard({ product }: ProductCardProps) {
               src={product.images[0]}
               alt={product.title}
               fill
-              className="object-cover"
+              className="object-contain"
             />
              {product.stockStatus ? (
                  <Badge className="absolute top-3 right-3" variant="default">В наличии</Badge>

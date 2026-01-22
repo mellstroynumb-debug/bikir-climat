@@ -1,17 +1,19 @@
 'use client';
 
 import React, { useState } from 'react';
-import { collection } from 'firebase/firestore';
-import { useFirestore, useCollection, useMemoFirebase } from '@/firebase';
+import { collection, doc } from 'firebase/firestore';
+import { useFirestore, useCollection, useMemoFirebase, setDocumentNonBlocking } from '@/firebase';
 import { Product } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { ProductDialog } from './product-dialog';
 import { ProductTable } from './product-table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { OrderTable } from './order-table';
+import { useToast } from '@/hooks/use-toast';
 
 export function AdminDashboard() {
   const firestore = useFirestore();
+  const { toast } = useToast();
   const productsCollection = useMemoFirebase(() => firestore ? collection(firestore, 'products') : null, [firestore]);
   const { data: products, isLoading, error } = useCollection<Product>(productsCollection);
   
@@ -27,6 +29,39 @@ export function AdminDashboard() {
     setSelectedProduct(product);
     setIsDialogOpen(true);
   };
+  
+  const handleSeedDatabase = () => {
+    if (!firestore) {
+      toast({
+        variant: "destructive",
+        title: "Ошибка",
+        description: "База данных не доступна.",
+      });
+      return;
+    }
+    
+    import('@/lib/seed-data')
+      .then(module => {
+        const productsToSeed = module.productsToSeed;
+        for (const product of productsToSeed) {
+          const { id, ...productData } = product;
+          const docRef = doc(firestore, 'products', id);
+          setDocumentNonBlocking(docRef, productData);
+        }
+        toast({
+          title: "Загрузка данных запущена",
+          description: `${productsToSeed.length} товаров добавляются в базу данных.`,
+        });
+      })
+      .catch(err => {
+        console.error("Failed to load seed data", err);
+        toast({
+          variant: "destructive",
+          title: "Ошибка",
+          description: "Не удалось загрузить тестовые данные.",
+        });
+      });
+  };
 
   if (isLoading) {
     return <div>Загрузка...</div>;
@@ -40,7 +75,10 @@ export function AdminDashboard() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Панель администратора</h1>
-        <Button onClick={handleAddNew}>Добавить товар</Button>
+        <div className="flex gap-2">
+            <Button onClick={handleSeedDatabase} variant="outline">Загрузить тестовые данные</Button>
+            <Button onClick={handleAddNew}>Добавить товар</Button>
+        </div>
       </div>
 
       <Tabs defaultValue="products">

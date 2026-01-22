@@ -8,6 +8,7 @@ import MobileNav from '@/components/layout/mobile-nav';
 import PageTransitionWrapper from '@/components/layout/page-transition-wrapper';
 import { FirebaseClientProvider } from '@/firebase';
 import { FirebaseErrorListener } from '@/components/FirebaseErrorListener';
+import { ScrollToTop } from '@/components/scroll-to-top';
 
 export const metadata: Metadata = {
   title: 'Bikir-Climat',
@@ -34,6 +35,7 @@ export default function RootLayout({
             <main className="pb-20 md:pb-0">{children}</main>
           </PageTransitionWrapper>
           <Footer />
+          <ScrollToTop />
           <MobileNav />
           <Toaster />
         </FirebaseClientProvider>

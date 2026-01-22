@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { useStore } from '@/store/useStore';
 import { Button } from './ui/button';
+import Link from 'next/link';
 
 // The generative background is included here for a self-contained component.
 function AnimatedBackground() {
@@ -142,31 +143,42 @@ export default function CinematicHero() {
             <HeroSubtitle />
         </motion.div>
         
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 1.2, type: 'spring', stiffness: 200, damping: 15 }}
-          whileHover={{ scale: 1.05 }}
-          className="mt-8"
-        >
-          <Button asChild size="lg" className="font-bold shadow-lg relative overflow-hidden">
-            <a href="#quiz">
-                <motion.span
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-[-20deg]"
-                    initial={{ x: "-150%" }}
-                    animate={{ x: "150%" }}
-                    transition={{
-                        delay: 4,
-                        duration: 1.5,
-                        repeat: Infinity,
-                        repeatDelay: 5,
-                        ease: "linear",
-                    }}
-                />
-                <span className="relative">Подобрать кондиционер</span>
-            </a>
-          </Button>
-        </motion.div>
+        <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 1.2, type: 'spring', stiffness: 200, damping: 15 }}
+            whileHover={{ scale: 1.05 }}
+          >
+            <Button asChild size="lg" className="font-bold shadow-lg relative overflow-hidden">
+              <a href="#quiz">
+                  <motion.span
+                      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-[-20deg]"
+                      initial={{ x: "-150%" }}
+                      animate={{ x: "150%" }}
+                      transition={{
+                          delay: 4,
+                          duration: 1.5,
+                          repeat: Infinity,
+                          repeatDelay: 5,
+                          ease: "linear",
+                      }}
+                  />
+                  <span className="relative">Подобрать кондиционер</span>
+              </a>
+            </Button>
+          </motion.div>
+          <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 1.3, type: 'spring', stiffness: 200, damping: 15 }}
+              whileHover={{ scale: 1.05 }}
+          >
+              <Button asChild size="lg" variant="outline" className="font-bold shadow-lg bg-background/50">
+                  <Link href="/contacts">Заказать звонок</Link>
+              </Button>
+          </motion.div>
+        </div>
       </div>
     </section>
   );

@@ -307,7 +307,7 @@ export default function Home() {
           )}
         </section>
 
-        <section className="py-24 border-t">
+        <section id="faq" className="py-24 border-t scroll-mt-20">
             <FaqSection />
         </section>
       </div>

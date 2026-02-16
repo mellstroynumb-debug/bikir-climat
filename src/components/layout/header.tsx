@@ -1,48 +1,99 @@
 'use client';
 
 import Link from 'next/link';
+import {
+  Heart,
+  Instagram,
+  Loader2,
+  Menu,
+  Phone,
+  Scale,
+  Search,
+  Send,
+  ShoppingCart,
+} from 'lucide-react';
 import { MainNav } from './main-nav';
 import { RegionSwitcher } from '../region-switcher';
-import { CartIcon } from '../cart-icon';
 import { useStore } from '@/store/useStore';
-import { Phone, Search, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState, useMemo, useEffect } from 'react';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
 import { collection, query } from 'firebase/firestore';
 import type { Product } from '@/lib/types';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
+function ActionLink({
+  href,
+  icon: Icon,
+  label,
+  count,
+}: {
+  href: string;
+  icon: React.ElementType;
+  label: string;
+  count?: number;
+}) {
+  return (
+    <Link
+      href={href}
+      className="flex flex-col items-center gap-1 text-xs font-medium text-muted-foreground transition-colors hover:text-primary"
+    >
+      <div className="relative">
+        <Icon className="h-6 w-6" />
+        {count !== undefined && count > 0 && (
+          <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
+            {count}
+          </span>
+        )}
+      </div>
+      <span>{label}</span>
+    </Link>
+  );
+}
+
 export default function Header() {
-  const region = useStore(state => state.region);
-  
+  const { region, getCartCount } = useStore();
+  const cartCount = getCartCount();
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   const phoneDisplay = region === 'PMR' ? '0775 28 405' : '+373 68 123456';
   const phoneCall = region === 'PMR' ? '+37377528405' : '+37368123456';
-  
+
   const router = useRouter();
   const firestore = useFirestore();
-  const productsCollection = useMemoFirebase(() => firestore ? query(collection(firestore, 'products')) : null, [firestore]);
-  const { data: products, isLoading } = useCollection<Product>(productsCollection);
+  const productsCollection = useMemoFirebase(
+    () => (firestore ? query(collection(firestore, 'products')) : null),
+    [firestore]
+  );
+  const { data: products, isLoading } = useCollection<Product>(
+    productsCollection
+  );
   const currency = region === 'PMR' ? 'руб.' : 'лей';
 
   const [searchTerm, setSearchTerm] = useState('');
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
   const filteredProducts = useMemo(() => {
-      if (!products || !searchTerm) {
-          return [];
-      }
-      const searchWords = searchTerm.toLowerCase().split(' ').filter(Boolean);
-      if (searchWords.length === 0) {
-          return [];
-      }
-      return products.filter(product => {
-          const productTitleLower = product.title.toLowerCase();
-          // A smarter check: ensures all search words appear in the title, regardless of order
-          return searchWords.every(word => productTitleLower.includes(word));
-      });
+    if (!products || !searchTerm) {
+      return [];
+    }
+    const searchWords = searchTerm.toLowerCase().split(' ').filter(Boolean);
+    if (searchWords.length === 0) {
+      return [];
+    }
+    return products.filter((product) => {
+      const productTitleLower = product.title.toLowerCase();
+      return searchWords.every((word) => productTitleLower.includes(word));
+    });
   }, [products, searchTerm]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -54,113 +105,154 @@ export default function Header() {
   };
 
   const handleSelect = (path: string) => {
-      router.push(path);
-      setIsPopoverOpen(false);
+    router.push(path);
+    setIsPopoverOpen(false);
   };
-
-  // Reset search term when popover closes
+  
   useEffect(() => {
-      if (!isPopoverOpen) {
-          setTimeout(() => setSearchTerm(''), 150);
-      }
+    if (!isPopoverOpen) {
+      setTimeout(() => setSearchTerm(''), 150);
+    }
   }, [isPopoverOpen]);
 
-  // Keyboard shortcut to open search
-  useEffect(() => {
-    const down = (e: KeyboardEvent) => {
-      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault();
-        // This is a workaround to make sure the input gets focus inside the popover.
-        const trigger = document.querySelector('[data-radix-collection-item] button[aria-label="Поиск"]');
-        if(trigger instanceof HTMLElement) {
-            trigger.click();
-        }
-      }
-    };
-
-    document.addEventListener('keydown', down);
-    return () => document.removeEventListener('keydown', down);
-  }, []);
 
   return (
-    <>
-      <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-sm">
-        <div className="mx-auto flex h-16 max-w-7xl items-center px-4 sm:px-6 lg:px-8">
-          <Link href="/" className="mr-6 flex items-center space-x-2">
-            <span className="font-bold sm:inline-block font-headline text-lg">
-              Bikir Climat
-            </span>
-          </Link>
-          <MainNav />
-          <div className="flex flex-1 items-center justify-end space-x-2 md:space-x-4">
-            
-            <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
-                <PopoverTrigger asChild>
-                    <Button variant="ghost" size="icon" aria-label="Поиск">
-                        <Search className="h-5 w-5" />
-                    </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-[300px] sm:w-[400px] lg:w-[500px] p-0">
-                    <form onSubmit={handleSearchSubmit}>
-                        <div className="flex items-center px-4 border-b">
-                            <Search className="h-5 w-5 text-muted-foreground" />
-                            <input
-                                type="text"
-                                placeholder="Найти кондиционер..."
-                                className="w-full h-12 border-0 bg-transparent px-3 text-base placeholder:text-muted-foreground focus:outline-none md:text-sm"
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                autoFocus
-                            />
-                        </div>
-                    </form>
-                    <div className="py-2 overflow-y-auto max-h-[70vh]">
-                        {isLoading && (
-                            <div className="flex items-center justify-center p-8">
-                                <Loader2 className="h-6 w-6 animate-spin" />
-                            </div>
-                        )}
-                        {!isLoading && searchTerm && filteredProducts.length === 0 && (
-                            <p className="text-center text-muted-foreground p-4 text-sm">Ничего не найдено.</p>
-                        )}
-                        {!isLoading && !searchTerm && (
-                            <p className="text-center text-muted-foreground p-4 text-sm">Начните вводить название товара.</p>
-                        )}
-                        <ul className="divide-y">
-                            {filteredProducts.slice(0, 7).map((product) => {
-                                const price = region === 'PMR' ? product.price_pmr : product.price_md;
-                                return (
-                                    <li key={product.id}>
-                                        <button onClick={() => handleSelect(`/catalog/${product.id}`)} className="w-full text-left p-2 hover:bg-accent transition-colors flex items-center gap-3">
-                                            <Image
-                                                src={product.images[0]}
-                                                alt={product.title}
-                                                width={40}
-                                                height={40}
-                                                className="rounded-md object-cover border"
-                                            />
-                                            <div className="flex-1">
-                                                <p className="font-medium text-sm leading-tight">{product.title}</p>
-                                                {price && <p className="text-xs text-primary">{new Intl.NumberFormat('ru-RU').format(price)} {currency}</p>}
-                                            </div>
-                                        </button>
-                                    </li>
-                                )
-                            })}
-                        </ul>
-                    </div>
-                </PopoverContent>
-            </Popover>
-
-            <div className="hidden items-center space-x-2 md:flex">
-               <Phone className="h-4 w-4 text-primary" />
-               <a href={`tel:${phoneCall}`} className="font-medium text-sm hover:text-primary transition-colors">{phoneDisplay}</a>
+    <header className="w-full bg-background shadow-sm">
+      {/* Top Bar */}
+      <div className="hidden bg-secondary/50 text-sm text-muted-foreground md:block">
+        <div className="container mx-auto flex h-10 items-center justify-between px-4">
+          <div>
+            <span>Мы работаем пн-пт с 9:00 - 18:00</span>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
+              <a
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition-colors hover:text-primary"
+              >
+                <Instagram className="h-5 w-5" />
+              </a>
+              <a
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition-colors hover:text-primary"
+              >
+                <Send className="h-5 w-5" />
+              </a>
             </div>
             <RegionSwitcher />
-            <CartIcon />
           </div>
         </div>
-      </header>
-    </>
+      </div>
+
+      {/* Main Header */}
+      <div className="container mx-auto flex h-24 items-center gap-4 px-4 md:gap-8">
+        <div className="hidden lg:flex">
+             <Link href="/" className="flex flex-col">
+                <span className="font-bold font-headline text-2xl">Bikir Climat</span>
+                <span className="text-xs text-muted-foreground">
+                    №1 по установке кондиционеров
+                </span>
+            </Link>
+        </div>
+       
+        <div className="flex-1">
+          <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
+            <PopoverTrigger asChild>
+                <div className="relative w-full max-w-lg cursor-text" onClick={() => setIsPopoverOpen(true)}>
+                    <div className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2">
+                        <Search className="h-5 w-5 text-muted-foreground" />
+                    </div>
+                    <div className="h-11 w-full rounded-md border border-input bg-background/50 pl-10 pr-4 text-sm flex items-center text-muted-foreground">
+                        Поиск по сайту
+                    </div>
+                </div>
+            </PopoverTrigger>
+            <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start">
+              <form onSubmit={handleSearchSubmit}>
+                 <div className="flex items-center px-4 border-b">
+                    <Search className="h-5 w-5 text-muted-foreground" />
+                    <input
+                        type="text"
+                        placeholder="Найти кондиционер..."
+                        className="w-full h-12 border-0 bg-transparent px-3 text-base placeholder:text-muted-foreground focus:outline-none focus:ring-0 md:text-sm"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        autoFocus
+                    />
+                 </div>
+              </form>
+              <div className="overflow-y-auto py-2 max-h-[60vh]">
+                 {isLoading && (
+                    <div className="flex items-center justify-center p-8">
+                        <Loader2 className="h-6 w-6 animate-spin" />
+                    </div>
+                )}
+                {!isLoading && searchTerm && filteredProducts.length === 0 && (
+                    <p className="text-center text-muted-foreground p-4 text-sm">Ничего не найдено.</p>
+                )}
+                {!isLoading && !searchTerm && (
+                    <p className="text-center text-muted-foreground p-4 text-sm">Начните вводить название товара.</p>
+                )}
+                <ul className="divide-y">
+                    {filteredProducts.slice(0, 7).map((product) => {
+                        const price = region === 'PMR' ? product.price_pmr : product.price_md;
+                        return (
+                            <li key={product.id}>
+                                <button onClick={() => handleSelect(`/catalog/${product.id}`)} className="w-full text-left p-2 hover:bg-accent transition-colors flex items-center gap-3">
+                                    <Image
+                                        src={product.images[0]}
+                                        alt={product.title}
+                                        width={40}
+                                        height={40}
+                                        className="rounded-md object-cover border"
+                                    />
+                                    <div className="flex-1">
+                                        <p className="font-medium text-sm leading-tight">{product.title}</p>
+                                        {price && <p className="text-xs text-primary">{new Intl.NumberFormat('ru-RU').format(price)} {currency}</p>}
+                                    </div>
+                                </button>
+                            </li>
+                        )
+                    })}
+                </ul>
+              </div>
+            </PopoverContent>
+          </Popover>
+        </div>
+        
+        <div className="hidden text-right lg:block">
+            <a
+                href={`tel:${phoneCall}`}
+                className="font-bold text-lg transition-colors hover:text-primary"
+            >
+                {phoneDisplay}
+            </a>
+            <p className="text-xs text-muted-foreground">пн-пт с 9:00 - 18:00</p>
+        </div>
+
+        <div className="hidden shrink-0 items-center gap-4 sm:flex">
+          <ActionLink href="#" icon={Heart} label="Избранное" count={0}/>
+          <ActionLink href="#" icon={Scale} label="Сравнить" count={0}/>
+          <ActionLink href="/cart" icon={ShoppingCart} label="Корзина" count={isClient ? cartCount : 0} />
+        </div>
+      </div>
+
+      {/* Bottom Nav */}
+       <div className="border-t bg-background">
+        <div className="container mx-auto flex h-14 items-center gap-6 px-4">
+            <Button asChild className="bg-primary hover:bg-primary/90 font-bold">
+              <Link href="/catalog">
+                <Menu className="mr-2 h-5 w-5" />
+                Каталог
+              </Link>
+            </Button>
+            <MainNav />
+        </div>
+      </div>
+    </header>
   );
 }

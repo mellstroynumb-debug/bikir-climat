@@ -17,7 +17,6 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-  PopoverAnchor,
 } from '@/components/ui/popover';
 import { collection, query } from 'firebase/firestore';
 import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
@@ -111,7 +110,7 @@ export default function Header() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [isCallbackOpen, setIsCallbackOpen] = useState(false);
   
-  const phoneDisplay = region === 'PMR' ? '0775 28 405' : '+373 68 123456';
+  const phoneDisplay = region === 'PMR' ? '775 28 405' : '+373 68 123456';
   const phoneCall = region === 'PMR' ? '+37377528405' : '+37368123456';
   
   const router = useRouter();
@@ -220,8 +219,8 @@ export default function Header() {
        
         <div className="flex-1" ref={searchContainerRef}>
             <Popover open={isPopoverOpen && !!searchTerm} onOpenChange={setIsPopoverOpen}>
-                <PopoverAnchor asChild>
-                    <form onSubmit={handleSearchSubmit} className="flex w-full max-w-lg items-stretch">
+                <PopoverTrigger asChild>
+                    <form onSubmit={handleSearchSubmit} className="relative flex w-full max-w-lg items-stretch">
                         <input
                             type="text"
                             placeholder="Поиск по сайту..."
@@ -237,7 +236,7 @@ export default function Header() {
                             <Search className="h-5 w-5" />
                         </Button>
                     </form>
-                </PopoverAnchor>
+                </PopoverTrigger>
 
                 {searchTerm && (
                     <PopoverContent 

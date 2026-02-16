@@ -8,7 +8,7 @@ import { RegionSwitcher } from "./region-switcher";
 
 const contactDetails = {
     PMR: {
-        phone: '0775 28 405',
+        phone: '775 28 405',
         phoneLink: '+37377528405',
         email: 'info.pmr@bikir-climat.com',
         address: 'г. Тирасполь, ул. 25 Октября, 100',

@@ -12,11 +12,12 @@ import { MainNav } from './main-nav';
 import { RegionSwitcher } from '../region-switcher';
 import { useStore } from '@/store/useStore';
 import { Button } from '@/components/ui/button';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
+  PopoverAnchor,
 } from '@/components/ui/popover';
 import { collection, query } from 'firebase/firestore';
 import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
@@ -42,6 +43,69 @@ function TiktokIcon(props: React.SVGProps<SVGSVGElement>) {
     );
 }
 
+// Search Results Component to avoid repetition
+const SearchResults = ({ products, isLoading, region, onSelect, onShowAll, count }: {
+    products: Product[],
+    isLoading: boolean,
+    region: 'PMR' | 'MD',
+    onSelect: (path: string) => void,
+    onShowAll: (e: React.MouseEvent) => void,
+    count: number
+}) => {
+    const currency = region === 'PMR' ? 'руб.' : 'лей';
+
+    if (isLoading) {
+        return <div className="p-4 text-center text-sm text-muted-foreground">Загрузка...</div>;
+    }
+    
+    if (products.length === 0) {
+        return <div className="p-4 text-center text-sm text-muted-foreground">Ничего не найдено.</div>;
+    }
+
+    return (
+        <>
+            <div className="max-h-[400px] overflow-y-auto">
+                {products.slice(0, 7).map((product) => {
+                    const price = region === 'PMR' ? product.price_pmr : product.price_md;
+                    return (
+                        <div
+                            key={product.id}
+                            className="flex cursor-pointer items-center gap-3 p-3 hover:bg-accent"
+                            onMouseDown={(e) => { e.preventDefault(); onSelect(`/catalog/${product.id}`)}} // use onMouseDown to fire before input's onBlur
+                        >
+                            <Image
+                                src={product.images[0]}
+                                alt={product.title}
+                                width={40}
+                                height={40}
+                                className="rounded-md border object-cover"
+                            />
+                            <div className="flex-1 overflow-hidden">
+                                <p className="text-sm font-medium truncate">{product.title}</p>
+                                <p className="text-xs text-primary font-semibold">
+                                    {price ? `${new Intl.NumberFormat('ru-RU').format(price)} ${currency}` : 'Цена не указана'}
+                                </p>
+                            </div>
+                        </div>
+                    )
+                })}
+            </div>
+            {count > 0 && (
+                <div className="border-t p-2">
+                    <Button
+                        variant="ghost"
+                        className="w-full justify-center"
+                        onMouseDown={(e) => { e.preventDefault(); onShowAll(e); }}
+                    >
+                        Показать все результаты ({count})
+                    </Button>
+                </div>
+            )}
+        </>
+    );
+}
+
+
 export default function Header() {
   const { region } = useStore();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
@@ -49,8 +113,7 @@ export default function Header() {
   
   const phoneDisplay = region === 'PMR' ? '0775 28 405' : '+373 68 123456';
   const phoneCall = region === 'PMR' ? '+37377528405' : '+37368123456';
-  const currency = region === 'PMR' ? 'руб.' : 'лей';
-
+  
   const router = useRouter();
   const firestore = useFirestore();
   const productsCollection = useMemoFirebase(
@@ -63,6 +126,8 @@ export default function Header() {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const searchContainerRef = useRef<HTMLDivElement>(null);
+
 
   const filteredProducts = useMemo(() => {
     if (!products || !searchTerm) {
@@ -93,6 +158,19 @@ export default function Header() {
     setIsPopoverOpen(false);
     setSearchTerm('');
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+        if (searchContainerRef.current && !searchContainerRef.current.contains(event.target as Node)) {
+            setIsPopoverOpen(false);
+        }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
   
   return (
     <header className="sticky top-0 z-30 w-full border-b bg-background/95 backdrop-blur-sm">
@@ -140,83 +218,44 @@ export default function Header() {
             </Link>
         </div>
        
-        <div className="flex-1">
-          <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
-            <PopoverTrigger asChild>
-              <form onSubmit={handleSearchSubmit} className="flex w-full max-w-lg items-stretch">
-                <input
-                    type="text"
-                    placeholder="Поиск по сайту..."
-                    className="h-11 w-full rounded-l-md rounded-r-none border-y border-l border-input bg-background/50 pl-4 pr-4 text-sm outline-none ring-0 focus-visible:z-10 focus-visible:ring-0"
-                    onFocus={() => setIsPopoverOpen(true)}
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    onKeyDown={(e) => {
-                        if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
-                            e.preventDefault();
-                            (e.target as HTMLInputElement).focus();
-                        }
-                    }}
-                />
-                 <Button type="submit" className="h-11 rounded-l-none rounded-r-md border-y border-r border-input bg-background px-4 text-muted-foreground hover:bg-accent hover:text-accent-foreground" aria-label="Поиск">
-                    <Search className="h-5 w-5" />
-                </Button>
-              </form>
-            </PopoverTrigger>
-            <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0" align="start">
-              {searchTerm && (
-                <div className="flex flex-col">
-                    {isLoading ? (
-                    <div className="p-4 text-center text-sm text-muted-foreground">Загрузка...</div>
-                    ) : filteredProducts.length > 0 ? (
-                    <>
-                        <div className="max-h-[400px] overflow-y-auto">
-                        {filteredProducts.slice(0, 7).map((product) => {
-                            const price = region === 'PMR' ? product.price_pmr : product.price_md;
-                            return (
-                                <div
-                                    key={product.id}
-                                    className="flex cursor-pointer items-center gap-3 p-3 hover:bg-accent"
-                                    onClick={() => handleSelect(`/catalog/${product.id}`)}
-                                >
-                                    <Image
-                                        src={product.images[0]}
-                                        alt={product.title}
-                                        width={40}
-                                        height={40}
-                                        className="rounded-md border object-cover"
-                                    />
-                                    <div className="flex-1 overflow-hidden">
-                                        <p className="text-sm font-medium truncate">{product.title}</p>
-                                        <p className="text-xs text-primary font-semibold">
-                                            {price ? `${new Intl.NumberFormat('ru-RU').format(price)} ${currency}` : 'Цена не указана'}
-                                        </p>
-                                    </div>
-                                </div>
-                            )
-                        })}
-                        </div>
-                        {filteredProducts.length > 0 && (
-                        <div className="border-t p-2">
-                            <Button
-                            variant="ghost"
-                            className="w-full justify-center"
-                            onClick={handleSearchSubmit}
-                            >
-                            Показать все результаты ({filteredProducts.length})
-                            </Button>
-                        </div>
-                        )}
-                    </>
-                    ) : (
-                    <div className="p-4 text-center text-sm text-muted-foreground">
-                        Ничего не найдено.
-                    </div>
-                    )}
-                </div>
+        <div className="flex-1" ref={searchContainerRef}>
+            <Popover open={isPopoverOpen && !!searchTerm} onOpenChange={setIsPopoverOpen}>
+                <PopoverAnchor asChild>
+                    <form onSubmit={handleSearchSubmit} className="flex w-full max-w-lg items-stretch">
+                        <input
+                            type="text"
+                            placeholder="Поиск по сайту..."
+                            className="h-11 w-full rounded-l-md rounded-r-none border-y border-l border-input bg-background/50 pl-4 pr-4 text-sm outline-none ring-0 focus-visible:z-10 focus-visible:ring-0"
+                            onFocus={() => setIsPopoverOpen(true)}
+                            value={searchTerm}
+                            onChange={(e) => {
+                                setSearchTerm(e.target.value);
+                                if (!isPopoverOpen) setIsPopoverOpen(true);
+                            }}
+                        />
+                        <Button type="submit" className="h-11 rounded-l-none rounded-r-md border-y border-r border-input bg-background px-4 text-muted-foreground hover:bg-accent hover:text-accent-foreground" aria-label="Поиск">
+                            <Search className="h-5 w-5" />
+                        </Button>
+                    </form>
+                </PopoverAnchor>
+
+                {searchTerm && (
+                    <PopoverContent 
+                        className="w-[var(--radix-popover-trigger-width)] p-0" 
+                        onOpenAutoFocus={(e) => e.preventDefault()}
+                        align="start"
+                    >
+                        <SearchResults
+                            products={filteredProducts}
+                            isLoading={isLoading}
+                            region={region}
+                            onSelect={handleSelect}
+                            onShowAll={(e) => handleSearchSubmit(e as any)}
+                            count={filteredProducts.length}
+                        />
+                    </PopoverContent>
                 )}
-            </PopoverContent>
-          </Popover>
+            </Popover>
         </div>
         
         <div className="hidden text-right lg:block">
@@ -290,7 +329,7 @@ export default function Header() {
         </Link>
         
         <div className="flex items-center gap-0">
-            <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
+            <Popover onOpenChange={setIsPopoverOpen}>
               <PopoverTrigger asChild>
                  <Button variant="ghost" size="icon">
                     <Search className="h-5 w-5" />
@@ -313,53 +352,14 @@ export default function Header() {
                   </form>
                   {searchTerm && (
                     <div className="flex flex-col border-t">
-                        {isLoading ? (
-                        <div className="p-4 text-center text-sm text-muted-foreground">Загрузка...</div>
-                        ) : filteredProducts.length > 0 ? (
-                        <>
-                            <div className="max-h-[400px] overflow-y-auto">
-                            {filteredProducts.slice(0, 7).map((product) => {
-                                const price = region === 'PMR' ? product.price_pmr : product.price_md;
-                                return (
-                                    <div
-                                        key={product.id}
-                                        className="flex cursor-pointer items-center gap-3 p-3 hover:bg-accent"
-                                        onClick={() => handleSelect(`/catalog/${product.id}`)}
-                                    >
-                                        <Image
-                                            src={product.images[0]}
-                                            alt={product.title}
-                                            width={40}
-                                            height={40}
-                                            className="rounded-md border object-cover"
-                                        />
-                                        <div className="flex-1 overflow-hidden">
-                                            <p className="text-sm font-medium truncate">{product.title}</p>
-                                            <p className="text-xs text-primary font-semibold">
-                                                {price ? `${new Intl.NumberFormat('ru-RU').format(price)} ${currency}` : 'Цена не указана'}
-                                            </p>
-                                        </div>
-                                    </div>
-                                )
-                            })}
-                            </div>
-                            {filteredProducts.length > 0 && (
-                            <div className="border-t p-2">
-                                <Button
-                                variant="ghost"
-                                className="w-full justify-center"
-                                onClick={handleSearchSubmit}
-                                >
-                                Показать все результаты ({filteredProducts.length})
-                                </Button>
-                            </div>
-                            )}
-                        </>
-                        ) : (
-                        <div className="p-4 text-center text-sm text-muted-foreground">
-                            Ничего не найдено.
-                        </div>
-                        )}
+                        <SearchResults
+                            products={filteredProducts}
+                            isLoading={isLoading}
+                            region={region}
+                            onSelect={handleSelect}
+                            onShowAll={(e) => handleSearchSubmit(e as any)}
+                            count={filteredProducts.length}
+                        />
                     </div>
                     )}
               </PopoverContent>

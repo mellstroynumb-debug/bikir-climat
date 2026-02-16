@@ -7,9 +7,6 @@ import {
   Search,
   Instagram,
   Send,
-  ShoppingCart,
-  Heart,
-  Scale
 } from 'lucide-react';
 import { MainNav } from './main-nav';
 import { RegionSwitcher } from '../region-switcher';
@@ -26,25 +23,33 @@ import { collection, query } from 'firebase/firestore';
 import type { Product } from '@/lib/types';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle, SheetClose } from '../ui/sheet';
-import { cn } from '@/lib/utils';
+import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from '../ui/sheet';
 import { CallbackRequestDialog } from '../callback-request-dialog';
 import { CartPopover } from './CartPopover';
 import { FavoritesPopover } from './FavoritesPopover';
 import { ComparePopover } from './ComparePopover';
 
+function TiktokIcon(props: React.SVGProps<SVGSVGElement>) {
+    return (
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            {...props}
+        >
+            <path d="M17.8673 4.44667C16.9956 3.49276 16.5152 2.26793 16.5153 1H12.574V16.1556C12.5442 16.9759 12.1831 17.7531 11.5667 18.3232C10.9504 18.8932 10.127 19.2116 9.27041 19.2111C7.45918 19.2111 5.95408 17.7933 5.95408 16.0333C5.95408 13.9311 8.07143 12.3544 10.2526 13.0022V9.14C5.85204 8.57778 2 11.8533 2 16.0333C2 20.1033 5.52041 23 9.25765 23C13.2628 23 16.5153 19.8833 16.5153 16.0333V8.34556C18.1135 9.44537 20.0324 10.0355 22 10.0322V6.25556C22 6.25556 19.602 6.36556 17.8673 4.44667Z" />
+        </svg>
+    );
+}
+
 export default function Header() {
   const { region } = useStore();
-  const [isClient, setIsClient] = useState(false);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [isCallbackOpen, setIsCallbackOpen] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
   
   const phoneDisplay = region === 'PMR' ? '0775 28 405' : '+373 68 123456';
   const phoneCall = region === 'PMR' ? '+37377528405' : '+37368123456';
+  const currency = region === 'PMR' ? 'руб.' : 'лей';
 
   const router = useRouter();
   const firestore = useFirestore();
@@ -55,7 +60,6 @@ export default function Header() {
   const { data: products, isLoading } = useCollection<Product>(
     productsCollection
   );
-  const currency = region === 'PMR' ? 'руб.' : 'лей';
 
   const [searchTerm, setSearchTerm] = useState('');
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
@@ -73,23 +77,26 @@ export default function Header() {
       // Check that every search word is present in the title
       return searchWords.every(word => productTitleLower.includes(word));
     });
-  }, [products, searchTerm, region]);
+  }, [products, searchTerm]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchTerm.trim()) {
       router.push(`/catalog?q=${encodeURIComponent(searchTerm.trim())}`);
       setIsPopoverOpen(false);
+      setSearchTerm('');
     }
   };
 
   const handleSelect = (path: string) => {
     router.push(path);
     setIsPopoverOpen(false);
+    setSearchTerm('');
   };
   
   useEffect(() => {
     if (!isPopoverOpen) {
+      // Small delay to prevent search term from clearing before navigation
       setTimeout(() => setSearchTerm(''), 150);
     }
   }, [isPopoverOpen]);
@@ -122,14 +129,7 @@ export default function Header() {
                 <Send className="h-5 w-5" />
               </a>
               <a href="#" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary">
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    className="h-5 w-5"
-                >
-                    <path d="M17.8673 4.44667C16.9956 3.49276 16.5152 2.26793 16.5153 1H12.574V16.1556C12.5442 16.9759 12.1831 17.7531 11.5667 18.3232C10.9504 18.8932 10.127 19.2116 9.27041 19.2111C7.45918 19.2111 5.95408 17.7933 5.95408 16.0333C5.95408 13.9311 8.07143 12.3544 10.2526 13.0022V9.14C5.85204 8.57778 2 11.8533 2 16.0333C2 20.1033 5.52041 23 9.25765 23C13.2628 23 16.5153 19.8833 16.5153 16.0333V8.34556C18.1135 9.44537 20.0324 10.0355 22 10.0322V6.25556C22 6.25556 19.602 6.36556 17.8673 4.44667Z" />
-                </svg>
+                <TiktokIcon className="h-5 w-5" />
               </a>
             </div>
             <RegionSwitcher />
@@ -172,7 +172,57 @@ export default function Header() {
               </form>
             </PopoverTrigger>
             <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0" align="start">
-              {/* ... Popover content from previous step */}
+              {searchTerm && (
+                <div className="flex flex-col">
+                    {isLoading ? (
+                    <div className="p-4 text-center text-sm text-muted-foreground">Загрузка...</div>
+                    ) : filteredProducts.length > 0 ? (
+                    <>
+                        <div className="max-h-[400px] overflow-y-auto">
+                        {filteredProducts.slice(0, 7).map((product) => {
+                            const price = region === 'PMR' ? product.price_pmr : product.price_md;
+                            return (
+                                <div
+                                    key={product.id}
+                                    className="flex cursor-pointer items-center gap-3 p-3 hover:bg-accent"
+                                    onClick={() => handleSelect(`/catalog/${product.id}`)}
+                                >
+                                    <Image
+                                        src={product.images[0]}
+                                        alt={product.title}
+                                        width={40}
+                                        height={40}
+                                        className="rounded-md border object-cover"
+                                    />
+                                    <div className="flex-1 overflow-hidden">
+                                        <p className="text-sm font-medium truncate">{product.title}</p>
+                                        <p className="text-xs text-primary font-semibold">
+                                            {price ? `${new Intl.NumberFormat('ru-RU').format(price)} ${currency}` : 'Цена не указана'}
+                                        </p>
+                                    </div>
+                                </div>
+                            )
+                        })}
+                        </div>
+                        {filteredProducts.length > 0 && (
+                        <div className="border-t p-2">
+                            <Button
+                            variant="ghost"
+                            className="w-full justify-center"
+                            onClick={handleSearchSubmit}
+                            >
+                            Показать все результаты ({filteredProducts.length})
+                            </Button>
+                        </div>
+                        )}
+                    </>
+                    ) : (
+                    <div className="p-4 text-center text-sm text-muted-foreground">
+                        Ничего не найдено.
+                    </div>
+                    )}
+                </div>
+                )}
             </PopoverContent>
           </Popover>
         </div>
@@ -218,22 +268,20 @@ export default function Header() {
           </SheetTrigger>
           <SheetContent side="left" className="w-[300px] p-0 flex flex-col">
             <SheetHeader className="p-6">
-                <SheetTitle className="sr-only">Главное меню</SheetTitle>
-                <SheetClose asChild>
-                    <Link href="/" className="flex flex-col text-left">
-                        <span className="font-bold font-headline text-2xl">Bikir Climat</span>
-                        <span className="text-xs text-muted-foreground">№1 по установке кондиционеров</span>
-                    </Link>
-                </SheetClose>
+                <SheetTitle className='sr-only'>Главное меню</SheetTitle>
+                <Link href="/" onClick={() => setIsSheetOpen(false)} className="flex flex-col text-left">
+                    <span className="font-bold font-headline text-2xl">Bikir Climat</span>
+                    <span className="text-xs text-muted-foreground">№1 по установке кондиционеров</span>
+                </Link>
             </SheetHeader>
             <div className="p-6 pt-2 flex-1">
                 <nav className="flex flex-col gap-4">
-                    <SheetClose asChild><Link href="/#quiz" className="font-medium text-lg">Подбор кондиционера</Link></SheetClose>
-                    <SheetClose asChild><Link href="/services" className="font-medium text-lg">Монтаж</Link></SheetClose>
-                    <SheetClose asChild><Link href="/portfolio" className="font-medium text-lg">Наши работы</Link></SheetClose>
-                    <SheetClose asChild><Link href="/#faq" className="font-medium text-lg">Частые вопросы</Link></SheetClose>
-                    <SheetClose asChild><Link href="/checkout" className="font-medium text-lg">Доставка и оплата</Link></SheetClose>
-                    <SheetClose asChild><Link href="/contacts" className="font-medium text-lg">Контакты</Link></SheetClose>
+                    <Link href="/#quiz" onClick={() => setIsSheetOpen(false)} className="font-medium text-lg">Подбор кондиционера</Link>
+                    <Link href="/services" onClick={() => setIsSheetOpen(false)} className="font-medium text-lg">Монтаж</Link>
+                    <Link href="/portfolio" onClick={() => setIsSheetOpen(false)} className="font-medium text-lg">Наши работы</Link>
+                    <Link href="/#faq" onClick={() => setIsSheetOpen(false)} className="font-medium text-lg">Частые вопросы</Link>
+                    <Link href="/checkout" onClick={() => setIsSheetOpen(false)} className="font-medium text-lg">Доставка и оплата</Link>
+                    <Link href="/contacts" onClick={() => setIsSheetOpen(false)} className="font-medium text-lg">Контакты</Link>
                 </nav>
             </div>
             <div className="p-6 border-t mt-auto">
@@ -258,7 +306,70 @@ export default function Header() {
                 </Button>
               </PopoverTrigger>
                <PopoverContent className="w-screen max-w-[calc(100vw-2rem)] p-0" align="end">
-                  {/* ... Popover content */}
+                  <form onSubmit={handleSearchSubmit} className="flex w-full items-stretch p-3">
+                    <input
+                        type="text"
+                        placeholder="Поиск по сайту..."
+                        className="h-11 w-full rounded-l-md rounded-r-none border-y border-l border-input bg-background/50 pl-4 pr-4 text-sm outline-none ring-0 focus-visible:z-10 focus-visible:ring-0"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        autoFocus
+                    />
+                     <Button type="submit" className="h-11 rounded-l-none rounded-r-md border-y border-r border-input bg-background px-4 text-muted-foreground hover:bg-accent hover:text-accent-foreground" aria-label="Поиск">
+                        <Search className="h-5 w-5" />
+                    </Button>
+                  </form>
+                  {searchTerm && (
+                    <div className="flex flex-col border-t">
+                        {isLoading ? (
+                        <div className="p-4 text-center text-sm text-muted-foreground">Загрузка...</div>
+                        ) : filteredProducts.length > 0 ? (
+                        <>
+                            <div className="max-h-[400px] overflow-y-auto">
+                            {filteredProducts.slice(0, 7).map((product) => {
+                                const price = region === 'PMR' ? product.price_pmr : product.price_md;
+                                return (
+                                    <div
+                                        key={product.id}
+                                        className="flex cursor-pointer items-center gap-3 p-3 hover:bg-accent"
+                                        onClick={() => handleSelect(`/catalog/${product.id}`)}
+                                    >
+                                        <Image
+                                            src={product.images[0]}
+                                            alt={product.title}
+                                            width={40}
+                                            height={40}
+                                            className="rounded-md border object-cover"
+                                        />
+                                        <div className="flex-1 overflow-hidden">
+                                            <p className="text-sm font-medium truncate">{product.title}</p>
+                                            <p className="text-xs text-primary font-semibold">
+                                                {price ? `${new Intl.NumberFormat('ru-RU').format(price)} ${currency}` : 'Цена не указана'}
+                                            </p>
+                                        </div>
+                                    </div>
+                                )
+                            })}
+                            </div>
+                            {filteredProducts.length > 0 && (
+                            <div className="border-t p-2">
+                                <Button
+                                variant="ghost"
+                                className="w-full justify-center"
+                                onClick={handleSearchSubmit}
+                                >
+                                Показать все результаты ({filteredProducts.length})
+                                </Button>
+                            </div>
+                            )}
+                        </>
+                        ) : (
+                        <div className="p-4 text-center text-sm text-muted-foreground">
+                            Ничего не найдено.
+                        </div>
+                        )}
+                    </div>
+                    )}
               </PopoverContent>
             </Popover>
             <Button asChild variant="ghost" size="icon">

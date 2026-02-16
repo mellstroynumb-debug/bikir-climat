@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '@/store/useStore';
 
-import CinematicHero from "@/components/cinematic-hero";
 import ProductList from "@/components/product-list";
 import type { Product } from '@/lib/types';
 import { Button } from '@/components/ui/button';
@@ -18,6 +17,8 @@ import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
 import { collection, query } from 'firebase/firestore';
 import { Advantages } from '@/components/advantages';
 import { FaqSection } from '@/components/faq-section';
+import { CategoryGrid } from '@/components/home/category-grid';
+import { BrandsCarousel } from '@/components/home/brands-carousel';
 
 // Helper function to get price based on region
 const getPrice = (product: Product, region: 'PMR' | 'MD') => {
@@ -266,7 +267,8 @@ export default function Home() {
 
   return (
     <>
-      <CinematicHero />
+      <CategoryGrid />
+      <BrandsCarousel />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Featured Products Section */}

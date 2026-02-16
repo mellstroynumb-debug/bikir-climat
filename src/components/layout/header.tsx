@@ -12,7 +12,7 @@ import { MainNav } from './main-nav';
 import { RegionSwitcher } from '../region-switcher';
 import { useStore } from '@/store/useStore';
 import { Button } from '@/components/ui/button';
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import {
   Popover,
   PopoverContent,
@@ -63,6 +63,7 @@ export default function Header() {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const isInitialMount = useRef(true);
 
   const filteredProducts = useMemo(() => {
     if (!products || !searchTerm) {
@@ -95,6 +96,10 @@ export default function Header() {
   };
   
   useEffect(() => {
+    if (isInitialMount.current) {
+        isInitialMount.current = false;
+        return;
+    }
     if (!isPopoverOpen) {
       // Small delay to prevent search term from clearing before navigation
       setTimeout(() => setSearchTerm(''), 150);

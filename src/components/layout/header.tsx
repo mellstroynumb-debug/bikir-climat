@@ -12,14 +12,13 @@ import { MainNav } from './main-nav';
 import { RegionSwitcher } from '../region-switcher';
 import { useStore } from '@/store/useStore';
 import { Button } from '@/components/ui/button';
-import { useState, useMemo, useEffect, useRef } from 'react';
+import { useState, useMemo } from 'react';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
-import { collection, query } from 'firebase/firestore';
 import type { Product } from '@/lib/types';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
@@ -63,7 +62,6 @@ export default function Header() {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
-  const isInitialMount = useRef(true);
 
   const filteredProducts = useMemo(() => {
     if (!products || !searchTerm) {
@@ -95,18 +93,6 @@ export default function Header() {
     setSearchTerm('');
   };
   
-  useEffect(() => {
-    if (isInitialMount.current) {
-        isInitialMount.current = false;
-        return;
-    }
-    if (!isPopoverOpen) {
-      // Small delay to prevent search term from clearing before navigation
-      setTimeout(() => setSearchTerm(''), 150);
-    }
-  }, [isPopoverOpen]);
-
-
   return (
     <header className="sticky top-0 z-30 w-full border-b bg-background/95 backdrop-blur-sm">
       {/* Top Bar */}

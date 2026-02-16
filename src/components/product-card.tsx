@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { ShoppingCart, Ruler, RefreshCw } from 'lucide-react';
+import { ShoppingCart, Ruler, RefreshCw, Heart, Scale } from 'lucide-react';
 import { useState } from 'react';
 import Link from 'next/link';
 
@@ -11,13 +11,14 @@ import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { QuickOrderDialog } from './quick-order-dialog';
+import { cn } from '@/lib/utils';
 
 interface ProductCardProps {
   product: Product;
 }
 
 export function ProductCard({ product }: ProductCardProps) {
-  const { region, addToCart } = useStore();
+  const { region, addToCart, toggleFavorite, isFavorite, toggleCompare, isCompared } = useStore();
   const { toast } = useToast();
   const [isQuickOrderOpen, setIsQuickOrderOpen] = useState(false);
 
@@ -36,6 +37,21 @@ export function ProductCard({ product }: ProductCardProps) {
       description: product.title,
     });
   };
+  
+  const handleFavoriteToggle = (e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleFavorite(product);
+      toast({ title: isFavorite(product.id) ? 'Удалено из избранного' : 'Добавлено в избранное', description: product.title });
+  }
+
+  const handleCompareToggle = (e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleCompare(product);
+      toast({ title: isCompared(product.id) ? 'Удалено из сравнения' : 'Добавлено к сравнению', description: product.title });
+  }
+
 
   return (
     <>
@@ -48,16 +64,24 @@ export function ProductCard({ product }: ProductCardProps) {
               src={product.images[0]}
               alt={product.title}
               fill
-              className="object-contain"
+              className="object-contain p-4"
             />
+             <div className="absolute top-2 right-2 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <Button size="icon" variant="secondary" className="h-8 w-8 rounded-full bg-background/70 hover:bg-background" onClick={handleFavoriteToggle}>
+                    <Heart className={cn("h-4 w-4", isFavorite(product.id) && "fill-red-500 text-red-500")} />
+                </Button>
+                <Button size="icon" variant="secondary" className="h-8 w-8 rounded-full bg-background/70 hover:bg-background" onClick={handleCompareToggle}>
+                    <Scale className={cn("h-4 w-4", isCompared(product.id) && "text-primary")} />
+                </Button>
+            </div>
              {product.stockStatus ? (
-                 <Badge className="absolute top-3 right-3" variant="default">В наличии</Badge>
+                 <Badge className="absolute top-3 left-3" variant="default">В наличии</Badge>
             ) : (
-                 <Badge className="absolute top-3 right-3" variant="destructive">Нет в наличии</Badge>
+                 <Badge className="absolute top-3 left-3" variant="destructive">Нет в наличии</Badge>
             )}
           </div>
           <div className="p-4 flex flex-col flex-grow">
-            <h3 className="font-bold text-lg font-headline truncate group-hover:text-primary transition-colors">{product.title}</h3>
+            <h3 className="font-semibold text-base leading-tight h-10 group-hover:text-primary transition-colors line-clamp-2">{product.title}</h3>
             
             <div className="mt-2 flex items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
               {product.specs.area_sq_m && (

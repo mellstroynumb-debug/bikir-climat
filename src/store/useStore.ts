@@ -4,6 +4,8 @@ import type { Product, CartItem, Region } from '@/lib/types';
 interface StoreState {
   region: Region;
   cart: CartItem[];
+  favorites: Product[];
+  compare: Product[];
   setRegion: (region: Region) => void;
   addToCart: (product: Product) => void;
   removeFromCart: (productId: string) => void;
@@ -12,11 +14,20 @@ interface StoreState {
   clearCart: () => void;
   getCartCount: () => number;
   getCartTotal: () => number;
+  toggleFavorite: (product: Product) => void;
+  isFavorite: (productId: string) => boolean;
+  getFavoritesCount: () => number;
+  toggleCompare: (product: Product) => void;
+  isCompared: (productId: string) => boolean;
+  getCompareCount: () => number;
+  removeFromCompare: (productId: string) => void;
 }
 
 export const useStore = create<StoreState>((set, get) => ({
   region: 'PMR',
   cart: [],
+  favorites: [],
+  compare: [],
   setRegion: (region) => set({ region }),
   addToCart: (product) => {
     const { cart } = get();
@@ -62,4 +73,43 @@ export const useStore = create<StoreState>((set, get) => ({
       return total + (price || 0) * item.quantity;
     }, 0);
   },
+
+  // Favorites
+  isFavorite: (productId) => {
+    const { favorites } = get();
+    return favorites.some(p => p.id === productId);
+  },
+  toggleFavorite: (product) => {
+    const { favorites } = get();
+    const isFavorite = favorites.some(p => p.id === product.id);
+    if (isFavorite) {
+      set({ favorites: favorites.filter(p => p.id !== product.id) });
+    } else {
+      set({ favorites: [...favorites, product] });
+    }
+  },
+  getFavoritesCount: () => get().favorites.length,
+
+  // Compare
+  isCompared: (productId) => {
+    const { compare } = get();
+    return compare.some(p => p.id === productId);
+  },
+  toggleCompare: (product) => {
+    const { compare } = get();
+    const isCompared = compare.some(p => p.id === product.id);
+    if (isCompared) {
+      set({ compare: compare.filter(p => p.id !== product.id) });
+    } else {
+      if (compare.length < 5) {
+         set({ compare: [...compare, product] });
+      }
+    }
+  },
+  removeFromCompare: (productId) => {
+     set(state => ({
+      compare: state.compare.filter(item => item.id !== productId),
+    }));
+  },
+  getCompareCount: () => get().compare.length,
 }));

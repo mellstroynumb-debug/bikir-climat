@@ -9,7 +9,7 @@ import { useStore } from '@/store/useStore';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ShoppingCart, Loader2, Wrench } from 'lucide-react';
+import { ShoppingCart, Loader2, Wrench, Heart, Scale } from 'lucide-react';
 import { QuickOrderDialog } from '@/components/quick-order-dialog';
 import { useState, useMemo, useEffect } from 'react';
 import {
@@ -52,7 +52,7 @@ export default function ProductPage() {
   const { data: installationService, isLoading: isServiceLoading } = useDoc<Product>(installationServiceRef);
 
 
-  const { region, addToCart } = useStore();
+  const { region, addToCart, toggleFavorite, isFavorite, toggleCompare, isCompared } = useStore();
   const { toast } = useToast();
   const [isQuickOrderOpen, setIsQuickOrderOpen] = useState(false);
   const [addInstallation, setAddInstallation] = useState(false);
@@ -147,6 +147,18 @@ export default function ProductPage() {
       description: toastMessage,
     });
   };
+
+  const handleFavoriteToggle = () => {
+    if (!product) return;
+    toggleFavorite(product);
+    toast({ title: isFavorite(product.id) ? 'Удалено из избранного' : 'Добавлено в избранное', description: product.title });
+  }
+
+  const handleCompareToggle = () => {
+      if (!product) return;
+      toggleCompare(product);
+      toast({ title: isCompared(product.id) ? 'Удалено из сравнения' : 'Добавлено к сравнению', description: product.title });
+  }
 
   return (
     <>
@@ -248,10 +260,18 @@ export default function ProductPage() {
             )}
             
             <div className="mt-6 pt-6 border-t space-y-3">
-              <Button size="lg" className="w-full" onClick={handleAddToCart} disabled={!product.stockStatus}>
-                <ShoppingCart className="mr-2 h-5 w-5" />
-                Добавить в корзину
-              </Button>
+              <div className="grid grid-cols-[1fr_auto_auto] gap-2">
+                  <Button size="lg" onClick={handleAddToCart} disabled={!product.stockStatus}>
+                      <ShoppingCart className="mr-2 h-5 w-5" />
+                      Добавить в корзину
+                  </Button>
+                  <Button size="lg" variant="outline" onClick={handleFavoriteToggle} aria-label="Добавить в избранное">
+                      <Heart className={cn("h-5 w-5", isFavorite(product.id) && "fill-red-500 text-red-500")} />
+                  </Button>
+                  <Button size="lg" variant="outline" onClick={handleCompareToggle} aria-label="Добавить к сравнению">
+                      <Scale className={cn("h-5 w-5", isCompared(product.id) && "text-primary")} />
+                  </Button>
+              </div>
               <Button size="lg" variant="secondary" className="w-full" onClick={() => setIsQuickOrderOpen(true)} disabled={!product.stockStatus}>
                 Быстрый заказ
               </Button>

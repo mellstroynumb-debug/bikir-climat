@@ -9,7 +9,7 @@ import { useStore } from '@/store/useStore';
 
 export default function MobileNav() {
   const pathname = usePathname();
-  const { getCartCount } = useStore();
+  const { getCartCount, getFavoritesCount, getCompareCount } = useStore();
   
   const [isClient, setIsClient] = useState(false);
   useEffect(() => {
@@ -17,11 +17,14 @@ export default function MobileNav() {
   }, []);
   
   const cartCount = getCartCount();
+  const favoritesCount = getFavoritesCount();
+  const compareCount = getCompareCount();
+
 
   const navItems = [
     { href: '/catalog', label: 'Каталог', icon: LayoutGrid },
-    { href: '#', label: 'Избранное', icon: Heart, count: 0 },
-    { href: '#', label: 'Сравнение', icon: Scale, count: 0 },
+    { href: '/favorites', label: 'Избранное', icon: Heart, count: isClient ? favoritesCount : 0 },
+    { href: '/compare', label: 'Сравнение', icon: Scale, count: isClient ? compareCount : 0 },
     { href: '/cart', label: 'Корзина', icon: ShoppingCart, count: isClient ? cartCount : 0 },
     { href: '/contacts', label: 'Контакты', icon: MapPin },
   ];

@@ -18,6 +18,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import { collection, query } from 'firebase/firestore';
 import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
 import type { Product } from '@/lib/types';
 import { useRouter } from 'next/navigation';

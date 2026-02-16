@@ -19,6 +19,7 @@ import { Advantages } from '@/components/advantages';
 import { FaqSection } from '@/components/faq-section';
 import { CategoryGrid } from '@/components/home/category-grid';
 import { BrandsCarousel } from '@/components/home/brands-carousel';
+import { HeroCarousel } from '@/components/home/hero-carousel';
 
 // Helper function to get price based on region
 const getPrice = (product: Product, region: 'PMR' | 'MD') => {
@@ -267,6 +268,22 @@ export default function Home() {
 
   return (
     <>
+      <HeroCarousel />
+      
+      {/* Quiz Section */}
+      <section className="py-16 md:py-24 bg-secondary/30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            {isLoading && !allProducts ? (
+            <div className="flex items-center justify-center h-[400px]">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                <p className="ml-4 text-muted-foreground">Загружаем наш умный подборщик...</p>
+            </div>
+            ) : (
+                allProducts && <Quiz allProducts={conditionerProducts} />
+            )}
+        </div>
+      </section>
+
       <CategoryGrid />
       <BrandsCarousel />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -294,18 +311,6 @@ export default function Home() {
                 <Link href="/catalog">Смотреть все модели</Link>
               </Button>
             </div>
-          )}
-        </section>
-
-        {/* Quiz Section */}
-        <section className="py-24 border-t">
-          {isLoading && !allProducts ? (
-            <div className="flex items-center justify-center h-[400px]">
-              <Loader2 className="h-8 w-8 animate-spin text-primary" />
-              <p className="ml-4 text-muted-foreground">Загружаем наш умный подборщик...</p>
-            </div>
-          ) : (
-             allProducts && <Quiz allProducts={conditionerProducts} />
           )}
         </section>
 

@@ -151,6 +151,16 @@ export default function Header() {
               >
                 <Send className="h-5 w-5" />
               </a>
+              <a href="#" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="h-5 w-5"
+                >
+                    <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.23-.16 1.74.03 1.48 1.14 2.57 2.5 2.51.91-.03 1.78-.39 2.34-1.05.53-.64.82-1.5.86-2.32.03-.78.05-1.56.05-2.34l.04-1.38Z" />
+                </svg>
+              </a>
             </div>
             <RegionSwitcher />
           </div>
@@ -169,70 +179,69 @@ export default function Header() {
         </div>
        
         <div className="flex-1">
-          <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
-            <PopoverTrigger asChild>
-                <div className="relative w-full max-w-lg">
-                    <div className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2">
-                        <Search className="h-5 w-5 text-muted-foreground" />
-                    </div>
-                     <input
+          <form onSubmit={handleSearchSubmit} className="flex w-full max-w-lg items-stretch">
+            <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
+                <PopoverTrigger asChild>
+                    <input
                         type="text"
                         placeholder="Поиск по сайту..."
-                        className="h-11 w-full rounded-md border border-input bg-background/50 pl-10 pr-4 text-sm outline-none ring-0 focus-visible:ring-0 focus:ring-0 focus-visible:ring-offset-0"
+                        className="h-11 w-full rounded-l-md rounded-r-none border-y border-l border-input bg-background/50 pl-4 pr-4 text-sm outline-none ring-0 focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-0"
                         onFocus={() => setIsPopoverOpen(true)}
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         onKeyDown={(e) => {
-                          if (e.key === 'Enter') handleSearchSubmit(e);
-                          if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
-                            e.preventDefault();
-                            (e.target as HTMLInputElement).focus();
-                          }
+                            if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+                                e.preventDefault();
+                                (e.target as HTMLInputElement).focus();
+                            }
                         }}
                     />
-                </div>
-            </PopoverTrigger>
-            <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start">
-              <div className="overflow-y-auto py-2 max-h-[60vh]">
-                 {isLoading && (
-                    <div className="flex items-center justify-center p-8">
-                        <Loader2 className="h-6 w-6 animate-spin" />
-                    </div>
-                )}
-                {!isLoading && searchTerm && filteredProducts.length === 0 && (
-                    <p className="text-center text-muted-foreground p-4 text-sm">Ничего не найдено.</p>
-                )}
-                {!isLoading && !searchTerm && (
-                    <p className="text-center text-muted-foreground p-4 text-sm">Начните вводить название товара.</p>
-                )}
-                <ul className="divide-y">
-                    {filteredProducts.slice(0, 7).map((product) => {
-                        const price = region === 'PMR' ? product.price_pmr : product.price_md;
-                        return (
-                            <li key={product.id}>
-                                <button onClick={() => handleSelect(`/catalog/${product.id}`)} className="w-full text-left p-2 hover:bg-accent transition-colors flex items-center gap-3">
-                                    <Image
-                                        src={product.images[0]}
-                                        alt={product.title}
-                                        width={40}
-                                        height={40}
-                                        className="rounded-md object-cover border"
-                                    />
-                                    <div className="flex-1">
-                                        <p className="font-medium text-sm leading-tight">{product.title}</p>
-                                        {price && <p className="text-xs text-primary">{new Intl.NumberFormat('ru-RU').format(price)} {currency}</p>}
-                                    </div>
-                                </button>
-                            </li>
-                        )
-                    })}
-                </ul>
-              </div>
-                 {searchTerm && <div className="border-t p-2">
-                    <Button onClick={handleSearchSubmit} className="w-full" variant="secondary">Показать все результаты</Button>
-                </div>}
-            </PopoverContent>
-          </Popover>
+                </PopoverTrigger>
+                <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0" align="start">
+                  <div className="overflow-y-auto py-2 max-h-[60vh]">
+                     {isLoading && (
+                        <div className="flex items-center justify-center p-8">
+                            <Loader2 className="h-6 w-6 animate-spin" />
+                        </div>
+                    )}
+                    {!isLoading && searchTerm && filteredProducts.length === 0 && (
+                        <p className="text-center text-muted-foreground p-4 text-sm">Ничего не найдено.</p>
+                    )}
+                    {!isLoading && !searchTerm && (
+                        <p className="text-center text-muted-foreground p-4 text-sm">Начните вводить название товара.</p>
+                    )}
+                    <ul className="divide-y">
+                        {filteredProducts.slice(0, 7).map((product) => {
+                            const price = region === 'PMR' ? product.price_pmr : product.price_md;
+                            return (
+                                <li key={product.id}>
+                                    <button onClick={() => handleSelect(`/catalog/${product.id}`)} className="w-full text-left p-2 hover:bg-accent transition-colors flex items-center gap-3">
+                                        <Image
+                                            src={product.images[0]}
+                                            alt={product.title}
+                                            width={40}
+                                            height={40}
+                                            className="rounded-md object-cover border"
+                                        />
+                                        <div className="flex-1">
+                                            <p className="font-medium text-sm leading-tight">{product.title}</p>
+                                            {price && <p className="text-xs text-primary">{new Intl.NumberFormat('ru-RU').format(price)} {currency}</p>}
+                                        </div>
+                                    </button>
+                                </li>
+                            )
+                        })}
+                    </ul>
+                  </div>
+                     {searchTerm && <div className="border-t p-2">
+                        <Button onClick={handleSearchSubmit} className="w-full" variant="secondary">Показать все результаты</Button>
+                    </div>}
+                </PopoverContent>
+            </Popover>
+            <Button type="submit" className="h-11 rounded-l-none rounded-r-md border-y border-r border-input bg-background px-4 text-muted-foreground hover:bg-accent hover:text-accent-foreground" aria-label="Поиск">
+                <Search className="h-5 w-5" />
+            </Button>
+          </form>
         </div>
         
         <div className="hidden text-right lg:block">
@@ -316,19 +325,17 @@ export default function Header() {
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-screen max-w-[calc(100vw-2rem)] p-0" align="end">
-                 <div className="flex items-center border-b">
+                 <form onSubmit={handleSearchSubmit} className="flex items-center border-b">
                     <Search className="h-5 w-5 text-muted-foreground ml-4" />
-                    <form onSubmit={handleSearchSubmit} className="flex-1">
-                        <input
-                            type="text"
-                            placeholder="Найти кондиционер..."
-                            className="w-full h-12 border-0 bg-transparent px-3 text-base placeholder:text-muted-foreground focus:outline-none ring-0 focus-visible:ring-0"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            autoFocus
-                        />
-                    </form>
-                 </div>
+                    <input
+                        type="text"
+                        placeholder="Найти кондиционер..."
+                        className="w-full h-12 border-0 bg-transparent px-3 text-base placeholder:text-muted-foreground focus:outline-none ring-0 focus-visible:ring-0"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        autoFocus
+                    />
+                 </form>
                  <div className="overflow-y-auto py-2 max-h-[60vh]">
                      {isLoading && (
                         <div className="flex items-center justify-center p-8">

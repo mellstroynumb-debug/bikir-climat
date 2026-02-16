@@ -11,6 +11,7 @@ import {
   Search,
   Send,
   ShoppingCart,
+  Home
 } from 'lucide-react';
 import { MainNav } from './main-nav';
 import { RegionSwitcher } from '../region-switcher';
@@ -27,7 +28,9 @@ import { collection, query } from 'firebase/firestore';
 import type { Product } from '@/lib/types';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { Sheet, SheetClose, SheetContent, SheetTrigger } from '../ui/sheet';
+import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '../ui/sheet';
+import { cn } from '@/lib/utils';
+import { CallbackRequestDialog } from '../callback-request-dialog';
 
 function ActionLink({
   href,
@@ -53,19 +56,22 @@ function ActionLink({
           </span>
         )}
       </div>
-      <span>{label}</span>
+      <span className="sr-only md:not-sr-only">{label}</span>
     </Link>
   );
 }
 
 export default function Header() {
-  const { region } = useStore();
+  const { region, getCartCount } = useStore();
   const [isClient, setIsClient] = useState(false);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [isCallbackOpen, setIsCallbackOpen] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
+  
+  const cartCount = getCartCount();
 
   const phoneDisplay = region === 'PMR' ? '0775 28 405' : '+373 68 123456';
   const phoneCall = region === 'PMR' ? '+37377528405' : '+37368123456';
@@ -94,9 +100,10 @@ export default function Header() {
     }
     return products.filter((product) => {
       const productTitleLower = product.title.toLowerCase();
-      return searchWords.every((word) => productTitleLower.includes(word));
+      // Check that every search word is present in the title
+      return searchWords.every(word => productTitleLower.includes(word));
     });
-  }, [products, searchTerm]);
+  }, [products, searchTerm, region]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -149,8 +156,8 @@ export default function Header() {
           </div>
         </div>
       </div>
-
-      {/* Main Header - DESKTOP */}
+      
+       {/* Middle Bar */}
       <div className="container mx-auto hidden h-24 items-center gap-4 px-4 md:flex md:gap-8">
         <div className="hidden lg:flex">
              <Link href="/" className="flex flex-col">
@@ -164,18 +171,24 @@ export default function Header() {
         <div className="flex-1">
           <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
             <PopoverTrigger asChild>
-                <div className="relative w-full max-w-lg cursor-text">
+                <div className="relative w-full max-w-lg">
                     <div className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2">
                         <Search className="h-5 w-5 text-muted-foreground" />
                     </div>
                      <input
                         type="text"
                         placeholder="Поиск по сайту..."
-                        className="h-11 w-full rounded-md border border-input bg-background/50 pl-10 pr-4 text-sm focus:outline-none"
+                        className="h-11 w-full rounded-md border border-input bg-background/50 pl-10 pr-4 text-sm outline-none ring-0 focus-visible:ring-0 focus:ring-0 focus-visible:ring-offset-0"
                         onFocus={() => setIsPopoverOpen(true)}
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        onKeyDown={(e) => e.key === 'Enter' && handleSearchSubmit(e)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') handleSearchSubmit(e);
+                          if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+                            e.preventDefault();
+                            (e.target as HTMLInputElement).focus();
+                          }
+                        }}
                     />
                 </div>
             </PopoverTrigger>
@@ -235,9 +248,23 @@ export default function Header() {
         <div className="hidden shrink-0 items-center gap-4 sm:flex">
           <ActionLink href="#" icon={Heart} label="Избранное" count={0}/>
           <ActionLink href="#" icon={Scale} label="Сравнить" count={0}/>
+           <ActionLink href="/cart" icon={ShoppingCart} label="Корзина" count={isClient ? cartCount : 0}/>
         </div>
       </div>
-      
+
+      {/* Bottom Nav (Desktop) */}
+       <div className="hidden border-t bg-background md:block">
+        <div className="container mx-auto flex h-14 items-center gap-6 px-4">
+            <Button asChild className="bg-primary hover:bg-primary/90 font-bold">
+              <Link href="/catalog">
+                <Menu className="mr-2 h-5 w-5" />
+                Каталог
+              </Link>
+            </Button>
+            <MainNav />
+        </div>
+      </div>
+
       {/* Main Header - MOBILE */}
       <div className="container mx-auto flex h-16 items-center justify-between px-2 md:hidden">
         <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
@@ -247,14 +274,17 @@ export default function Header() {
               <span className="sr-only">Открыть меню</span>
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="w-[300px] p-0">
-             <div className="p-6">
+          <SheetContent side="left" className="w-[300px] p-0 flex flex-col">
+            <SheetHeader className="p-6">
+                <SheetTitle className="sr-only">Главное меню</SheetTitle>
                 <SheetClose asChild>
-                    <Link href="/" className="flex flex-col mb-8">
+                    <Link href="/" className="flex flex-col text-left">
                         <span className="font-bold font-headline text-2xl">Bikir Climat</span>
                         <span className="text-xs text-muted-foreground">№1 по установке кондиционеров</span>
                     </Link>
                 </SheetClose>
+            </SheetHeader>
+            <div className="p-6 pt-2 flex-1">
                 <nav className="flex flex-col gap-4">
                     <SheetClose asChild><Link href="/#quiz" className="font-medium text-lg">Подбор кондиционера</Link></SheetClose>
                     <SheetClose asChild><Link href="/services" className="font-medium text-lg">Монтаж</Link></SheetClose>
@@ -264,8 +294,8 @@ export default function Header() {
                     <SheetClose asChild><Link href="/contacts" className="font-medium text-lg">Контакты</Link></SheetClose>
                 </nav>
             </div>
-            <div className="absolute bottom-0 left-0 right-0 p-6 border-t">
-                <div className="flex justify-between items-center mb-6">
+            <div className="p-6 border-t mt-auto">
+                <div className="flex justify-between items-center">
                      <a href={`tel:${phoneCall}`} className="font-bold text-lg">{phoneDisplay}</a>
                      <RegionSwitcher />
                 </div>
@@ -292,7 +322,7 @@ export default function Header() {
                         <input
                             type="text"
                             placeholder="Найти кондиционер..."
-                            className="w-full h-12 border-0 bg-transparent px-3 text-base placeholder:text-muted-foreground focus:outline-none"
+                            className="w-full h-12 border-0 bg-transparent px-3 text-base placeholder:text-muted-foreground focus:outline-none ring-0 focus-visible:ring-0"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             autoFocus
@@ -300,7 +330,39 @@ export default function Header() {
                     </form>
                  </div>
                  <div className="overflow-y-auto py-2 max-h-[60vh]">
-                    {/* ... results */}
+                     {isLoading && (
+                        <div className="flex items-center justify-center p-8">
+                            <Loader2 className="h-6 w-6 animate-spin" />
+                        </div>
+                    )}
+                    {!isLoading && searchTerm && filteredProducts.length === 0 && (
+                        <p className="text-center text-muted-foreground p-4 text-sm">Ничего не найдено.</p>
+                    )}
+                    {!isLoading && !searchTerm && (
+                        <p className="text-center text-muted-foreground p-4 text-sm">Начните вводить название товара.</p>
+                    )}
+                    <ul className="divide-y">
+                        {filteredProducts.slice(0, 7).map((product) => {
+                            const price = region === 'PMR' ? product.price_pmr : product.price_md;
+                            return (
+                                <li key={product.id}>
+                                    <button onClick={() => handleSelect(`/catalog/${product.id}`)} className="w-full text-left p-2 hover:bg-accent transition-colors flex items-center gap-3">
+                                        <Image
+                                            src={product.images[0]}
+                                            alt={product.title}
+                                            width={40}
+                                            height={40}
+                                            className="rounded-md object-cover border"
+                                        />
+                                        <div className="flex-1">
+                                            <p className="font-medium text-sm leading-tight">{product.title}</p>
+                                            {price && <p className="text-xs text-primary">{new Intl.NumberFormat('ru-RU').format(price)} {currency}</p>}
+                                        </div>
+                                    </button>
+                                </li>
+                            )
+                        })}
+                    </ul>
                 </div>
                 {searchTerm && <div className="border-t p-2">
                     <Button onClick={handleSearchSubmit} className="w-full" variant="secondary">Показать все результаты</Button>
@@ -315,20 +377,7 @@ export default function Header() {
             </Button>
         </div>
       </div>
-
-
-      {/* Bottom Nav (Desktop) */}
-       <div className="hidden border-t bg-background md:block">
-        <div className="container mx-auto flex h-14 items-center gap-6 px-4">
-            <Button asChild className="bg-primary hover:bg-primary/90 font-bold">
-              <Link href="/catalog">
-                <Menu className="mr-2 h-5 w-5" />
-                Каталог
-              </Link>
-            </Button>
-            <MainNav />
-        </div>
-      </div>
+      <CallbackRequestDialog isOpen={isCallbackOpen} onOpenChange={setIsCallbackOpen} />
     </header>
   );
 }

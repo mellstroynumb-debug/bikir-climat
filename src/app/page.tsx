@@ -270,26 +270,10 @@ export default function Home() {
     <>
       <HeroCarousel />
       
-      {/* Quiz Section */}
-      <section className="py-16 md:py-24 bg-secondary/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            {isLoading && !allProducts ? (
-            <div className="flex items-center justify-center h-[400px]">
-                <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                <p className="ml-4 text-muted-foreground">Загружаем наш умный подборщик...</p>
-            </div>
-            ) : (
-                allProducts && <Quiz allProducts={conditionerProducts} />
-            )}
-        </div>
-      </section>
-
       <CategoryGrid />
-      <BrandsCarousel />
+      
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Featured Products Section */}
-        <section id="featured-products" className="py-24 scroll-mt-20">
+        <section id="featured-products" className="py-16 md:py-24 scroll-mt-20">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight font-headline">
               Популярные модели
@@ -313,11 +297,29 @@ export default function Home() {
             </div>
           )}
         </section>
+      </div>
 
+      <section className="py-16 md:py-24 bg-secondary/30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            {isLoading && !allProducts ? (
+            <div className="flex items-center justify-center h-[400px]">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                <p className="ml-4 text-muted-foreground">Загружаем наш умный подборщик...</p>
+            </div>
+            ) : (
+                allProducts && <Quiz allProducts={conditionerProducts} />
+            )}
+        </div>
+      </section>
+
+      <BrandsCarousel />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <section id="faq" className="py-24 border-t scroll-mt-20">
             <FaqSection />
         </section>
       </div>
+
       <Advantages />
     </>
   );

@@ -44,18 +44,19 @@ export function HeroCarousel() {
     );
 
     return (
-        <section className="w-full">
+        <section className="w-full py-8 md:py-12">
+          <div className="container mx-auto px-4">
             <Carousel
                 plugins={[plugin.current]}
                 opts={{ loop: true }}
-                className="w-full"
+                className="w-full rounded-lg overflow-hidden"
                 onMouseEnter={plugin.current.stop}
                 onMouseLeave={plugin.current.reset}
             >
                 <CarouselContent>
                     {slides.map((slide, index) => (
                         <CarouselItem key={index}>
-                            <div className="relative aspect-[2/1] md:aspect-[2.5/1] lg:aspect-[3.5/1] xl:aspect-[4/1]">
+                            <div className="relative aspect-[2/1] md:aspect-[2.5/1] lg:aspect-[3.2/1]">
                                 <Image
                                     src={slide.image}
                                     alt={slide.title}
@@ -65,7 +66,7 @@ export function HeroCarousel() {
                                     data-ai-hint={slide.imageHint}
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/30 flex items-center">
-                                    <div className="container mx-auto px-4 text-white">
+                                    <div className="container mx-auto px-4 md:px-8 text-white">
                                         <div className="max-w-md">
                                             <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold font-headline">{slide.title}</h2>
                                             <p className="mt-2 md:mt-4 text-sm md:text-lg">{slide.description}</p>
@@ -82,6 +83,7 @@ export function HeroCarousel() {
                 <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 hidden sm:flex" />
                 <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 hidden sm:flex" />
             </Carousel>
+          </div>
         </section>
     );
 }

@@ -1,1 +1,359 @@
-[]
+[
+  {
+    "id": "prod-daikin-01",
+    "title": "Кондиционер Daikin Stylish инверторный FTXA25BT/RXA25A9 (черное дерево)",
+    "brand": "Daikin",
+    "description": "Компактный и функциональный дизайн, подходящий для всех интерьеров с отделкой из черного дерева. Выбор продукта R-32 снижает воздействие на окружающую среду на 68% по сравнению с R-410A. Эффект Коанда оптимизирует воздушный поток для комфортного климата. Бесшумная работа до 19 дБА. Значения сезонной эффективности до A+++ при охлаждении и обогреве. Flash Streamer расщепляет аллергены и удаляет неприятные запахи. Управление через приложение Onecta и голосовые команды Amazon Alexa или Google Assistant.",
+    "category_id": "cat-invertornye",
+    "price_pmr": 42530,
+    "old_price_pmr": null,
+    "price_md": null,
+    "old_price_md": null,
+    "images": [
+      {"id": "img-01-1", "url": "/images/products/Кондиционер_Daikin_Stylish_инверторный_FTXA25BT_RXA25A9_черное_дерево_1.webp", "sort_order": 0},
+      {"id": "img-01-2", "url": "/images/products/Кондиционер_Daikin_Stylish_инверторный_FTXA25BT_RXA25A9_черное_дерево_2.webp", "sort_order": 1},
+      {"id": "img-01-3", "url": "/images/products/Кондиционер_Daikin_Stylish_инверторный_FTXA25BT_RXA25A9_черное_дерево_3.webp", "sort_order": 2},
+      {"id": "img-01-4", "url": "/images/products/Кондиционер_Daikin_Stylish_инверторный_FTXA25BT_RXA25A9_черное_дерево_4.webp", "sort_order": 3},
+      {"id": "img-01-5", "url": "/images/products/Кондиционер_Daikin_Stylish_инверторный_FTXA25BT_RXA25A9_черное_дерево_5.webp", "sort_order": 4}
+    ],
+    "specs": [
+      {"id": "s01-0", "group_id": "sg-main", "name": "Рекомендуемая площадь, м2", "value": "25 (9)", "sort_order": 0},
+      {"id": "s01-1", "group_id": "sg-main", "name": "Производитель", "value": "Daikin", "sort_order": 1},
+      {"id": "s01-2", "group_id": "sg-main", "name": "Тип компрессора", "value": "Инверторный", "sort_order": 2},
+      {"id": "s01-3", "group_id": "sg-main", "name": "Модель", "value": "Stylish", "sort_order": 3},
+      {"id": "s01-4", "group_id": "sg-main", "name": "Марка фреона", "value": "R-32", "sort_order": 4},
+      {"id": "s01-5", "group_id": "sg-main", "name": "Расход воздуха, (м3/ч)", "value": "270/360/540/690", "sort_order": 5},
+      {"id": "s01-6", "group_id": "sg-main", "name": "Wi-Fi модуль", "value": "Да", "sort_order": 6},
+      {"id": "s01-7", "group_id": "sg-main", "name": "Класс энергоэффективности", "value": "А+++", "sort_order": 7},
+      {"id": "s01-8", "group_id": "sg-main", "name": "Режим работы", "value": "Охлаждение/Обогрев/Осушение/Вентиляция", "sort_order": 8},
+      {"id": "s01-9", "group_id": "sg-main", "name": "Максимальный перепад высот (м)", "value": "15", "sort_order": 9},
+      {"id": "s01-10", "group_id": "sg-main", "name": "Максимальная длина магистрали (м)", "value": "20", "sort_order": 10},
+      {"id": "s01-11", "group_id": "sg-main", "name": "Напряжение питания", "value": "1Ph, (220-240)V, 50Hz", "sort_order": 11},
+      {"id": "s01-12", "group_id": "sg-main", "name": "Гарантия (мес.)", "value": "36", "sort_order": 12},
+      {"id": "s01-13", "group_id": "sg-main", "name": "Цвет", "value": "Чёрное дерево", "sort_order": 13},
+      {"id": "s01-14", "group_id": "sg-performance", "name": "Производительность (тепло), кВт", "value": "2.8", "sort_order": 14},
+      {"id": "s01-15", "group_id": "sg-performance", "name": "Производительность (охлаждение), кВт", "value": "2.5", "sort_order": 15},
+      {"id": "s01-16", "group_id": "sg-performance", "name": "Потребляемая мощность, Вт (обогрев)", "value": "710", "sort_order": 16},
+      {"id": "s01-17", "group_id": "sg-performance", "name": "Потребляемая мощность, Вт (охлаждение)", "value": "560", "sort_order": 17},
+      {"id": "s01-18", "group_id": "sg-temperature", "name": "Температурный режим при обогреве, °C", "value": "-15°/+18°", "sort_order": 18},
+      {"id": "s01-19", "group_id": "sg-temperature", "name": "Температурный режим при охлаждении ,°C", "value": "-10°/+46°", "sort_order": 19},
+      {"id": "s01-20", "group_id": "sg-pipes", "name": "Диаметр труб (Жидкость, мм)", "value": "6", "sort_order": 20},
+      {"id": "s01-21", "group_id": "sg-pipes", "name": "Диаметр труб (Газ, мм)", "value": "9", "sort_order": 21},
+      {"id": "s01-22", "group_id": "sg-dimensions", "name": "Вес (кг) (внутренний блок)", "value": "11.5", "sort_order": 22},
+      {"id": "s01-23", "group_id": "sg-dimensions", "name": "Вес (кг) (внешний блок)", "value": "32", "sort_order": 23},
+      {"id": "s01-24", "group_id": "sg-dimensions", "name": "Уровень шума дБ(А) (внутренний блок)", "value": "19", "sort_order": 24},
+      {"id": "s01-25", "group_id": "sg-dimensions", "name": "Уровень шума дБ(А) (внешний блок)", "value": "39", "sort_order": 25},
+      {"id": "s01-26", "group_id": "sg-dimensions", "name": "Габариты (мм) (внутренний блок)", "value": "798x295x189", "sort_order": 26},
+      {"id": "s01-27", "group_id": "sg-dimensions", "name": "Габариты (мм) (внешний блок)", "value": "765x550x285", "sort_order": 27}
+    ],
+    "stock_status": true,
+    "sort_order": 0,
+    "created_at": "2026-02-17T12:00:00.000Z"
+  },
+  {
+    "id": "prod-daikin-02",
+    "title": "Кондиционер Daikin Emura инверторный FTXJ50AW/RXJ50A (белый)",
+    "brand": "Daikin",
+    "description": "Инверторная сплит-система Daikin Emura с мощностью охлаждения 18000 BTU для помещений до 50 м2. Технология Inverter с классом A+++. Хладагент R32. Уровень шума 32 дБ. Управление через приложение.",
+    "category_id": "cat-invertornye",
+    "price_pmr": 69783,
+    "old_price_pmr": null,
+    "price_md": null,
+    "old_price_md": null,
+    "images": [
+      {"id": "img-02-1", "url": "/images/products/Кондиционер_Daikin_Emura_инверторный_FTXJ50AW_RXJ50A_белый_1.webp", "sort_order": 0},
+      {"id": "img-02-2", "url": "/images/products/Кондиционер_Daikin_Emura_инверторный_FTXJ50AW_RXJ50A_белый_2.webp", "sort_order": 1},
+      {"id": "img-02-3", "url": "/images/products/Кондиционер_Daikin_Emura_инверторный_FTXJ50AW_RXJ50A_белый_3.webp", "sort_order": 2},
+      {"id": "img-02-4", "url": "/images/products/Кондиционер_Daikin_Emura_инверторный_FTXJ50AW_RXJ50A_белый_4.webp", "sort_order": 3},
+      {"id": "img-02-5", "url": "/images/products/Кондиционер_Daikin_Emura_инверторный_FTXJ50AW_RXJ50A_белый_5.webp", "sort_order": 4}
+    ],
+    "specs": [
+      {"id": "s02-0", "group_id": "sg-main", "name": "Рекомендуемая площадь, м2", "value": "50 (18)", "sort_order": 0},
+      {"id": "s02-1", "group_id": "sg-main", "name": "Производитель", "value": "Daikin", "sort_order": 1},
+      {"id": "s02-2", "group_id": "sg-main", "name": "Тип компрессора", "value": "Инверторный", "sort_order": 2},
+      {"id": "s02-3", "group_id": "sg-main", "name": "Модель", "value": "Emura", "sort_order": 3},
+      {"id": "s02-4", "group_id": "sg-main", "name": "Марка фреона", "value": "R-32", "sort_order": 4},
+      {"id": "s02-5", "group_id": "sg-main", "name": "Wi-Fi модуль", "value": "Да", "sort_order": 5},
+      {"id": "s02-6", "group_id": "sg-main", "name": "Класс энергоэффективности", "value": "А+++", "sort_order": 6},
+      {"id": "s02-7", "group_id": "sg-main", "name": "Режим работы", "value": "Охлаждение/Обогрев/Осушение/Вентиляция", "sort_order": 7},
+      {"id": "s02-8", "group_id": "sg-main", "name": "Гарантия (мес.)", "value": "36", "sort_order": 8},
+      {"id": "s02-9", "group_id": "sg-main", "name": "Цвет", "value": "Белый", "sort_order": 9},
+      {"id": "s02-10", "group_id": "sg-performance", "name": "Производительность (тепло), кВт", "value": "5.8", "sort_order": 10},
+      {"id": "s02-11", "group_id": "sg-performance", "name": "Производительность (охлаждение), кВт", "value": "5", "sort_order": 11},
+      {"id": "s02-12", "group_id": "sg-performance", "name": "Потребляемая мощность, Вт (обогрев)", "value": "1450", "sort_order": 12},
+      {"id": "s02-13", "group_id": "sg-performance", "name": "Потребляемая мощность, Вт (охлаждение)", "value": "1360", "sort_order": 13},
+      {"id": "s02-14", "group_id": "sg-temperature", "name": "Температурный режим при обогреве, °C", "value": "-20 ... +24", "sort_order": 14},
+      {"id": "s02-15", "group_id": "sg-temperature", "name": "Температурный режим при охлаждении ,°C", "value": "-10°/+50°", "sort_order": 15},
+      {"id": "s02-16", "group_id": "sg-pipes", "name": "Диаметр труб (Жидкость, мм)", "value": "6", "sort_order": 16},
+      {"id": "s02-17", "group_id": "sg-pipes", "name": "Диаметр труб (Газ, мм)", "value": "12", "sort_order": 17},
+      {"id": "s02-18", "group_id": "sg-dimensions", "name": "Вес (кг) (внутренний блок)", "value": "12", "sort_order": 18},
+      {"id": "s02-19", "group_id": "sg-dimensions", "name": "Вес (кг) (внешний блок)", "value": "49", "sort_order": 19},
+      {"id": "s02-20", "group_id": "sg-dimensions", "name": "Уровень шума дБ(А) (внутренний блок)", "value": "24/46", "sort_order": 20},
+      {"id": "s02-21", "group_id": "sg-dimensions", "name": "Уровень шума дБ(А) (внешний блок)", "value": "32", "sort_order": 21},
+      {"id": "s02-22", "group_id": "sg-dimensions", "name": "Габариты (мм) (внутренний блок)", "value": "305x900x214", "sort_order": 22},
+      {"id": "s02-23", "group_id": "sg-dimensions", "name": "Габариты (мм) (внешний блок)", "value": "734x954x408", "sort_order": 23}
+    ],
+    "stock_status": true,
+    "sort_order": 1,
+    "created_at": "2026-02-17T12:00:00.000Z"
+  },
+  {
+    "id": "prod-daikin-03",
+    "title": "Кондиционер Daikin Emura инверторный FTXJ35AS/RXJ35A (серый)",
+    "brand": "Daikin",
+    "description": "Сочетание культового дизайна и технического совершенства с элегантной серебристой отделкой. R-32, эффект Коанда, A+++ при охлаждении и обогреве. Flash Streamer. Управление через Amazon Alexa или Google Assistant. Уровень шума от 19 дБА.",
+    "category_id": "cat-invertornye",
+    "price_pmr": 52269,
+    "old_price_pmr": null, "price_md": null, "old_price_md": null,
+    "images": [
+      {"id": "img-03-1", "url": "/images/products/Кондиционер_Daikin_Emura_инверторный_FTXJ35AS_RXJ35A_серый_1.webp", "sort_order": 0},
+      {"id": "img-03-2", "url": "/images/products/Кондиционер_Daikin_Emura_инверторный_FTXJ35AS_RXJ35A_серый_2.webp", "sort_order": 1},
+      {"id": "img-03-3", "url": "/images/products/Кондиционер_Daikin_Emura_инверторный_FTXJ35AS_RXJ35A_серый_3.webp", "sort_order": 2},
+      {"id": "img-03-4", "url": "/images/products/Кондиционер_Daikin_Emura_инверторный_FTXJ35AS_RXJ35A_серый_4.webp", "sort_order": 3},
+      {"id": "img-03-5", "url": "/images/products/Кондиционер_Daikin_Emura_инверторный_FTXJ35AS_RXJ35A_серый_5.webp", "sort_order": 4}
+    ],
+    "specs": [
+      {"id": "s03-0", "group_id": "sg-main", "name": "Рекомендуемая площадь, м2", "value": "35 (12)", "sort_order": 0},
+      {"id": "s03-1", "group_id": "sg-main", "name": "Модель", "value": "Emura", "sort_order": 1},
+      {"id": "s03-2", "group_id": "sg-main", "name": "Марка фреона", "value": "R-32", "sort_order": 2},
+      {"id": "s03-3", "group_id": "sg-main", "name": "Wi-Fi модуль", "value": "Да", "sort_order": 3},
+      {"id": "s03-4", "group_id": "sg-main", "name": "Класс энергоэффективности", "value": "А+++", "sort_order": 4},
+      {"id": "s03-5", "group_id": "sg-main", "name": "Гарантия (мес.)", "value": "36", "sort_order": 5},
+      {"id": "s03-6", "group_id": "sg-main", "name": "Цвет", "value": "Серый", "sort_order": 6},
+      {"id": "s03-7", "group_id": "sg-performance", "name": "Производительность (тепло), кВт", "value": "4", "sort_order": 7},
+      {"id": "s03-8", "group_id": "sg-performance", "name": "Производительность (охлаждение), кВт", "value": "3.5 (1.5 - 4.2)", "sort_order": 8},
+      {"id": "s03-9", "group_id": "sg-performance", "name": "Потребляемая мощность, Вт (обогрев)", "value": "990", "sort_order": 9},
+      {"id": "s03-10", "group_id": "sg-performance", "name": "Потребляемая мощность, Вт (охлаждение)", "value": "860", "sort_order": 10},
+      {"id": "s03-11", "group_id": "sg-temperature", "name": "Температурный режим при обогреве, °C", "value": "-20°C/+18°C", "sort_order": 11},
+      {"id": "s03-12", "group_id": "sg-temperature", "name": "Температурный режим при охлаждении ,°C", "value": "-10°/+50°", "sort_order": 12},
+      {"id": "s03-13", "group_id": "sg-pipes", "name": "Диаметр труб (Жидкость, мм)", "value": "6", "sort_order": 13},
+      {"id": "s03-14", "group_id": "sg-pipes", "name": "Диаметр труб (Газ, мм)", "value": "9", "sort_order": 14},
+      {"id": "s03-15", "group_id": "sg-dimensions", "name": "Вес (кг) (внутренний блок)", "value": "12", "sort_order": 15},
+      {"id": "s03-16", "group_id": "sg-dimensions", "name": "Вес (кг) (внешний блок)", "value": "33", "sort_order": 16},
+      {"id": "s03-17", "group_id": "sg-dimensions", "name": "Уровень шума дБ(А) (внутренний блок)", "value": "20", "sort_order": 17},
+      {"id": "s03-18", "group_id": "sg-dimensions", "name": "Габариты (мм) (внутренний блок)", "value": "998x303x212", "sort_order": 18},
+      {"id": "s03-19", "group_id": "sg-dimensions", "name": "Габариты (мм) (внешний блок)", "value": "765x550x285", "sort_order": 19}
+    ],
+    "stock_status": true, "sort_order": 2, "created_at": "2026-02-17T12:00:00.000Z"
+  },
+  {
+    "id": "prod-daikin-04",
+    "title": "Кондиционер Daikin Emura инверторный FTXJ35AB/RXJ35A (черный)",
+    "brand": "Daikin",
+    "description": "Культовый дизайн Emura с элегантной матовой черной отделкой. R-32, A+++, Flash Streamer, управление через Alexa/Google. Уровень шума от 19 дБА.",
+    "category_id": "cat-invertornye",
+    "price_pmr": 51429,
+    "old_price_pmr": null, "price_md": null, "old_price_md": null,
+    "images": [
+      {"id": "img-04-1", "url": "/images/products/Кондиционер_Daikin_Emura_инверторный_FTXJ35AB_RXJ35A_черный_1.webp", "sort_order": 0},
+      {"id": "img-04-2", "url": "/images/products/Кондиционер_Daikin_Emura_инверторный_FTXJ35AB_RXJ35A_черный_2.webp", "sort_order": 1},
+      {"id": "img-04-3", "url": "/images/products/Кондиционер_Daikin_Emura_инверторный_FTXJ35AB_RXJ35A_черный_3.webp", "sort_order": 2},
+      {"id": "img-04-4", "url": "/images/products/Кондиционер_Daikin_Emura_инверторный_FTXJ35AB_RXJ35A_черный_4.webp", "sort_order": 3},
+      {"id": "img-04-5", "url": "/images/products/Кондиционер_Daikin_Emura_инверторный_FTXJ35AB_RXJ35A_черный_5.webp", "sort_order": 4}
+    ],
+    "specs": [
+      {"id": "s04-0", "group_id": "sg-main", "name": "Рекомендуемая площадь, м2", "value": "35 (12)", "sort_order": 0},
+      {"id": "s04-1", "group_id": "sg-main", "name": "Модель", "value": "Emura", "sort_order": 1},
+      {"id": "s04-2", "group_id": "sg-main", "name": "Марка фреона", "value": "R-32", "sort_order": 2},
+      {"id": "s04-3", "group_id": "sg-main", "name": "Класс энергоэффективности", "value": "А+++", "sort_order": 3},
+      {"id": "s04-4", "group_id": "sg-main", "name": "Цвет", "value": "Чёрный", "sort_order": 4},
+      {"id": "s04-5", "group_id": "sg-main", "name": "Гарантия (мес.)", "value": "36", "sort_order": 5},
+      {"id": "s04-6", "group_id": "sg-performance", "name": "Производительность (тепло), кВт", "value": "4 (0.9 - 5.1)", "sort_order": 6},
+      {"id": "s04-7", "group_id": "sg-performance", "name": "Производительность (охлаждение), кВт", "value": "3.5 (1.5 - 4.2)", "sort_order": 7},
+      {"id": "s04-8", "group_id": "sg-performance", "name": "Потребляемая мощность, Вт (обогрев)", "value": "990", "sort_order": 8},
+      {"id": "s04-9", "group_id": "sg-performance", "name": "Потребляемая мощность, Вт (охлаждение)", "value": "860", "sort_order": 9},
+      {"id": "s04-10", "group_id": "sg-temperature", "name": "Температурный режим при обогреве, °C", "value": "-20°C/+18°C", "sort_order": 10},
+      {"id": "s04-11", "group_id": "sg-temperature", "name": "Температурный режим при охлаждении ,°C", "value": "-10°/+50°", "sort_order": 11},
+      {"id": "s04-12", "group_id": "sg-pipes", "name": "Диаметр труб (Жидкость, мм)", "value": "9", "sort_order": 12},
+      {"id": "s04-13", "group_id": "sg-pipes", "name": "Диаметр труб (Газ, мм)", "value": "6", "sort_order": 13},
+      {"id": "s04-14", "group_id": "sg-dimensions", "name": "Габариты (мм) (внутренний блок)", "value": "998x303x212", "sort_order": 14},
+      {"id": "s04-15", "group_id": "sg-dimensions", "name": "Габариты (мм) (внешний блок)", "value": "765x550x285", "sort_order": 15}
+    ],
+    "stock_status": true, "sort_order": 3, "created_at": "2026-02-17T12:00:00.000Z"
+  },
+  {
+    "id": "prod-daikin-05",
+    "title": "Кондиционер Daikin Emura инверторный FTXJ35AW/RXJ35A (белый)",
+    "brand": "Daikin",
+    "description": "Сплит система премиум класса Daikin серии Emura с непревзойденным дизайном. A+++, шум 19 дБ, R-32, очистка воздуха, работа при -15°С.",
+    "category_id": "cat-invertornye",
+    "price_pmr": 50799,
+    "old_price_pmr": null, "price_md": null, "old_price_md": null,
+    "images": [
+      {"id": "img-05-1", "url": "/images/products/Кондиционер_Daikin_Emura_инверторный_FTXJ35AW_RXJ35A_белый_1.webp", "sort_order": 0},
+      {"id": "img-05-2", "url": "/images/products/Кондиционер_Daikin_Emura_инверторный_FTXJ35AW_RXJ35A_белый_2.webp", "sort_order": 1},
+      {"id": "img-05-3", "url": "/images/products/Кондиционер_Daikin_Emura_инверторный_FTXJ35AW_RXJ35A_белый_3.webp", "sort_order": 2},
+      {"id": "img-05-4", "url": "/images/products/Кондиционер_Daikin_Emura_инверторный_FTXJ35AW_RXJ35A_белый_4.webp", "sort_order": 3},
+      {"id": "img-05-5", "url": "/images/products/Кондиционер_Daikin_Emura_инверторный_FTXJ35AW_RXJ35A_белый_5.webp", "sort_order": 4}
+    ],
+    "specs": [
+      {"id": "s05-0", "group_id": "sg-main", "name": "Рекомендуемая площадь, м2", "value": "35 (12)", "sort_order": 0},
+      {"id": "s05-1", "group_id": "sg-main", "name": "Модель", "value": "Emura", "sort_order": 1},
+      {"id": "s05-2", "group_id": "sg-main", "name": "Марка фреона", "value": "R-32", "sort_order": 2},
+      {"id": "s05-3", "group_id": "sg-main", "name": "Класс энергоэффективности", "value": "А+++", "sort_order": 3},
+      {"id": "s05-4", "group_id": "sg-main", "name": "Цвет", "value": "Белый", "sort_order": 4},
+      {"id": "s05-5", "group_id": "sg-main", "name": "Гарантия (мес.)", "value": "36", "sort_order": 5},
+      {"id": "s05-6", "group_id": "sg-performance", "name": "Производительность (тепло), кВт", "value": "4", "sort_order": 6},
+      {"id": "s05-7", "group_id": "sg-performance", "name": "Производительность (охлаждение), кВт", "value": "3.5 (1.5 - 4.2)", "sort_order": 7},
+      {"id": "s05-8", "group_id": "sg-performance", "name": "Потребляемая мощность, Вт (обогрев)", "value": "990", "sort_order": 8},
+      {"id": "s05-9", "group_id": "sg-performance", "name": "Потребляемая мощность, Вт (охлаждение)", "value": "860", "sort_order": 9},
+      {"id": "s05-10", "group_id": "sg-temperature", "name": "Температурный режим при обогреве, °C", "value": "-20°/+18°", "sort_order": 10},
+      {"id": "s05-11", "group_id": "sg-temperature", "name": "Температурный режим при охлаждении ,°C", "value": "-10°/+50°", "sort_order": 11},
+      {"id": "s05-12", "group_id": "sg-dimensions", "name": "Габариты (мм) (внутренний блок)", "value": "998x303x212", "sort_order": 12},
+      {"id": "s05-13", "group_id": "sg-dimensions", "name": "Габариты (мм) (внешний блок)", "value": "765x550x285", "sort_order": 13}
+    ],
+    "stock_status": true, "sort_order": 4, "created_at": "2026-02-17T12:00:00.000Z"
+  },
+  {
+    "id": "prod-daikin-06", "title": "Кондиционер Daikin Stylish инверторный FTXA35BT/RXA35A9 (черное дерево)", "brand": "Daikin",
+    "description": "Stylish серия с отделкой из черного дерева. R-32, A+++, Wi-Fi, Flash Streamer, шум от 19 дБА.", "category_id": "cat-invertornye",
+    "price_pmr": 49530, "old_price_pmr": null, "price_md": null, "old_price_md": null,
+    "images": [{"id":"img-06-1","url":"/images/products/Кондиционер_Daikin_Stylish_инверторный_FTXA35BT_RXA35A9_черное_дерево_1.webp","sort_order":0},{"id":"img-06-2","url":"/images/products/Кондиционер_Daikin_Stylish_инверторный_FTXA35BT_RXA35A9_черное_дерево_2.webp","sort_order":1},{"id":"img-06-3","url":"/images/products/Кондиционер_Daikin_Stylish_инверторный_FTXA35BT_RXA35A9_черное_дерево_3.webp","sort_order":2},{"id":"img-06-4","url":"/images/products/Кондиционер_Daikin_Stylish_инверторный_FTXA35BT_RXA35A9_черное_дерево_4.webp","sort_order":3},{"id":"img-06-5","url":"/images/products/Кондиционер_Daikin_Stylish_инверторный_FTXA35BT_RXA35A9_черное_дерево_5.webp","sort_order":4}],
+    "specs": [{"id":"s06-0","group_id":"sg-main","name":"Рекомендуемая площадь, м2","value":"35 (12)","sort_order":0},{"id":"s06-1","group_id":"sg-main","name":"Модель","value":"Stylish","sort_order":1},{"id":"s06-2","group_id":"sg-main","name":"Марка фреона","value":"R-32","sort_order":2},{"id":"s06-3","group_id":"sg-main","name":"Класс энергоэффективности","value":"А+++","sort_order":3},{"id":"s06-4","group_id":"sg-main","name":"Цвет","value":"Чёрное дерево","sort_order":4},{"id":"s06-5","group_id":"sg-main","name":"Гарантия (мес.)","value":"36","sort_order":5},{"id":"s06-6","group_id":"sg-performance","name":"Производительность (тепло), кВт","value":"4","sort_order":6},{"id":"s06-7","group_id":"sg-performance","name":"Производительность (охлаждение), кВт","value":"3.4 (1.0 - 3.81)","sort_order":7},{"id":"s06-8","group_id":"sg-dimensions","name":"Габариты (мм) (внутренний блок)","value":"798x295x189","sort_order":8},{"id":"s06-9","group_id":"sg-dimensions","name":"Габариты (мм) (внешний блок)","value":"765x550x285","sort_order":9}],
+    "stock_status": true, "sort_order": 5, "created_at": "2026-02-17T12:00:00.000Z"
+  },
+  {
+    "id": "prod-daikin-07", "title": "Кондиционер Daikin Stylish инверторный FTXA35BS/RXA35A9 (серый)", "brand": "Daikin",
+    "description": "Stylish серия с элегантной серебристой отделкой. R-32, A+++, Wi-Fi, Flash Streamer.", "category_id": "cat-invertornye",
+    "price_pmr": 47884, "old_price_pmr": null, "price_md": null, "old_price_md": null,
+    "images": [{"id":"img-07-1","url":"/images/products/Кондиционер_Daikin_Stylish_инверторный_FTXA35BS_RXA35A9_серый_1.webp","sort_order":0},{"id":"img-07-2","url":"/images/products/Кондиционер_Daikin_Stylish_инверторный_FTXA35BS_RXA35A9_серый_2.webp","sort_order":1},{"id":"img-07-3","url":"/images/products/Кондиционер_Daikin_Stylish_инверторный_FTXA35BS_RXA35A9_серый_3.webp","sort_order":2},{"id":"img-07-4","url":"/images/products/Кондиционер_Daikin_Stylish_инверторный_FTXA35BS_RXA35A9_серый_4.webp","sort_order":3},{"id":"img-07-5","url":"/images/products/Кондиционер_Daikin_Stylish_инверторный_FTXA35BS_RXA35A9_серый_5.webp","sort_order":4}],
+    "specs": [{"id":"s07-0","group_id":"sg-main","name":"Рекомендуемая площадь, м2","value":"35 (12)","sort_order":0},{"id":"s07-1","group_id":"sg-main","name":"Модель","value":"Stylish","sort_order":1},{"id":"s07-2","group_id":"sg-main","name":"Марка фреона","value":"R-32","sort_order":2},{"id":"s07-3","group_id":"sg-main","name":"Класс энергоэффективности","value":"А+++","sort_order":3},{"id":"s07-4","group_id":"sg-main","name":"Цвет","value":"Серый","sort_order":4},{"id":"s07-5","group_id":"sg-main","name":"Гарантия (мес.)","value":"36","sort_order":5},{"id":"s07-6","group_id":"sg-performance","name":"Производительность (тепло), кВт","value":"4","sort_order":6},{"id":"s07-7","group_id":"sg-performance","name":"Производительность (охлаждение), кВт","value":"3.4 (1.0 - 3.81)","sort_order":7},{"id":"s07-8","group_id":"sg-dimensions","name":"Габариты (мм) (внутренний блок)","value":"798x295x189","sort_order":8},{"id":"s07-9","group_id":"sg-dimensions","name":"Габариты (мм) (внешний блок)","value":"765x550x285","sort_order":9}],
+    "stock_status": true, "sort_order": 6, "created_at": "2026-02-17T12:00:00.000Z"
+  },
+  {
+    "id": "prod-daikin-08", "title": "Кондиционер Daikin Emura инверторный FTXJ25AS/RXJ25A (серый)", "brand": "Daikin",
+    "description": "Emura серый, 25м2, A+++, R-32, Wi-Fi, Flash Streamer, шум от 19 дБА.", "category_id": "cat-invertornye",
+    "price_pmr": 45045, "old_price_pmr": null, "price_md": null, "old_price_md": null,
+    "images": [{"id":"img-08-1","url":"/images/products/Кондиционер_Daikin_Emura_инверторный_FTXJ25AS_RXJ25A_серый_1.webp","sort_order":0},{"id":"img-08-2","url":"/images/products/Кондиционер_Daikin_Emura_инверторный_FTXJ25AS_RXJ25A_серый_2.webp","sort_order":1},{"id":"img-08-3","url":"/images/products/Кондиционер_Daikin_Emura_инверторный_FTXJ25AS_RXJ25A_серый_3.webp","sort_order":2},{"id":"img-08-4","url":"/images/products/Кондиционер_Daikin_Emura_инверторный_FTXJ25AS_RXJ25A_серый_4.webp","sort_order":3},{"id":"img-08-5","url":"/images/products/Кондиционер_Daikin_Emura_инверторный_FTXJ25AS_RXJ25A_серый_5.webp","sort_order":4}],
+    "specs": [{"id":"s08-0","group_id":"sg-main","name":"Рекомендуемая площадь, м2","value":"25 (9)","sort_order":0},{"id":"s08-1","group_id":"sg-main","name":"Модель","value":"Emura","sort_order":1},{"id":"s08-2","group_id":"sg-main","name":"Класс энергоэффективности","value":"А+++","sort_order":2},{"id":"s08-3","group_id":"sg-main","name":"Цвет","value":"Серый","sort_order":3},{"id":"s08-4","group_id":"sg-performance","name":"Производительность (тепло), кВт","value":"3.2 (0.9 - 4.7)","sort_order":4},{"id":"s08-5","group_id":"sg-performance","name":"Производительность (охлаждение), кВт","value":"2.4 (0.9 - 4.7)","sort_order":5},{"id":"s08-6","group_id":"sg-dimensions","name":"Габариты (мм) (внутренний блок)","value":"998x303x212","sort_order":6}],
+    "stock_status": true, "sort_order": 7, "created_at": "2026-02-17T12:00:00.000Z"
+  },
+  {
+    "id": "prod-daikin-09", "title": "Кондиционер Daikin Emura инверторный FTXJ25AB/RXJ25A (черный)", "brand": "Daikin",
+    "description": "Emura черный с округлыми линиями. 25м2, A+++, R-32. Минималистичный пульт ДУ с магнитным креплением.", "category_id": "cat-invertornye",
+    "price_pmr": 44184, "old_price_pmr": null, "price_md": null, "old_price_md": null,
+    "images": [{"id":"img-09-1","url":"/images/products/Кондиционер_Daikin_Emura_инверторный_FTXJ25AB_RXJ25A_черный_1.webp","sort_order":0},{"id":"img-09-2","url":"/images/products/Кондиционер_Daikin_Emura_инверторный_FTXJ25AB_RXJ25A_черный_2.webp","sort_order":1},{"id":"img-09-3","url":"/images/products/Кондиционер_Daikin_Emura_инверторный_FTXJ25AB_RXJ25A_черный_3.webp","sort_order":2},{"id":"img-09-4","url":"/images/products/Кондиционер_Daikin_Emura_инверторный_FTXJ25AB_RXJ25A_черный_4.webp","sort_order":3},{"id":"img-09-5","url":"/images/products/Кондиционер_Daikin_Emura_инверторный_FTXJ25AB_RXJ25A_черный_5.webp","sort_order":4}],
+    "specs": [{"id":"s09-0","group_id":"sg-main","name":"Рекомендуемая площадь, м2","value":"25 (9)","sort_order":0},{"id":"s09-1","group_id":"sg-main","name":"Модель","value":"Emura","sort_order":1},{"id":"s09-2","group_id":"sg-main","name":"Класс энергоэффективности","value":"А+++","sort_order":2},{"id":"s09-3","group_id":"sg-main","name":"Цвет","value":"Чёрный","sort_order":3},{"id":"s09-4","group_id":"sg-performance","name":"Производительность (тепло), кВт","value":"3.2 (0.9 - 4.7)","sort_order":4},{"id":"s09-5","group_id":"sg-performance","name":"Производительность (охлаждение), кВт","value":"2.4 (0.9 - 4.7)","sort_order":5}],
+    "stock_status": true, "sort_order": 8, "created_at": "2026-02-17T12:00:00.000Z"
+  },
+  {
+    "id": "prod-daikin-10", "title": "Кондиционер Daikin Emura инверторный FTXJ25AW/RXJ25A (белый)", "brand": "Daikin",
+    "description": "Emura белый, 25м2, A+++, R-32, шум 19 дБ, режим сушки, автоматический режим, турборежим.", "category_id": "cat-invertornye",
+    "price_pmr": 43617, "old_price_pmr": null, "price_md": null, "old_price_md": null,
+    "images": [{"id":"img-10-1","url":"/images/products/Кондиционер_Daikin_Emura_инверторный_FTXJ25AW_RXJ25A_белый_1.webp","sort_order":0}],
+    "specs": [{"id":"s10-0","group_id":"sg-main","name":"Рекомендуемая площадь, м2","value":"25 (9)","sort_order":0},{"id":"s10-1","group_id":"sg-main","name":"Модель","value":"Emura","sort_order":1},{"id":"s10-2","group_id":"sg-main","name":"Класс энергоэффективности","value":"А+++","sort_order":2},{"id":"s10-3","group_id":"sg-main","name":"Цвет","value":"Белый","sort_order":3},{"id":"s10-4","group_id":"sg-performance","name":"Производительность (тепло), кВт","value":"3.2 (0.9 - 4.7)","sort_order":4},{"id":"s10-5","group_id":"sg-performance","name":"Производительность (охлаждение), кВт","value":"2.4 (0.9 - 4.7)","sort_order":5}],
+    "stock_status": true, "sort_order": 9, "created_at": "2026-02-17T12:00:00.000Z"
+  },
+  {
+    "id": "prod-daikin-11", "title": "Кондиционер Daikin Stylish инверторный FTXA25BS/RXA25A9 (серый)", "brand": "Daikin",
+    "description": "Stylish серый, 25м2, A+++, R-32, Wi-Fi, Flash Streamer, шум от 19 дБА.", "category_id": "cat-invertornye",
+    "price_pmr": 41038, "old_price_pmr": null, "price_md": null, "old_price_md": null,
+    "images": [{"id":"img-11-1","url":"/images/products/Кондиционер_Daikin_Stylish_инверторный_FTXA25BS_RXA25A9_серый_1.webp","sort_order":0},{"id":"img-11-2","url":"/images/products/Кондиционер_Daikin_Stylish_инверторный_FTXA25BS_RXA25A9_серый_2.webp","sort_order":1},{"id":"img-11-3","url":"/images/products/Кондиционер_Daikin_Stylish_инверторный_FTXA25BS_RXA25A9_серый_3.webp","sort_order":2},{"id":"img-11-4","url":"/images/products/Кондиционер_Daikin_Stylish_инверторный_FTXA25BS_RXA25A9_серый_4.webp","sort_order":3},{"id":"img-11-5","url":"/images/products/Кондиционер_Daikin_Stylish_инверторный_FTXA25BS_RXA25A9_серый_5.webp","sort_order":4}],
+    "specs": [{"id":"s11-0","group_id":"sg-main","name":"Рекомендуемая площадь, м2","value":"25 (9)","sort_order":0},{"id":"s11-1","group_id":"sg-main","name":"Модель","value":"Stylish","sort_order":1},{"id":"s11-2","group_id":"sg-main","name":"Класс энергоэффективности","value":"А+++","sort_order":2},{"id":"s11-3","group_id":"sg-main","name":"Цвет","value":"Серый","sort_order":3},{"id":"s11-4","group_id":"sg-performance","name":"Производительность (тепло), кВт","value":"2.8","sort_order":4},{"id":"s11-5","group_id":"sg-performance","name":"Производительность (охлаждение), кВт","value":"2.5","sort_order":5}],
+    "stock_status": true, "sort_order": 10, "created_at": "2026-02-17T12:00:00.000Z"
+  },
+  {
+    "id": "prod-daikin-12", "title": "Кондиционер Daikin Perfera инверторный FTXM35R/RXM35R9", "brand": "Daikin",
+    "description": "Perfera 35м2, A++, R-32, Wi-Fi, Flash Streamer, шум от 19 дБА. Эффективное решение для помещений до 35 м2.", "category_id": "cat-invertornye",
+    "price_pmr": 33317, "old_price_pmr": null, "price_md": null, "old_price_md": null,
+    "images": [{"id":"img-12-1","url":"/images/products/Кондиционер_Daikin_Perfera_инверторный_FTXM35R_RXM35R9_1.webp","sort_order":0},{"id":"img-12-2","url":"/images/products/Кондиционер_Daikin_Perfera_инверторный_FTXM35R_RXM35R9_2.webp","sort_order":1},{"id":"img-12-3","url":"/images/products/Кондиционер_Daikin_Perfera_инверторный_FTXM35R_RXM35R9_3.webp","sort_order":2},{"id":"img-12-4","url":"/images/products/Кондиционер_Daikin_Perfera_инверторный_FTXM35R_RXM35R9_4.webp","sort_order":3},{"id":"img-12-5","url":"/images/products/Кондиционер_Daikin_Perfera_инверторный_FTXM35R_RXM35R9_5.webp","sort_order":4}],
+    "specs": [{"id":"s12-0","group_id":"sg-main","name":"Рекомендуемая площадь, м2","value":"35 (12)","sort_order":0},{"id":"s12-1","group_id":"sg-main","name":"Модель","value":"Perfera","sort_order":1},{"id":"s12-2","group_id":"sg-main","name":"Класс энергоэффективности","value":"А++","sort_order":2},{"id":"s12-3","group_id":"sg-main","name":"Цвет","value":"Белый","sort_order":3},{"id":"s12-4","group_id":"sg-performance","name":"Производительность (тепло), кВт","value":"4","sort_order":4},{"id":"s12-5","group_id":"sg-performance","name":"Производительность (охлаждение), кВт","value":"3.4 (1.0 - 3.81)","sort_order":5}],
+    "stock_status": true, "sort_order": 11, "created_at": "2026-02-17T12:00:00.000Z"
+  },
+  {
+    "id": "prod-daikin-13", "title": "Кондиционер Daikin Sensira инверторный FTXC60C/RXC60C", "brand": "Daikin",
+    "description": "Sensira 60м2, A++, R-32, инвертор, экономия энергии до 30%, режимы: авто, турбо, сон.", "category_id": "cat-invertornye",
+    "price_pmr": 31741, "old_price_pmr": null, "price_md": null, "old_price_md": null,
+    "images": [{"id":"img-13-1","url":"/images/products/Кондиционер_Daikin_Sensira_инверторный_FTXC60C_RXC60C_1.webp","sort_order":0},{"id":"img-13-2","url":"/images/products/Кондиционер_Daikin_Sensira_инверторный_FTXC60C_RXC60C_2.webp","sort_order":1},{"id":"img-13-3","url":"/images/products/Кондиционер_Daikin_Sensira_инверторный_FTXC60C_RXC60C_3.webp","sort_order":2},{"id":"img-13-4","url":"/images/products/Кондиционер_Daikin_Sensira_инверторный_FTXC60C_RXC60C_4.webp","sort_order":3}],
+    "specs": [{"id":"s13-0","group_id":"sg-main","name":"Рекомендуемая площадь, м2","value":"60 (24)","sort_order":0},{"id":"s13-1","group_id":"sg-main","name":"Модель","value":"Sensira","sort_order":1},{"id":"s13-2","group_id":"sg-main","name":"Класс энергоэффективности","value":"А++","sort_order":2},{"id":"s13-3","group_id":"sg-main","name":"Цвет","value":"Белый","sort_order":3},{"id":"s13-4","group_id":"sg-performance","name":"Производительность (тепло), кВт","value":"6.4","sort_order":4},{"id":"s13-5","group_id":"sg-performance","name":"Производительность (охлаждение), кВт","value":"6.2","sort_order":5}],
+    "stock_status": true, "sort_order": 12, "created_at": "2026-02-17T12:00:00.000Z"
+  },
+  {
+    "id": "prod-daikin-14", "title": "Кондиционер Daikin Perfera инверторный FTXM25N/RXM25N9", "brand": "Daikin",
+    "description": "Perfera 25м2, A++, R-32, Wi-Fi, Flash Streamer, шум от 19 дБА. Элегантный европейский дизайн.", "category_id": "cat-invertornye",
+    "price_pmr": 29846, "old_price_pmr": null, "price_md": null, "old_price_md": null,
+    "images": [{"id":"img-14-1","url":"/images/products/Кондиционер_Daikin_Perfera_инверторный_FTXM25N_RXM25N9_1.webp","sort_order":0},{"id":"img-14-2","url":"/images/products/Кондиционер_Daikin_Perfera_инверторный_FTXM25N_RXM25N9_2.webp","sort_order":1},{"id":"img-14-3","url":"/images/products/Кондиционер_Daikin_Perfera_инверторный_FTXM25N_RXM25N9_3.webp","sort_order":2},{"id":"img-14-4","url":"/images/products/Кондиционер_Daikin_Perfera_инверторный_FTXM25N_RXM25N9_4.webp","sort_order":3},{"id":"img-14-5","url":"/images/products/Кондиционер_Daikin_Perfera_инверторный_FTXM25N_RXM25N9_5.webp","sort_order":4}],
+    "specs": [{"id":"s14-0","group_id":"sg-main","name":"Рекомендуемая площадь, м2","value":"25 (9)","sort_order":0},{"id":"s14-1","group_id":"sg-main","name":"Модель","value":"Perfera","sort_order":1},{"id":"s14-2","group_id":"sg-main","name":"Класс энергоэффективности","value":"А++","sort_order":2},{"id":"s14-3","group_id":"sg-main","name":"Цвет","value":"Белый","sort_order":3},{"id":"s14-4","group_id":"sg-performance","name":"Производительность (тепло), кВт","value":"2.8","sort_order":4},{"id":"s14-5","group_id":"sg-performance","name":"Производительность (охлаждение), кВт","value":"2.5","sort_order":5}],
+    "stock_status": true, "sort_order": 13, "created_at": "2026-02-17T12:00:00.000Z"
+  },
+  {
+    "id": "prod-daikin-15", "title": "Кондиционер Daikin Perfera инверторный FTXM25R/RXM25R", "brand": "Daikin",
+    "description": "Perfera R-серия, 25м2, A++, R-32, Wi-Fi, голосовое управление Alexa/Google, Flash Streamer, 2-зонный датчик движения.", "category_id": "cat-invertornye",
+    "price_pmr": 29846, "old_price_pmr": null, "price_md": null, "old_price_md": null,
+    "images": [{"id":"img-15-1","url":"/images/products/Кондиционер_Daikin_Perfera_инверторный_FTXM25R_RXM25R_1.webp","sort_order":0},{"id":"img-15-2","url":"/images/products/Кондиционер_Daikin_Perfera_инверторный_FTXM25R_RXM25R_2.webp","sort_order":1},{"id":"img-15-3","url":"/images/products/Кондиционер_Daikin_Perfera_инверторный_FTXM25R_RXM25R_3.webp","sort_order":2},{"id":"img-15-4","url":"/images/products/Кондиционер_Daikin_Perfera_инверторный_FTXM25R_RXM25R_4.webp","sort_order":3},{"id":"img-15-5","url":"/images/products/Кондиционер_Daikin_Perfera_инверторный_FTXM25R_RXM25R_5.webp","sort_order":4}],
+    "specs": [{"id":"s15-0","group_id":"sg-main","name":"Рекомендуемая площадь, м2","value":"25 (9)","sort_order":0},{"id":"s15-1","group_id":"sg-main","name":"Модель","value":"Perfera","sort_order":1},{"id":"s15-2","group_id":"sg-main","name":"Класс энергоэффективности","value":"А++","sort_order":2},{"id":"s15-3","group_id":"sg-main","name":"Цвет","value":"Белый","sort_order":3},{"id":"s15-4","group_id":"sg-performance","name":"Производительность (тепло), кВт","value":"2.8","sort_order":4},{"id":"s15-5","group_id":"sg-performance","name":"Производительность (охлаждение), кВт","value":"2.5","sort_order":5}],
+    "stock_status": true, "sort_order": 14, "created_at": "2026-02-17T12:00:00.000Z"
+  },
+  {
+    "id": "prod-daikin-16", "title": "Кондиционер Daikin Sensira инверторный FTXC50B/RXC50B", "brand": "Daikin",
+    "description": "Sensira 50м2, A++, R-32, swing-компрессор, экономия энергии, дискретный дизайн.", "category_id": "cat-invertornye",
+    "price_pmr": 27412, "old_price_pmr": null, "price_md": null, "old_price_md": null,
+    "images": [{"id":"img-16-1","url":"/images/products/Кондиционер_Daikin_Sensira_инверторный_FTXC50B_RXC50B_1.webp","sort_order":0},{"id":"img-16-2","url":"/images/products/Кондиционер_Daikin_Sensira_инверторный_FTXC50B_RXC50B_2.webp","sort_order":1},{"id":"img-16-3","url":"/images/products/Кондиционер_Daikin_Sensira_инверторный_FTXC50B_RXC50B_3.webp","sort_order":2},{"id":"img-16-4","url":"/images/products/Кондиционер_Daikin_Sensira_инверторный_FTXC50B_RXC50B_4.webp","sort_order":3}],
+    "specs": [{"id":"s16-0","group_id":"sg-main","name":"Рекомендуемая площадь, м2","value":"50 (18)","sort_order":0},{"id":"s16-1","group_id":"sg-main","name":"Модель","value":"Sensira","sort_order":1},{"id":"s16-2","group_id":"sg-main","name":"Класс энергоэффективности","value":"А++","sort_order":2},{"id":"s16-3","group_id":"sg-main","name":"Цвет","value":"Белый","sort_order":3},{"id":"s16-4","group_id":"sg-performance","name":"Производительность (тепло), кВт","value":"6","sort_order":4},{"id":"s16-5","group_id":"sg-performance","name":"Производительность (охлаждение), кВт","value":"5","sort_order":5}],
+    "stock_status": true, "sort_order": 15, "created_at": "2026-02-17T12:00:00.000Z"
+  },
+  {
+    "id": "prod-daikin-17", "title": "Кондиционер Daikin Sensira инверторный FTXC35D/RXC35D", "brand": "Daikin",
+    "description": "Sensira 35м2, A++, R-32, шум 22 дБ, турбо-режим, фильтр воздуха, таймер.", "category_id": "cat-invertornye",
+    "price_pmr": 17018, "old_price_pmr": null, "price_md": null, "old_price_md": null,
+    "images": [{"id":"img-17-1","url":"/images/products/Кондиционер_Daikin_Sensira_инверторный_FTXC35D_RXC35D_1.webp","sort_order":0},{"id":"img-17-2","url":"/images/products/Кондиционер_Daikin_Sensira_инверторный_FTXC35D_RXC35D_2.webp","sort_order":1},{"id":"img-17-3","url":"/images/products/Кондиционер_Daikin_Sensira_инверторный_FTXC35D_RXC35D_3.webp","sort_order":2}],
+    "specs": [{"id":"s17-0","group_id":"sg-main","name":"Рекомендуемая площадь, м2","value":"35 (12)","sort_order":0},{"id":"s17-1","group_id":"sg-main","name":"Модель","value":"Sensira","sort_order":1},{"id":"s17-2","group_id":"sg-main","name":"Класс энергоэффективности","value":"А++","sort_order":2},{"id":"s17-3","group_id":"sg-main","name":"Цвет","value":"Белый","sort_order":3},{"id":"s17-4","group_id":"sg-performance","name":"Производительность (тепло), кВт","value":"4","sort_order":4},{"id":"s17-5","group_id":"sg-performance","name":"Производительность (охлаждение), кВт","value":"3,5","sort_order":5}],
+    "stock_status": true, "sort_order": 16, "created_at": "2026-02-17T12:00:00.000Z"
+  },
+  {
+    "id": "prod-daikin-18", "title": "Кондиционер Daikin Sensira инверторный FTXC35C/RXC35C", "brand": "Daikin",
+    "description": "Sensira 35м2, A++, R-32, антикоррозийная обработка, плоская стильная панель, Onecta опционально.", "category_id": "cat-invertornye",
+    "price_pmr": 17018, "old_price_pmr": null, "price_md": null, "old_price_md": null,
+    "images": [{"id":"img-18-1","url":"/images/products/Кондиционер_Daikin_Sensira_инверторный_FTXC35C_RXC35C_1.webp","sort_order":0},{"id":"img-18-2","url":"/images/products/Кондиционер_Daikin_Sensira_инверторный_FTXC35C_RXC35C_2.webp","sort_order":1},{"id":"img-18-3","url":"/images/products/Кондиционер_Daikin_Sensira_инверторный_FTXC35C_RXC35C_3.webp","sort_order":2}],
+    "specs": [{"id":"s18-0","group_id":"sg-main","name":"Рекомендуемая площадь, м2","value":"35 (12)","sort_order":0},{"id":"s18-1","group_id":"sg-main","name":"Модель","value":"Sensira","sort_order":1},{"id":"s18-2","group_id":"sg-main","name":"Класс энергоэффективности","value":"А++","sort_order":2},{"id":"s18-3","group_id":"sg-main","name":"Цвет","value":"Белый","sort_order":3},{"id":"s18-4","group_id":"sg-performance","name":"Производительность (тепло), кВт","value":"3.5","sort_order":4},{"id":"s18-5","group_id":"sg-performance","name":"Производительность (охлаждение), кВт","value":"3.3","sort_order":5}],
+    "stock_status": true, "sort_order": 17, "created_at": "2026-02-17T12:00:00.000Z"
+  },
+  {
+    "id": "prod-daikin-19", "title": "Кондиционер Daikin Sensira инверторный FTXC25B/RXC25B", "brand": "Daikin",
+    "description": "Sensira 25м2, A++, R-32, антикоррозийная обработка теплообменника, приложение Onecta опционально.", "category_id": "cat-invertornye",
+    "price_pmr": 16020, "old_price_pmr": null, "price_md": null, "old_price_md": null,
+    "images": [{"id":"img-19-1","url":"/images/products/Кондиционер_Daikin_Sensira_инверторный_FTXC25B_RXC25B_1.webp","sort_order":0},{"id":"img-19-2","url":"/images/products/Кондиционер_Daikin_Sensira_инверторный_FTXC25B_RXC25B_2.webp","sort_order":1},{"id":"img-19-3","url":"/images/products/Кондиционер_Daikin_Sensira_инверторный_FTXC25B_RXC25B_3.webp","sort_order":2},{"id":"img-19-4","url":"/images/products/Кондиционер_Daikin_Sensira_инверторный_FTXC25B_RXC25B_4.webp","sort_order":3}],
+    "specs": [{"id":"s19-0","group_id":"sg-main","name":"Рекомендуемая площадь, м2","value":"25 (9)","sort_order":0},{"id":"s19-1","group_id":"sg-main","name":"Модель","value":"Sensira","sort_order":1},{"id":"s19-2","group_id":"sg-main","name":"Класс энергоэффективности","value":"А++","sort_order":2},{"id":"s19-3","group_id":"sg-main","name":"Цвет","value":"Белый","sort_order":3},{"id":"s19-4","group_id":"sg-performance","name":"Производительность (тепло), кВт","value":"2.8","sort_order":4},{"id":"s19-5","group_id":"sg-performance","name":"Производительность (охлаждение), кВт","value":"2.5","sort_order":5}],
+    "stock_status": true, "sort_order": 18, "created_at": "2026-02-17T12:00:00.000Z"
+  },
+  {
+    "id": "prod-daikin-20", "title": "Кондиционер Daikin Sensira инверторный FTXC25D/RXC25D", "brand": "Daikin",
+    "description": "Sensira 25м2, A++, R-32, swing-компрессор, экономия энергии, надежность.", "category_id": "cat-invertornye",
+    "price_pmr": 16020, "old_price_pmr": null, "price_md": null, "old_price_md": null,
+    "images": [{"id":"img-20-1","url":"/images/products/Кондиционер_Daikin_Sensira_инверторный_FTXC25D_RXC25D_1.webp","sort_order":0},{"id":"img-20-2","url":"/images/products/Кондиционер_Daikin_Sensira_инверторный_FTXC25D_RXC25D_2.webp","sort_order":1},{"id":"img-20-3","url":"/images/products/Кондиционер_Daikin_Sensira_инверторный_FTXC25D_RXC25D_3.webp","sort_order":2}],
+    "specs": [{"id":"s20-0","group_id":"sg-main","name":"Рекомендуемая площадь, м2","value":"25 (9)","sort_order":0},{"id":"s20-1","group_id":"sg-main","name":"Модель","value":"Sensira","sort_order":1},{"id":"s20-2","group_id":"sg-main","name":"Класс энергоэффективности","value":"А++","sort_order":2},{"id":"s20-3","group_id":"sg-main","name":"Цвет","value":"Белый","sort_order":3},{"id":"s20-4","group_id":"sg-performance","name":"Производительность (тепло), кВт","value":"4","sort_order":4},{"id":"s20-5","group_id":"sg-performance","name":"Производительность (охлаждение), кВт","value":"3","sort_order":5}],
+    "stock_status": true, "sort_order": 19, "created_at": "2026-02-17T12:00:00.000Z"
+  },
+  {
+    "id": "prod-daikin-21", "title": "Кондиционер Daikin Sensira инверторный FTXC25C/RXC25C", "brand": "Daikin",
+    "description": "Sensira 25м2, A++, R-32, антикоррозийная обработка, плоская стильная панель, Onecta опционально.", "category_id": "cat-invertornye",
+    "price_pmr": 16020, "old_price_pmr": null, "price_md": null, "old_price_md": null,
+    "images": [{"id":"img-21-1","url":"/images/products/Кондиционер_Daikin_Sensira_инверторный_FTXC25C_RXC25C_1.webp","sort_order":0},{"id":"img-21-2","url":"/images/products/Кондиционер_Daikin_Sensira_инверторный_FTXC25C_RXC25C_2.webp","sort_order":1},{"id":"img-21-3","url":"/images/products/Кондиционер_Daikin_Sensira_инверторный_FTXC25C_RXC25C_3.webp","sort_order":2}],
+    "specs": [{"id":"s21-0","group_id":"sg-main","name":"Рекомендуемая площадь, м2","value":"25 (9)","sort_order":0},{"id":"s21-1","group_id":"sg-main","name":"Модель","value":"Sensira","sort_order":1},{"id":"s21-2","group_id":"sg-main","name":"Класс энергоэффективности","value":"А++","sort_order":2},{"id":"s21-3","group_id":"sg-main","name":"Цвет","value":"Белый","sort_order":3},{"id":"s21-4","group_id":"sg-performance","name":"Производительность (тепло), кВт","value":"2.8","sort_order":4},{"id":"s21-5","group_id":"sg-performance","name":"Производительность (охлаждение), кВт","value":"2.5","sort_order":5}],
+    "stock_status": true, "sort_order": 20, "created_at": "2026-02-17T12:00:00.000Z"
+  },
+  {
+    "id": "prod-daikin-22", "title": "Кондиционер Daikin Sensira инверторный FTXC20B/RXC20B", "brand": "Daikin",
+    "description": "Sensira 20м2, A++, R-32, swing-компрессор, шум от 21 дБА, экономия энергии в режиме ожидания 80%.", "category_id": "cat-invertornye",
+    "price_pmr": 15063, "old_price_pmr": null, "price_md": null, "old_price_md": null,
+    "images": [{"id":"img-22-1","url":"/images/products/Кондиционер_Daikin_Sensira_инверторный_FTXC20B_RXC20B_1.webp","sort_order":0},{"id":"img-22-2","url":"/images/products/Кондиционер_Daikin_Sensira_инверторный_FTXC20B_RXC20B_2.webp","sort_order":1},{"id":"img-22-3","url":"/images/products/Кондиционер_Daikin_Sensira_инверторный_FTXC20B_RXC20B_3.webp","sort_order":2},{"id":"img-22-4","url":"/images/products/Кондиционер_Daikin_Sensira_инверторный_FTXC20B_RXC20B_4.webp","sort_order":3}],
+    "specs": [{"id":"s22-0","group_id":"sg-main","name":"Рекомендуемая площадь, м2","value":"20 (7)","sort_order":0},{"id":"s22-1","group_id":"sg-main","name":"Модель","value":"Sensira","sort_order":1},{"id":"s22-2","group_id":"sg-main","name":"Класс энергоэффективности","value":"А++","sort_order":2},{"id":"s22-3","group_id":"sg-main","name":"Цвет","value":"Белый","sort_order":3},{"id":"s22-4","group_id":"sg-performance","name":"Производительность (тепло), кВт","value":"2.5","sort_order":4},{"id":"s22-5","group_id":"sg-performance","name":"Производительность (охлаждение), кВт","value":"2","sort_order":5}],
+    "stock_status": true, "sort_order": 21, "created_at": "2026-02-17T12:00:00.000Z"
+  },
+  {
+    "id": "prod-daikin-23", "title": "Кондиционер Daikin Sensira инверторный FTXC20C/RXC20C", "brand": "Daikin",
+    "description": "Sensira 20м2, A++, R-32, антикоррозийная обработка, плоская стильная панель, Onecta опционально.", "category_id": "cat-invertornye",
+    "price_pmr": 15063, "old_price_pmr": null, "price_md": null, "old_price_md": null,
+    "images": [{"id":"img-23-1","url":"/images/products/Кондиционер_Daikin_Sensira_инверторный_FTXC20C_RXC20C_1.webp","sort_order":0},{"id":"img-23-2","url":"/images/products/Кондиционер_Daikin_Sensira_инверторный_FTXC20C_RXC20C_2.webp","sort_order":1},{"id":"img-23-3","url":"/images/products/Кондиционер_Daikin_Sensira_инверторный_FTXC20C_RXC20C_3.webp","sort_order":2}],
+    "specs": [{"id":"s23-0","group_id":"sg-main","name":"Рекомендуемая площадь, м2","value":"20 (7)","sort_order":0},{"id":"s23-1","group_id":"sg-main","name":"Модель","value":"Sensira","sort_order":1},{"id":"s23-2","group_id":"sg-main","name":"Класс энергоэффективности","value":"А++","sort_order":2},{"id":"s23-3","group_id":"sg-main","name":"Цвет","value":"Белый","sort_order":3},{"id":"s23-4","group_id":"sg-performance","name":"Производительность (тепло), кВт","value":"2.5","sort_order":4},{"id":"s23-5","group_id":"sg-performance","name":"Производительность (охлаждение), кВт","value":"2","sort_order":5}],
+    "stock_status": true, "sort_order": 22, "created_at": "2026-02-17T12:00:00.000Z"
+  },
+  {
+    "id": "prod-daikin-24", "title": "Кондиционер Daikin Sensira инверторный FTXC20D/RXC20D", "brand": "Daikin",
+    "description": "Sensira 20м2, A++, R-32, swing-компрессор, титано-апатитовый фильтр, антибактериальный пульт.", "category_id": "cat-invertornye",
+    "price_pmr": 15063, "old_price_pmr": null, "price_md": null, "old_price_md": null,
+    "images": [{"id":"img-24-1","url":"/images/products/Кондиционер_Daikin_Sensira_инверторный_FTXC20D_RXC20D_1.webp","sort_order":0},{"id":"img-24-2","url":"/images/products/Кондиционер_Daikin_Sensira_инверторный_FTXC20D_RXC20D_2.webp","sort_order":1},{"id":"img-24-3","url":"/images/products/Кондиционер_Daikin_Sensira_инверторный_FTXC20D_RXC20D_3.webp","sort_order":2}],
+    "specs": [{"id":"s24-0","group_id":"sg-main","name":"Рекомендуемая площадь, м2","value":"20 (7)","sort_order":0},{"id":"s24-1","group_id":"sg-main","name":"Модель","value":"Sensira","sort_order":1},{"id":"s24-2","group_id":"sg-main","name":"Класс энергоэффективности","value":"А++","sort_order":2},{"id":"s24-3","group_id":"sg-main","name":"Цвет","value":"Белый","sort_order":3},{"id":"s24-4","group_id":"sg-performance","name":"Производительность (тепло), кВт","value":"2.5","sort_order":4},{"id":"s24-5","group_id":"sg-performance","name":"Производительность (охлаждение), кВт","value":"2","sort_order":5}],
+    "stock_status": true, "sort_order": 23, "created_at": "2026-02-17T12:00:00.000Z"
+  }
+]

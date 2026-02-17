@@ -10,8 +10,8 @@
  * - image filenames -> ProductImage[] with /images/products/ prefix
  */
 
-import fs from 'fs'
-import path from 'path'
+const fs = require('fs')
+const path = require('path')
 
 const ROOT = process.cwd()
 

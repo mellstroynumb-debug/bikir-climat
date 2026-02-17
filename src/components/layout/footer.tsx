@@ -4,7 +4,8 @@ import { Instagram, Send } from 'lucide-react';
 const footerNav = [
   { href: '/catalog', label: 'Каталог' },
   { href: '/services', label: 'Услуги' },
-  { href: '/portfolio', label: 'Наши работы' },
+  { href: '/delivery', label: 'Доставка и оплата' },
+  { href: '/about', label: 'О компании' },
   { href: '/contacts', label: 'Контакты' },
 ];
 
@@ -32,11 +33,7 @@ export default function Footer() {
                   </Link>
                 </li>
               ))}
-               <li>
-                  <Link href="/admin" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                    Админ
-                  </Link>
-                </li>
+
             </ul>
           </div>
 

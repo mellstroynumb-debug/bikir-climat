@@ -54,6 +54,19 @@ export type Product = {
   created_at?: string
 }
 
+/* ── Banners ── */
+export type Banner = {
+  id: string
+  tag: string
+  title: string
+  description: string
+  image: string
+  link: string
+  cta: string
+  sort_order: number
+  active: boolean
+}
+
 /* ── Cart ── */
 export type CartItem = Product & { quantity: number }
 

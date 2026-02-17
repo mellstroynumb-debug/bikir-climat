@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import type { Category, Product, ProductImage, ProductSpec, SpecGroup, Order, OrderItem } from './types'
+import type { Banner, Category, Product, ProductImage, ProductSpec, SpecGroup, Order, OrderItem } from './types'
 
 /* ──────────────────────────────────────────────
    JSON-file database.

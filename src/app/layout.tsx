@@ -7,8 +7,6 @@ import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 import MobileNav from '@/components/layout/mobile-nav';
 import PageTransitionWrapper from '@/components/layout/page-transition-wrapper';
-import { FirebaseClientProvider } from '@/firebase';
-import { FirebaseErrorListener } from '@/components/FirebaseErrorListener';
 import { ScrollToTop } from '@/components/scroll-to-top';
 
 const inter = Inter({
@@ -37,17 +35,14 @@ export default function RootLayout({
   return (
     <html lang="ru" className={cn('scroll-smooth', inter.variable, ptSans.variable)}>
       <body className={cn('min-h-screen bg-background font-body antialiased')}>
-        <FirebaseClientProvider>
-          <FirebaseErrorListener />
-          <Header />
-          <PageTransitionWrapper>
-            <main className="pb-20 md:pb-0">{children}</main>
-          </PageTransitionWrapper>
-          <Footer />
-          <ScrollToTop />
-          <MobileNav />
-          <Toaster />
-        </FirebaseClientProvider>
+        <Header />
+        <PageTransitionWrapper>
+          <main className="pb-20 md:pb-0">{children}</main>
+        </PageTransitionWrapper>
+        <Footer />
+        <ScrollToTop />
+        <MobileNav />
+        <Toaster />
       </body>
     </html>
   );

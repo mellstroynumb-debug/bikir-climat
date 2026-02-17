@@ -1,104 +1,48 @@
-'use client';
+'use client'
 
-import React, { useState } from 'react';
-import { collection, doc } from 'firebase/firestore';
-import { useFirestore, useCollection, useMemoFirebase, setDocumentNonBlocking } from '@/firebase';
-import { Product } from '@/lib/types';
-import { Button } from '@/components/ui/button';
-import { ProductDialog } from './product-dialog';
-import { ProductTable } from './product-table';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { OrderTable } from './order-table';
-import { useToast } from '@/hooks/use-toast';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { LayoutGrid, Package, ShoppingCart } from 'lucide-react'
+import { CategoryManager } from './category-manager'
+import { ProductManager } from './product-manager'
+import { OrderManager } from './order-manager'
 
 export function AdminDashboard() {
-  const firestore = useFirestore();
-  const { toast } = useToast();
-  const productsCollection = useMemoFirebase(() => firestore ? collection(firestore, 'products') : null, [firestore]);
-  const { data: products, isLoading, error } = useCollection<Product>(productsCollection);
-  
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-
-  const handleAddNew = () => {
-    setSelectedProduct(null);
-    setIsDialogOpen(true);
-  };
-
-  const handleEdit = (product: Product) => {
-    setSelectedProduct(product);
-    setIsDialogOpen(true);
-  };
-  
-  const handleSeedDatabase = () => {
-    if (!firestore) {
-      toast({
-        variant: "destructive",
-        title: "Ошибка",
-        description: "База данных не доступна.",
-      });
-      return;
-    }
-    
-    import('@/lib/seed-data')
-      .then(module => {
-        const productsToSeed = module.productsToSeed;
-        for (const product of productsToSeed) {
-          const { id, ...productData } = product;
-          const docRef = doc(firestore, 'products', id);
-          setDocumentNonBlocking(docRef, productData);
-        }
-        toast({
-          title: "Загрузка данных запущена",
-          description: `${productsToSeed.length} товаров добавляются в базу данных.`,
-        });
-      })
-      .catch(err => {
-        console.error("Failed to load seed data", err);
-        toast({
-          variant: "destructive",
-          title: "Ошибка",
-          description: "Не удалось загрузить тестовые данные.",
-        });
-      });
-  };
-
-  if (isLoading) {
-    return <div>Загрузка...</div>;
-  }
-
-  if (error) {
-    return <div>Ошибка: {error.message}</div>;
-  }
-
+  console.log("[v0] AdminDashboard: rendering NEW dashboard with Categories/Products/Orders tabs")
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Панель администратора</h1>
-        <div className="flex gap-2">
-            <Button onClick={handleSeedDatabase} variant="outline">Загрузить тестовые данные</Button>
-            <Button onClick={handleAddNew}>Добавить товар</Button>
-        </div>
+      <div>
+        <h1 className="text-2xl font-bold text-foreground">Панель управления</h1>
+        <p className="text-muted-foreground">
+          Управляйте категориями, товарами и заказами
+        </p>
       </div>
 
-      <Tabs defaultValue="products">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="products">Товары</TabsTrigger>
-          <TabsTrigger value="orders">Заказы</TabsTrigger>
+      <Tabs defaultValue="categories" className="space-y-4">
+        <TabsList className="grid w-full grid-cols-3 lg:w-auto lg:inline-grid">
+          <TabsTrigger value="categories" className="flex items-center gap-2">
+            <LayoutGrid className="h-4 w-4" />
+            <span className="hidden sm:inline">Категории</span>
+          </TabsTrigger>
+          <TabsTrigger value="products" className="flex items-center gap-2">
+            <Package className="h-4 w-4" />
+            <span className="hidden sm:inline">Товары</span>
+          </TabsTrigger>
+          <TabsTrigger value="orders" className="flex items-center gap-2">
+            <ShoppingCart className="h-4 w-4" />
+            <span className="hidden sm:inline">Заказы</span>
+          </TabsTrigger>
         </TabsList>
-        <TabsContent value="products" className="mt-6">
-          <ProductTable products={products || []} onEdit={handleEdit} />
+
+        <TabsContent value="categories">
+          <CategoryManager />
         </TabsContent>
-        <TabsContent value="orders" className="mt-6">
-          <OrderTable />
+        <TabsContent value="products">
+          <ProductManager />
+        </TabsContent>
+        <TabsContent value="orders">
+          <OrderManager />
         </TabsContent>
       </Tabs>
-
-      <ProductDialog
-        isOpen={isDialogOpen}
-        onOpenChange={setIsDialogOpen}
-        product={selectedProduct}
-      />
     </div>
-  );
+  )
 }

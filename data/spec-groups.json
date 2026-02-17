@@ -1,0 +1,7 @@
+[
+  { "id": "sg-main", "name": "Основные", "sort_order": 0 },
+  { "id": "sg-performance", "name": "Производительность", "sort_order": 1 },
+  { "id": "sg-temperature", "name": "Диапазон рабочих температур", "sort_order": 2 },
+  { "id": "sg-pipes", "name": "Диаметр труб", "sort_order": 3 },
+  { "id": "sg-dimensions", "name": "Размеры и вес", "sort_order": 4 }
+]

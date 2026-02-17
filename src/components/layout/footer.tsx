@@ -5,7 +5,7 @@ const footerNav = [
   { href: '/catalog', label: 'Каталог' },
   { href: '/services', label: 'Услуги' },
   { href: '/delivery', label: 'Доставка и оплата' },
-  { href: '/portfolio', label: 'Наши работы' },
+  { href: '/about', label: 'О компании' },
   { href: '/contacts', label: 'Контакты' },
 ];
 

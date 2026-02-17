@@ -3,13 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { ChevronDown } from 'lucide-react';
+
 
 export function MainNav() {
   const pathname = usePathname();
@@ -27,20 +21,9 @@ export function MainNav() {
         <Link href="/services" className={navLinkClasses('/services')}>
             Монтаж
         </Link>
-        <DropdownMenu>
-            <DropdownMenuTrigger className={cn(navLinkClasses('#'), "flex items-center gap-1 outline-none")}>
-                О нас
-                <ChevronDown className="h-4 w-4" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-                <DropdownMenuItem asChild>
-                    <Link href="/portfolio">Наши работы</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                    <Link href="/#faq">Частые вопросы</Link>
-                </DropdownMenuItem>
-            </DropdownMenuContent>
-        </DropdownMenu>
+        <Link href="/about" className={navLinkClasses('/about')}>
+            О нас
+        </Link>
         <Link href="/delivery" className={navLinkClasses('/delivery')}>
             Доставка и оплата
         </Link>

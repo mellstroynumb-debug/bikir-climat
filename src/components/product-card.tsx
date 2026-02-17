@@ -197,15 +197,16 @@ export function ProductCard({ product }: ProductCardProps) {
         </Link>
 
         {/* Actions */}
-        <div className="p-4 pt-0">
-          <div className="border-t pt-3 flex gap-2">
-            <Button className="flex-1" size="sm" onClick={handleAddToCart} disabled={!product.stock_status}>
+        <div className="p-3 pt-0">
+          <div className="border-t pt-3 flex flex-col gap-1.5">
+            <Button className="w-full" size="sm" onClick={handleAddToCart} disabled={!product.stock_status}>
               <ShoppingCart className="mr-1.5 h-4 w-4" />
               {'В корзину'}
             </Button>
             <Button
               variant="outline"
               size="sm"
+              className="w-full"
               onClick={() => setIsQuickOrderOpen(true)}
               disabled={!product.stock_status}
             >

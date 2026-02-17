@@ -7,6 +7,7 @@ import { ProductManager } from './product-manager'
 import { OrderManager } from './order-manager'
 
 export function AdminDashboard() {
+  console.log("[v0] AdminDashboard: rendering NEW dashboard with Categories/Products/Orders tabs")
   return (
     <div className="space-y-6">
       <div>

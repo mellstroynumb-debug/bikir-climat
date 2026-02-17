@@ -13,14 +13,14 @@
 const fs = require('fs')
 const path = require('path')
 
-const ROOT = process.cwd()
+const ROOT = '/vercel/share/v0-project'
 
 // ── Read source data ──
-const sourceFile = path.join(ROOT, 'user_read_only_context/text_attachments/products-7WD84.json')
+const sourceFile = path.join(ROOT, 'scripts', 'parsed-daikin.json')
 const parsed = JSON.parse(fs.readFileSync(sourceFile, 'utf-8'))
 
 // ── Read existing products (to append, not overwrite) ──
-const prodFile = path.join(ROOT, 'data/products.json')
+const prodFile = path.join(ROOT, 'data', 'products.json')
 let existing = []
 try {
   existing = JSON.parse(fs.readFileSync(prodFile, 'utf-8'))

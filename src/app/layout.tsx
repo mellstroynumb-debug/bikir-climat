@@ -35,7 +35,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru" className={cn('scroll-smooth', inter.variable, ptSans.variable)}>
-      <body className={cn('min-h-screen bg-background font-body antialiased')}>
+      <body className={cn('min-h-screen bg-background font-body antialiased overflow-x-hidden')}>
         <ExtensionErrorHandler />
         <Header />
         <PageTransitionWrapper>

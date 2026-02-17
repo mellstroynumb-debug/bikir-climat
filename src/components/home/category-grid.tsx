@@ -33,14 +33,14 @@ export function CategoryGrid() {
                 className="group block"
               >
                 <Card className="overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 h-full">
-                  <CardContent className="p-4 text-center flex flex-col h-full">
-                    <div className="relative aspect-video w-full mb-4">
+                  <CardContent className="p-0 text-center flex flex-col h-full">
+                    <div className="relative aspect-[4/3] w-full">
                       {category.image ? (
                         <Image
                           src={category.image}
                           alt={category.name}
                           fill
-                          className="object-contain"
+                          className="object-cover"
                           unoptimized
                         />
                       ) : (
@@ -49,7 +49,7 @@ export function CategoryGrid() {
                         </div>
                       )}
                     </div>
-                    <div className="mt-auto">
+                    <div className="mt-auto p-4 pt-3">
                       <h3 className="font-semibold text-base md:text-lg group-hover:text-primary transition-colors">
                         {category.name}
                       </h3>

@@ -67,10 +67,10 @@ export function ProductCard({ product }: ProductCardProps) {
               className="object-contain p-4"
             />
              <div className="absolute top-2 right-2 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <Button size="icon" variant="secondary" className="h-8 w-8 rounded-full bg-background/70 hover:bg-background" onClick={handleFavoriteToggle}>
+                <Button size="icon" variant="secondary" className="h-8 w-8 rounded-full bg-background/70 hover:bg-background transition-colors" onClick={handleFavoriteToggle}>
                     <Heart className={cn("h-4 w-4", isFavorite(product.id) && "fill-red-500 text-red-500")} />
                 </Button>
-                <Button size="icon" variant="secondary" className="h-8 w-8 rounded-full bg-background/70 hover:bg-background" onClick={handleCompareToggle}>
+                <Button size="icon" variant="secondary" className="h-8 w-8 rounded-full bg-background/70 hover:bg-background transition-colors" onClick={handleCompareToggle}>
                     <Scale className={cn("h-4 w-4", isCompared(product.id) && "text-primary")} />
                 </Button>
             </div>

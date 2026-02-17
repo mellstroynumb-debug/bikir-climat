@@ -316,39 +316,39 @@ export default function ProductPage() {
               ) : null}
             </div>
 
-            <div className="mt-6 pt-6 border-t space-y-3">
-              <div className="grid grid-cols-[1fr_auto_auto] gap-2">
-                <Button size="lg" onClick={handleAddToCart} disabled={!product.stock_status}>
-                  <ShoppingCart className="mr-2 h-5 w-5" />
-                  {'Добавить в корзину'}
+            <div className="mt-4 pt-4 border-t space-y-2 sm:mt-6 sm:pt-6 sm:space-y-3">
+              <div className="flex gap-2">
+                <Button size="default" className="flex-1 sm:flex-none sm:flex-grow" onClick={handleAddToCart} disabled={!product.stock_status}>
+                  <ShoppingCart className="mr-1.5 h-4 w-4 sm:mr-2 sm:h-5 sm:w-5" />
+                  <span className="text-sm sm:text-base">{'В корзину'}</span>
                 </Button>
                 <Button
-                  size="lg"
+                  size="icon"
                   variant="outline"
                   onClick={handleFavoriteToggle}
                   aria-label="Add to favorites"
-                  className="transition-colors hover:bg-red-50 hover:text-red-500"
+                  className="h-10 w-10 flex-shrink-0 transition-colors hover:bg-red-50 hover:text-red-500"
                 >
-                  <Heart className={cn('h-5 w-5', isFavorite(product.id) && 'fill-red-500 text-red-500')} />
+                  <Heart className={cn('h-4 w-4', isFavorite(product.id) && 'fill-red-500 text-red-500')} />
                 </Button>
                 <Button
-                  size="lg"
+                  size="icon"
                   variant="outline"
                   onClick={handleCompareToggle}
                   aria-label="Add to compare"
-                  className="transition-colors hover:bg-blue-50 hover:text-blue-600"
+                  className="h-10 w-10 flex-shrink-0 transition-colors hover:bg-blue-50 hover:text-blue-600"
                 >
-                  <Scale className={cn('h-5 w-5', isCompared(product.id) && 'text-primary')} />
+                  <Scale className={cn('h-4 w-4', isCompared(product.id) && 'text-primary')} />
                 </Button>
               </div>
               <Button
-                size="lg"
+                size="default"
                 variant="secondary"
                 className="w-full"
                 onClick={() => setIsQuickOrderOpen(true)}
                 disabled={!product.stock_status}
               >
-                {'Быстрый заказ'}
+                <span className="text-sm sm:text-base">{'Быстрый заказ'}</span>
               </Button>
             </div>
           </div>

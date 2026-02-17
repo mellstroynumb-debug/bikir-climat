@@ -8,6 +8,7 @@ import Footer from '@/components/layout/footer';
 import MobileNav from '@/components/layout/mobile-nav';
 import PageTransitionWrapper from '@/components/layout/page-transition-wrapper';
 import { ScrollToTop } from '@/components/scroll-to-top';
+import { ExtensionErrorHandler } from '@/components/extension-error-handler';
 
 const inter = Inter({
   subsets: ['latin', 'cyrillic'],
@@ -35,6 +36,7 @@ export default function RootLayout({
   return (
     <html lang="ru" className={cn('scroll-smooth', inter.variable, ptSans.variable)}>
       <body className={cn('min-h-screen bg-background font-body antialiased')}>
+        <ExtensionErrorHandler />
         <Header />
         <PageTransitionWrapper>
           <main className="pb-20 md:pb-0">{children}</main>

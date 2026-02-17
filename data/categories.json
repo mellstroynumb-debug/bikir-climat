@@ -1,1 +1,23 @@
-[]
+[
+  {
+    "id": "cat-invertornye",
+    "name": "Инверторные кондиционеры",
+    "slug": "invertornye-konditsionery",
+    "image": "/images/categories/invertornye-konditsionery.png",
+    "sort_order": 10
+  },
+  {
+    "id": "cat-on-off",
+    "name": "On/Off кондиционеры",
+    "slug": "on-off-konditsionery",
+    "image": "/images/categories/on-off-konditsionery.png",
+    "sort_order": 20
+  },
+  {
+    "id": "cat-multisplit",
+    "name": "Мультисплит кондиционеры",
+    "slug": "multisplit-konditsionery",
+    "image": "/images/categories/multisplit-konditsionery.png",
+    "sort_order": 30
+  }
+]

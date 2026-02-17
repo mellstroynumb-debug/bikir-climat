@@ -214,10 +214,10 @@ export default function ProductPage() {
   return (
     <>
       <div className="container mx-auto px-4 py-8 md:py-12">
-        <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
+        <div className="grid md:grid-cols-2 gap-8 lg:gap-12 min-w-0">
           {/* Image Gallery -- smaller container */}
-          <div className="w-full max-w-md mx-auto md:max-w-none flex flex-col gap-3">
-            <Carousel className="w-full" setApi={setApi}>
+          <div className="w-full min-w-0 max-w-md mx-auto md:max-w-none flex flex-col gap-3">
+            <Carousel className="w-full min-w-0" setApi={setApi}>
               <CarouselContent>
                 {sortedImages.map((img, index) => (
                   <CarouselItem key={img.id}>
@@ -264,26 +264,28 @@ export default function ProductPage() {
             </Carousel>
 
             {sortedImages.length > 1 && (
-              <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-hide md:grid md:grid-cols-5 md:overflow-x-visible md:pb-0">
-                {sortedImages.map((img, index) => (
-                  <button
-                    key={img.id}
-                    onClick={() => handleThumbnailClick(index)}
-                    className={cn(
-                      'relative rounded-md overflow-hidden border-2 transition flex-shrink-0 w-16 h-16 md:w-auto md:h-auto md:aspect-square focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
-                      index === current ? 'border-primary' : 'border-transparent hover:border-muted-foreground/30'
-                    )}
-                    aria-label={`Switch to image ${index + 1}`}
-                  >
-                    <Image
-                      src={img.url}
-                      alt={`Thumbnail ${index + 1}`}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 64px, 8vw"
-                    />
-                  </button>
-                ))}
+              <div className="w-full min-w-0 overflow-x-auto scrollbar-hide md:overflow-x-visible">
+                <div className="flex gap-1.5 w-max md:w-full md:grid md:grid-cols-5">
+                  {sortedImages.map((img, index) => (
+                    <button
+                      key={img.id}
+                      onClick={() => handleThumbnailClick(index)}
+                      className={cn(
+                        'relative rounded-md overflow-hidden border-2 transition flex-shrink-0 w-14 h-14 md:w-auto md:h-auto md:aspect-square focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
+                        index === current ? 'border-primary' : 'border-transparent hover:border-muted-foreground/30'
+                      )}
+                      aria-label={`Switch to image ${index + 1}`}
+                    >
+                      <Image
+                        src={img.url}
+                        alt={`Thumbnail ${index + 1}`}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 56px, 8vw"
+                      />
+                    </button>
+                  ))}
+                </div>
               </div>
             )}
           </div>

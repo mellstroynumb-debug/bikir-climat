@@ -18,7 +18,7 @@ const slides = [
     {
         title: "Эстетичный монтаж",
         description: "Гарантия на все виды работ. Убираем за собой.",
-        image: "https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&q=80&w=1920",
+        image: "/banner-1.jpg",
         imageHint: "modern living-room",
         link: "/services"
     },
@@ -65,15 +65,13 @@ export function HeroCarousel() {
                                     priority={index === 0}
                                     data-ai-hint={slide.imageHint}
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/30 flex items-center">
-                                    <div className="container mx-auto px-4 md:px-8 text-white">
-                                        <div className="max-w-md">
-                                            <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold font-headline">{slide.title}</h2>
-                                            <p className="mt-2 md:mt-4 text-sm md:text-lg">{slide.description}</p>
-                                            <Button asChild className="mt-4 md:mt-6" size="lg">
-                                                <Link href={slide.link}>Подробнее</Link>
-                                            </Button>
-                                        </div>
+                                <div className="absolute inset-0 flex items-center justify-center p-4">
+                                    <div className="rounded-2xl bg-white/20 backdrop-blur-lg border border-white/30 max-w-xl w-full p-8 text-center text-[#003366]">
+                                        <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold font-headline">{slide.title}</h2>
+                                        <p className="mt-2 md:mt-4 text-sm md:text-lg">{slide.description}</p>
+                                        <Button asChild className="mt-4 md:mt-6 bg-[#003366] hover:bg-[#002244] text-white" size="lg">
+                                            <Link href={slide.link}>Подробнее</Link>
+                                        </Button>
                                     </div>
                                 </div>
                             </div>

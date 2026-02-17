@@ -8,15 +8,13 @@ import { useStore } from '@/store/useStore'
 import { useToast } from '@/hooks/use-toast'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { ShoppingCart, Loader2, Heart, Scale } from 'lucide-react'
+import { ShoppingCart, Loader2, Heart, Scale, ChevronLeft, ChevronRight, X, ZoomIn } from 'lucide-react'
 import { QuickOrderDialog } from '@/components/quick-order-dialog'
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, useCallback } from 'react'
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
   type CarouselApi,
 } from '@/components/ui/carousel'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -25,6 +23,101 @@ import ProductList from '@/components/product-list'
 import { cn } from '@/lib/utils'
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
+
+/* ── Fullscreen Lightbox ── */
+function Lightbox({
+  images,
+  initialIndex,
+  onClose,
+}: {
+  images: { id: string; url: string; sort_order: number }[]
+  initialIndex: number
+  onClose: () => void
+}) {
+  const [current, setCurrent] = useState(initialIndex)
+
+  const goPrev = useCallback(() => {
+    setCurrent((c) => (c > 0 ? c - 1 : images.length - 1))
+  }, [images.length])
+
+  const goNext = useCallback(() => {
+    setCurrent((c) => (c < images.length - 1 ? c + 1 : 0))
+  }, [images.length])
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+      if (e.key === 'ArrowLeft') goPrev()
+      if (e.key === 'ArrowRight') goNext()
+    }
+    document.body.style.overflow = 'hidden'
+    window.addEventListener('keydown', handler)
+    return () => {
+      document.body.style.overflow = ''
+      window.removeEventListener('keydown', handler)
+    }
+  }, [onClose, goPrev, goNext])
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/90"
+      onClick={onClose}
+    >
+      {/* Close button */}
+      <button
+        onClick={onClose}
+        className="absolute top-4 right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-foreground/20 text-background hover:bg-foreground/40 transition-colors"
+        aria-label="Close"
+      >
+        <X className="h-5 w-5" />
+      </button>
+
+      {/* Prev */}
+      {images.length > 1 && (
+        <button
+          onClick={(e) => { e.stopPropagation(); goPrev() }}
+          className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-foreground/20 text-background hover:bg-foreground/40 transition-colors"
+          aria-label="Previous"
+        >
+          <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
+        </button>
+      )}
+
+      {/* Image */}
+      <div
+        className="relative h-[80vh] w-[90vw] max-w-4xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <Image
+          src={images[current].url}
+          alt={`Image ${current + 1}`}
+          fill
+          className="object-contain"
+          sizes="90vw"
+          priority
+        />
+      </div>
+
+      {/* Next */}
+      {images.length > 1 && (
+        <button
+          onClick={(e) => { e.stopPropagation(); goNext() }}
+          className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-foreground/20 text-background hover:bg-foreground/40 transition-colors"
+          aria-label="Next"
+        >
+          <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
+        </button>
+      )}
+
+      {/* Counter */}
+      {images.length > 1 && (
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-foreground/20 px-4 py-1.5 text-sm text-background">
+          {current + 1} / {images.length}
+        </div>
+      )}
+    </div>
+  )
+}
 
 export default function ProductPage() {
   const params = useParams()
@@ -37,6 +130,7 @@ export default function ProductPage() {
   const { region, addToCart, toggleFavorite, isFavorite, toggleCompare, isCompared } = useStore()
   const { toast } = useToast()
   const [isQuickOrderOpen, setIsQuickOrderOpen] = useState(false)
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
 
   const [api, setApi] = useState<CarouselApi>()
   const [current, setCurrent] = useState(0)
@@ -121,28 +215,52 @@ export default function ProductPage() {
     <>
       <div className="container mx-auto px-4 py-8 md:py-12">
         <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
-          {/* Image Gallery */}
-          <div className="w-full flex flex-col gap-4">
+          {/* Image Gallery -- smaller container */}
+          <div className="w-full max-w-md mx-auto md:max-w-none flex flex-col gap-3">
             <Carousel className="w-full" setApi={setApi}>
               <CarouselContent>
                 {sortedImages.map((img, index) => (
                   <CarouselItem key={img.id}>
-                    <Card className="overflow-hidden">
-                      <div className="aspect-square relative">
-                        <Image
-                          src={img.url}
-                          alt={`${product.title} - ${index + 1}`}
-                          fill
-                          className="object-contain"
-                          sizes="(max-width: 768px) 100vw, 50vw"
-                        />
+                    <div
+                      className="aspect-[4/3] relative bg-muted/30 rounded-lg overflow-hidden cursor-zoom-in group"
+                      onClick={() => setLightboxIndex(index)}
+                    >
+                      <Image
+                        src={img.url}
+                        alt={`${product.title} - ${index + 1}`}
+                        fill
+                        className="object-contain p-4"
+                        sizes="(max-width: 768px) 100vw, 40vw"
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/5 transition-colors">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-foreground/10 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <ZoomIn className="h-5 w-5 text-foreground/70" />
+                        </div>
                       </div>
-                    </Card>
+                    </div>
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious className="hidden sm:flex" />
-              <CarouselNext className="hidden sm:flex" />
+
+              {/* Arrows inside the carousel, responsive positioning */}
+              {sortedImages.length > 1 && (
+                <>
+                  <button
+                    onClick={() => api?.scrollPrev()}
+                    className="absolute left-2 top-1/2 -translate-y-1/2 z-10 flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full border bg-background/80 shadow-sm hover:bg-background transition-colors disabled:opacity-50"
+                    aria-label="Previous"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </button>
+                  <button
+                    onClick={() => api?.scrollNext()}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 z-10 flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full border bg-background/80 shadow-sm hover:bg-background transition-colors disabled:opacity-50"
+                    aria-label="Next"
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </button>
+                </>
+              )}
             </Carousel>
 
             {sortedImages.length > 1 && (
@@ -153,16 +271,16 @@ export default function ProductPage() {
                     onClick={() => handleThumbnailClick(index)}
                     className={cn(
                       'aspect-square relative rounded-md overflow-hidden border-2 transition focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
-                      index === current ? 'border-primary' : 'border-transparent'
+                      index === current ? 'border-primary' : 'border-transparent hover:border-muted-foreground/30'
                     )}
-                    aria-label={`Переключить на изображение ${index + 1}`}
+                    aria-label={`Switch to image ${index + 1}`}
                   >
                     <Image
                       src={img.url}
                       alt={`Thumbnail ${index + 1}`}
                       fill
                       className="object-cover"
-                      sizes="(max-width: 768px) 20vw, 10vw"
+                      sizes="(max-width: 768px) 20vw, 8vw"
                     />
                   </button>
                 ))}
@@ -206,7 +324,7 @@ export default function ProductPage() {
                   size="lg"
                   variant="outline"
                   onClick={handleFavoriteToggle}
-                  aria-label="Добавить в избранное"
+                  aria-label="Add to favorites"
                   className="transition-colors hover:bg-red-50 hover:text-red-500"
                 >
                   <Heart className={cn('h-5 w-5', isFavorite(product.id) && 'fill-red-500 text-red-500')} />
@@ -215,7 +333,7 @@ export default function ProductPage() {
                   size="lg"
                   variant="outline"
                   onClick={handleCompareToggle}
-                  aria-label="Добавить к сравнению"
+                  aria-label="Add to compare"
                   className="transition-colors hover:bg-blue-50 hover:text-blue-600"
                 >
                   <Scale className={cn('h-5 w-5', isCompared(product.id) && 'text-primary')} />
@@ -298,6 +416,16 @@ export default function ProductPage() {
           </div>
         )}
       </div>
+
+      {/* Lightbox */}
+      {lightboxIndex !== null && (
+        <Lightbox
+          images={sortedImages}
+          initialIndex={lightboxIndex}
+          onClose={() => setLightboxIndex(null)}
+        />
+      )}
+
       <QuickOrderDialog
         isOpen={isQuickOrderOpen}
         onOpenChange={setIsQuickOrderOpen}

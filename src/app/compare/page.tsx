@@ -4,46 +4,9 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { Scale, Lightbulb, Loader2 } from 'lucide-react';
+import { Scale } from 'lucide-react';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
-import { compareProducts, CompareProductsInput } from '@/ai/flows/compare-products-flow';
 import { Product } from '@/lib/types';
-
-// The AI summary component
-function AiSummary({ summary, isLoading }: { summary: string | null; isLoading: boolean }) {
-  if (isLoading) {
-    return (
-      <Card className="mb-8 bg-blue-50 border-blue-200">
-        <CardContent className="p-6">
-          <div className="flex items-center">
-            <Loader2 className="h-6 w-6 mr-4 animate-spin text-primary" />
-            <div>
-              <h4 className="font-semibold">Анализируем...</h4>
-              <p className="text-sm text-muted-foreground">Наш AI-эксперт подбирает для вас лучшую модель.</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
-
-  if (!summary) return null;
-
-  return (
-    <Card className="mb-8 bg-blue-50 border-blue-200 shadow-lg">
-      <CardHeader>
-        <CardTitle className="flex items-center text-xl">
-          <Lightbulb className="h-6 w-6 mr-3 text-blue-500" />
-          Совет эксперта
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="text-blue-800 whitespace-pre-wrap">{summary}</div>
-      </CardContent>
-    </Card>
-  );
-}
 
 
 const specLabels: Record<string, string> = {
@@ -66,42 +29,6 @@ export default function ComparePage() {
     const { compare, region } = useStore();
     const currency = region === 'PMR' ? 'руб.' : 'лей';
 
-    const [summary, setSummary] = useState<string | null>(null);
-    const [isGenerating, setIsGenerating] = useState(false);
-
-    useEffect(() => {
-        if (compare.length > 1) {
-            const generateSummary = async () => {
-                setIsGenerating(true);
-                setSummary(null);
-                try {
-                    const productsForAI: CompareProductsInput['products'] = compare.map(p => ({
-                        title: p.title,
-                        price: region === 'PMR' ? p.price_pmr : p.price_md,
-                        specs: p.specs
-                    }));
-
-                    const input: CompareProductsInput = {
-                        products: productsForAI,
-                        currency: currency,
-                    };
-                    
-                    const result = await compareProducts(input);
-                    setSummary(result);
-                } catch (error) {
-                    console.error("Error generating comparison summary:", error);
-                    // Optionally set an error state to show in the UI
-                } finally {
-                    setIsGenerating(false);
-                }
-            };
-            generateSummary();
-        } else {
-            setSummary(null);
-        }
-    }, [compare, region, currency]);
-
-
     if (compare.length === 0) {
         return (
              <div className="container mx-auto px-4 py-12 text-center">
@@ -123,8 +50,6 @@ export default function ComparePage() {
              <div className="text-center mb-8">
                 <h1 className="text-3xl font-bold font-headline">Сравнение товаров</h1>
             </div>
-
-            <AiSummary summary={summary} isLoading={isGenerating} />
             
             <div className="overflow-x-auto border rounded-lg">
                 <Table className="min-w-full">

@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import type { Product, CartItem, Region } from '@/lib/types';
 
 interface StoreState {
@@ -23,7 +24,9 @@ interface StoreState {
   removeFromCompare: (productId: string) => void;
 }
 
-export const useStore = create<StoreState>((set, get) => ({
+export const useStore = create<StoreState>()(
+  persist(
+    (set, get) => ({
   region: 'PMR',
   cart: [],
   favorites: [],
@@ -112,4 +115,15 @@ export const useStore = create<StoreState>((set, get) => ({
     }));
   },
   getCompareCount: () => get().compare.length,
-}));
+    }),
+    {
+      name: 'bikir-climat-store',
+      partialize: (state) => ({
+        region: state.region,
+        cart: state.cart,
+        favorites: state.favorites,
+        compare: state.compare,
+      }),
+    }
+  )
+);

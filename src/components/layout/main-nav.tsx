@@ -41,7 +41,7 @@ export function MainNav() {
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
-        <Link href="/checkout" className={navLinkClasses('/checkout')}>
+        <Link href="/delivery" className={navLinkClasses('/delivery')}>
             Доставка и оплата
         </Link>
         <Link href="/contacts" className={navLinkClasses('/contacts')}>

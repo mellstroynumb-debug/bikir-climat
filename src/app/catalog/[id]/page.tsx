@@ -32,8 +32,14 @@ const specLabels: Record<string, string> = {
   power_btu: 'Мощность (BTU)',
   area_sq_m: 'Площадь (м²)',
   brand: 'Бренд',
-  compressor_type: 'Тип компрессора',
-  // Add other known keys here for user-friendly display
+  cooling_power_w: 'Мощность охлаждения (Вт)',
+  heating_power_w: 'Мощность обогрева (Вт)',
+  energy_class: 'Класс энергоэффективности',
+  noise_indoor_db: 'Уровень шума (вн. блок, дБ)',
+  refrigerant: 'Тип хладагента',
+  wifi: 'Подключение к Wi-Fi',
+  features: 'Дополнительные функции',
+  heating_min_temp: 'Мин. t для обогрева (°С)',
 };
 
 
@@ -265,10 +271,10 @@ export default function ProductPage() {
                       <ShoppingCart className="mr-2 h-5 w-5" />
                       Добавить в корзину
                   </Button>
-                  <Button size="lg" variant="outline" onClick={handleFavoriteToggle} aria-label="Добавить в избранное">
+                  <Button size="lg" variant="outline" onClick={handleFavoriteToggle} aria-label="Добавить в избранное" className="transition-colors hover:bg-red-50 hover:text-red-500">
                       <Heart className={cn("h-5 w-5", isFavorite(product.id) && "fill-red-500 text-red-500")} />
                   </Button>
-                  <Button size="lg" variant="outline" onClick={handleCompareToggle} aria-label="Добавить к сравнению">
+                  <Button size="lg" variant="outline" onClick={handleCompareToggle} aria-label="Добавить к сравнению" className="transition-colors hover:bg-blue-50 hover:text-blue-600">
                       <Scale className={cn("h-5 w-5", isCompared(product.id) && "text-primary")} />
                   </Button>
               </div>

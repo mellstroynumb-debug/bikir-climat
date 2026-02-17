@@ -7,6 +7,22 @@ import Link from 'next/link';
 import { Scale } from 'lucide-react';
 import Image from 'next/image';
 
+const specLabels: Record<string, string> = {
+  inverter: 'Инвертор',
+  power_btu: 'Мощность (BTU)',
+  area_sq_m: 'Площадь (м²)',
+  brand: 'Бренд',
+  cooling_power_w: 'Мощность охлаждения (Вт)',
+  heating_power_w: 'Мощность обогрева (Вт)',
+  energy_class: 'Класс энергоэффективности',
+  noise_indoor_db: 'Уровень шума (вн. блок, дБ)',
+  refrigerant: 'Тип хладагента',
+  wifi: 'Подключение к Wi-Fi',
+  features: 'Дополнительные функции',
+  heating_min_temp: 'Мин. t для обогрева (°С)',
+};
+
+
 export default function ComparePage() {
     const { compare, region } = useStore();
     const currency = region === 'PMR' ? 'руб.' : 'лей';
@@ -61,7 +77,7 @@ export default function ComparePage() {
                         </TableRow>
                        {allSpecKeys.map(key => (
                            <TableRow key={key}>
-                               <TableCell className="font-semibold text-muted-foreground">{key}</TableCell>
+                               <TableCell className="font-semibold text-muted-foreground">{specLabels[key] || key}</TableCell>
                                {compare.map(product => (
                                    <TableCell key={product.id} className="text-center text-sm">
                                        {String(product.specs[key] ?? '—')}

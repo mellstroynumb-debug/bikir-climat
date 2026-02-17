@@ -16,13 +16,13 @@ const ProductSpecsSchema = z.object({
   specs: z.record(z.union([z.string(), z.number()])),
 });
 
-export const CompareProductsInputSchema = z.object({
+const CompareProductsInputSchema = z.object({
     products: z.array(ProductSpecsSchema),
     currency: z.string(),
 });
 export type CompareProductsInput = z.infer<typeof CompareProductsInputSchema>;
 
-export const CompareProductsOutputSchema = z.string().describe("A concise and helpful comparison of the products, written in Russian. Use newlines for formatting, but do not use Markdown.");
+const CompareProductsOutputSchema = z.string().describe("A concise and helpful comparison of the products, written in Russian. Use newlines for formatting, but do not use Markdown.");
 export type CompareProductsOutput = z.infer<typeof CompareProductsOutputSchema>;
 
 export async function compareProducts(

@@ -34,6 +34,7 @@ export async function compareProducts(
 const compareProductsPrompt = ai.definePrompt(
   {
     name: 'compareProductsPrompt',
+    model: 'googleai/gemini-1.5-flash-latest',
     input: { schema: CompareProductsInputSchema },
     output: { schema: CompareProductsOutputSchema },
     prompt: `Ты — эксперт по климатической технике в интернет-магазине. Твоя задача — помочь покупателю, который не разбирается в характеристиках, сделать правильный выбор между несколькими моделями кондиционеров.

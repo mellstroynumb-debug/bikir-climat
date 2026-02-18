@@ -5,7 +5,9 @@ import { fileURLToPath } from 'url'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-const DATA_DIR = path.join(__dirname, '..', 'data')
+// Use absolute path to match process.cwd() in the Next.js app
+const PROJECT_ROOT = '/vercel/share/v0-project'
+const DATA_DIR = path.join(PROJECT_ROOT, 'data')
 const PROD_FILE = path.join(DATA_DIR, 'products.json')
 
 const SPEC_GROUPS = {
@@ -40,7 +42,7 @@ if (fs.existsSync(PROD_FILE)) {
 
 // Read source data
 const sourceData = JSON.parse(
-  fs.readFileSync(path.join(__dirname, 'gree-inverter-data.json'), 'utf-8')
+  fs.readFileSync(path.join(PROJECT_ROOT, 'scripts', 'gree-inverter-data.json'), 'utf-8')
 )
 
 console.log(`Found ${existingProducts.length} existing products`)

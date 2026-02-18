@@ -1,12 +1,7 @@
 import fs from 'fs'
-import path from 'path'
-import { fileURLToPath } from 'url'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-
-// Read source data from the same directory
-const sourceFile = path.join(__dirname, 'gree-inverter-data.json')
+// Use absolute path since sandbox runs from /home/user/
+const sourceFile = '/vercel/share/v0-project/scripts/gree-inverter-data.json'
 const sourceData = JSON.parse(fs.readFileSync(sourceFile, 'utf-8'))
 
 console.log(`Loaded ${sourceData.length} GREE inverter products from JSON`)
